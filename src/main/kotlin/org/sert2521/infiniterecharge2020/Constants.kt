@@ -7,6 +7,9 @@ object MotorControllers {
     val leftBack = TalonId(3)
     val rightFront = TalonId(2)
     val rightBack = TalonId(4)
+
+    val extender = TalonId(-1)
+    val spinner = TalonId(-1)
 }
 
 object Operator {
