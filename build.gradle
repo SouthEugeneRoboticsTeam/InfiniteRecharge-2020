@@ -15,7 +15,7 @@ repositories {
     maven { url "http://first.wpi.edu/FRC/roborio/maven/release" }
     maven { url "http://devsite.ctr-electronics.com/maven/release" }
     maven { url "https://www.kauailabs.com/maven2" }
-    maven { url "http://www.revrobotics.com/content/sw/max/sdk/maven/" }
+    maven { url "http://www.revrobotics.com/content/sw/color-sensor-v3/sdk/maven/" }
     google()
     maven { url 'https://jitpack.io' }
 }
