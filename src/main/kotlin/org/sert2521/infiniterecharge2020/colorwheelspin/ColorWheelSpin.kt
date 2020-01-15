@@ -12,12 +12,8 @@ class ColorWheelSpin : Subsystem("ColorWheelSpin") {
     private val extender = MotorController(MotorControllers.extender)
     private val spinner = MotorController(MotorControllers.spinner)
 
-    fun extendOut(speed: Double){
+    fun extend(speed: Double){
         extender.setPercentOutput(speed)
-    }
-
-    fun extendIn(speed: Double){
-        extender.setPercentOutput(-speed)
     }
 
     fun spin(speed: Double){

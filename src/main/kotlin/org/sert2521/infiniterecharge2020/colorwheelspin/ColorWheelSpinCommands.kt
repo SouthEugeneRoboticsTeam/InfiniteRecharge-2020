@@ -14,9 +14,9 @@ suspend fun extend(isExtendingOut: Boolean, time: Long) = doTask {
     action {
         onTick {
             if (isExtendingOut) {
-                colorWheelSpin.extendOut(0.3)
+                colorWheelSpin.extend(0.3)
             } else {
-                colorWheelSpin.extendIn(-0.3)
+                colorWheelSpin.extend(-0.3)
             }
             if(currentTimeMillis() - startTime < time){
                 this@action.cancel()
