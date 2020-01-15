@@ -5,10 +5,8 @@ import org.sert2521.sertain.subsystems.doTask
 import org.sert2521.sertain.subsystems.use
 import edu.wpi.first.wpilibj.util.Color
 import kotlinx.coroutines.cancel
-import org.sert2521.sertain.coroutines.doAll
 import org.sert2521.sertain.coroutines.doOne
 import java.lang.System.currentTimeMillis
-import java.sql.Time
 
 suspend fun extend(isExtendingOut: Boolean, time: Long) = doTask {
     val colorWheelSpin = use<ColorWheelSpin>()
