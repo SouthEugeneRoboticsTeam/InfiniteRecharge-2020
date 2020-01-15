@@ -7,8 +7,7 @@ import org.sert2521.sertain.motors.MotorController
 import org.sert2521.sertain.subsystems.Subsystem
 
 class ColorWheelSpin : Subsystem("ColorWheelSpin") {
-    private val i2cPort: I2C.Port = I2C.Port.kOnboard
-    val sensor = ColorSensorV3(i2cPort)
+    val sensor = ColorSensorV3(I2C.Port.kOnboard)
 
     private val extender = MotorController(MotorControllers.extender)
     private val spinner = MotorController(MotorControllers.spinner)
