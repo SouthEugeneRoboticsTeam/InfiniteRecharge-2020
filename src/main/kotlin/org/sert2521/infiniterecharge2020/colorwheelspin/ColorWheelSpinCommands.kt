@@ -7,6 +7,7 @@ import edu.wpi.first.wpilibj.util.Color
 import kotlinx.coroutines.cancel
 import org.sert2521.sertain.coroutines.doOne
 import java.lang.System.currentTimeMillis
+import kotlin.math.abs
 
 suspend fun extend(isExtendingOut: Boolean, time: Long) = doTask {
     val colorWheelSpin = use<ColorWheelSpin>()
@@ -30,10 +31,8 @@ suspend fun spinToColor() = doTask {
     action {
         val colorToSpinTo: Color = Color.kBlue
         onTick {
-            val sensorColor = colorWheelSpin.sensor.color
-            if ((sensorColor.red + 25 > colorToSpinTo.red && colorToSpinTo.red > sensorColor.red - 25) &&
-                    (sensorColor.blue + 25 > colorToSpinTo.blue && colorToSpinTo.blue > sensorColor.blue - 25) &&
-                    (sensorColor.green + 25 > colorToSpinTo.green && colorToSpinTo.green > sensorColor.green - 25)) {
+            val sensorColor = getColor(colorWheelSpin.sensor.color)
+            if (sensorColor === colorToSpinTo) {
                 this@action.cancel()
             }
             colorWheelSpin.spin(0.3)
@@ -47,10 +46,8 @@ suspend fun spinForColors() = doTask {
         var triangleSpins = 0
         var pastColor: Color = Color.kWhite
         onTick {
-            val sensorColor = colorWheelSpin.sensor.color
-            if ((sensorColor.red + 25 > pastColor.red && pastColor.red > sensorColor.red - 25) &&
-                    (sensorColor.blue + 25 > pastColor.blue && pastColor.blue > sensorColor.blue - 25) &&
-                    (sensorColor.green + 25 > pastColor.green && pastColor.green > sensorColor.green - 25)) {
+            val sensorColor = getColor(colorWheelSpin.sensor.color)
+            if (!(sensorColor === pastColor)) {
                 pastColor = sensorColor
                 triangleSpins++
             }
@@ -78,5 +75,22 @@ suspend fun spinAndExtend(isSpinningToColor: Boolean) = doTask {
             }
         }
         extend(false, 3000)
+    }
+}
+
+fun getColor(sensorOutput: Color): Color{
+    val distanceToRed = abs(sensorOutput.blue - 0.13) +  abs(sensorOutput.green - 0.34) +  abs(sensorOutput.red - 0.52)
+    val distanceToBlue = abs(sensorOutput.blue - 0.45) +  abs(sensorOutput.green - 0.42) +  abs(sensorOutput.red - 0.11)
+    val distanceToGreen = abs(sensorOutput.blue - 0.25) +  abs(sensorOutput.green - 0.58) +  abs(sensorOutput.red - 0.16)
+    val distanceToYellow = abs(sensorOutput.blue - 0.11) +  abs(sensorOutput.green - 0.56) +  abs(sensorOutput.red - 0.31)
+
+    return if(distanceToRed < distanceToBlue && distanceToRed < distanceToGreen && distanceToRed < distanceToYellow){
+        Color.kRed
+    }else if(distanceToBlue < distanceToGreen && distanceToBlue < distanceToYellow){
+        Color.kBlue
+    }else if(distanceToGreen < distanceToYellow){
+        Color.kGreen
+    }else{
+        Color.kYellow
     }
 }
