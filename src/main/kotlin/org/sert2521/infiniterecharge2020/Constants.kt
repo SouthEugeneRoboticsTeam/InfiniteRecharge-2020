@@ -8,8 +8,8 @@ object MotorControllers {
 }
 
 object Operator {
-    val PRIMARY_CONTROLLER = 0
+    const val PRIMARY_CONTROLLER = 0
 
-    val SPIN_FOR_COLORS = 14
-    val SPIN_TO_COLOR = 13
+    const val SPIN_FOR_COLORS = 14
+    const val SPIN_TO_COLOR = 13
 }
