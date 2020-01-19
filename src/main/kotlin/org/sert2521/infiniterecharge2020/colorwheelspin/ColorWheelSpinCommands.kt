@@ -15,9 +15,9 @@ suspend fun extend(isExtendingOut: Boolean, time: Long) = doTask {
     action {
         onTick {
             if (isExtendingOut) {
-                colorWheelSpin.extend(0.3)
+                colorWheelSpin.extend(0.2)
             } else {
-                colorWheelSpin.extend(-0.3)
+                colorWheelSpin.extend(-0.2)
             }
             if (currentTimeMillis() - startTime < time) {
                 this@action.cancel()
@@ -35,7 +35,7 @@ suspend fun spinToColor() = doTask {
             if (sensorColor === colorToSpinTo) {
                 this@action.cancel()
             }
-            colorWheelSpin.spin(0.3)
+            colorWheelSpin.spin(0.5)
         }
     }
 }
@@ -55,7 +55,7 @@ suspend fun spinForColors() = doTask {
                 this@action.cancel()
             }
             pastColor = sensorColor
-            colorWheelSpin.spin(0.3)
+            colorWheelSpin.spin(0.5)
         }
     }
 }
