@@ -2,11 +2,11 @@ package org.sert2521.infiniterecharge2020.drivetrain
 
 import edu.wpi.first.wpilibj.GenericHID
 import kotlinx.coroutines.cancel
-import org.sert2521.infiniterecharge2020.oi.primaryJoystick
+import org.sert2521.infiniterecharge2020.primaryJoystick
 import org.sert2521.infiniterecharge2020.utils.deadband
-import org.sert2521.infiniterecharge2020.oi.ControlMode
-import org.sert2521.infiniterecharge2020.oi.controlMode
-import org.sert2521.infiniterecharge2020.oi.primaryController
+import org.sert2521.infiniterecharge2020.ControlMode
+import org.sert2521.infiniterecharge2020.controlMode
+import org.sert2521.infiniterecharge2020.primaryController
 import org.sert2521.sertain.control.MotionCurve
 import org.sert2521.sertain.events.onTick
 import org.sert2521.sertain.motors.EncoderTicks
@@ -16,7 +16,6 @@ import org.sert2521.sertain.units.Chronic
 import org.sert2521.sertain.units.CompositeUnit
 import org.sert2521.sertain.units.CompositeUnitType
 import org.sert2521.sertain.units.Linear
-import org.sert2521.sertain.units.LinearUnit
 import org.sert2521.sertain.units.Meters
 import org.sert2521.sertain.units.MetricUnit
 import org.sert2521.sertain.units.MetricValue
@@ -46,23 +45,6 @@ suspend fun controlDrivetrain() = doTask {
             val scaledThrottle = (-throttle.sign * (throttle * throttle)).deadband(.05)
             val scaledTurn = (turn.sign * (turn * turn)).deadband(.05)
             drivetrain.arcadeDrive(scaledThrottle, scaledTurn)
-        }
-    }
-}
-
-// Drives the robot in a straight line for a certain distance (in inches) at a given speed
-suspend fun driveCurve(speed: Double, distance: Double) = doTask {
-    val drivetrain = use<Drivetrain>()
-    action {
-        drivetrain.zeroEncoders()
-        onTick {
-            drivetrain.arcadeDrive(speed, 0.0)
-            // Calculates the number of encoder pulses corresponding to a certain distance
-            val ticks = (PULSES_PER_REVOLUTION * distance / 2.0) / (2 * Math.PI * WHEEL_RADIUS)
-            if (drivetrain.position >= ticks) {
-                drivetrain.stop()
-                this@action.cancel()
-            }
         }
     }
 }
