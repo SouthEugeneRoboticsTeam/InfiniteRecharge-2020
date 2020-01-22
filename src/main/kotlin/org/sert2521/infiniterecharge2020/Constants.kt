@@ -7,4 +7,7 @@ object MotorControllers {
     val rightFront = TalonId(4)
     val leftRear = TalonId(2)
     val rightRear = TalonId(4)
+
+    val CLIMBER_LIFT = TalonId(-1)
+    val CLIMBER_WENCH = TalonId(-1)
 }
