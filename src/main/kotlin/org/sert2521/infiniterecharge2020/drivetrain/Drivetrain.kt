@@ -1,9 +1,12 @@
 package org.sert2521.infiniterecharge2020.drivetrain
 
 import org.sert2521.infiniterecharge2020.MotorControllers
+import org.sert2521.infiniterecharge2020.OI.controlMode
+import org.sert2521.sertain.coroutines.RobotScope
 
 import org.sert2521.sertain.motors.MotorController
 import org.sert2521.sertain.subsystems.Subsystem
+import org.sert2521.sertain.telemetry.linkTableEntry
 
 class Drivetrain : Subsystem("Drivetrain", ::controlDrivetrain) {
     private val right = MotorController(MotorControllers.rightFront, MotorControllers.rightBack) {
@@ -33,6 +36,8 @@ class Drivetrain : Subsystem("Drivetrain", ::controlDrivetrain) {
 
     init {
         zeroEncoders()
+        RobotScope.linkTableEntry("Position", listOf("Operator")) { position }
+        RobotScope.linkTableEntry("Control Mode", listOf("Drivetrain")) { controlMode }
     }
 
     fun arcadeDrive(speed: Double, turn: Double) {
