@@ -2,11 +2,11 @@ package org.sert2521.infiniterecharge2020.drivetrain
 
 import edu.wpi.first.wpilibj.GenericHID
 import kotlinx.coroutines.cancel
-import org.sert2521.infiniterecharge2020.oi.primaryJoystick
+import org.sert2521.infiniterecharge2020.OI.primaryJoystick
 import org.sert2521.infiniterecharge2020.utils.deadband
-import org.sert2521.infiniterecharge2020.oi.ControlMode
-import org.sert2521.infiniterecharge2020.oi.controlMode
-import org.sert2521.infiniterecharge2020.oi.primaryController
+import org.sert2521.infiniterecharge2020.OI.ControlMode
+import org.sert2521.infiniterecharge2020.OI.controlMode
+import org.sert2521.infiniterecharge2020.OI.primaryController
 import org.sert2521.sertain.control.MotionCurve
 import org.sert2521.sertain.events.onTick
 import org.sert2521.sertain.motors.EncoderTicks
