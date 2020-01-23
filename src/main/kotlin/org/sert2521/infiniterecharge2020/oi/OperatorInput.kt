@@ -5,7 +5,6 @@ import edu.wpi.first.wpilibj.XboxController
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser
 import org.sert2521.infiniterecharge2020.Operator
 
-
 enum class ControlMode {
     CONTROLLER, JOYSTICK
 }

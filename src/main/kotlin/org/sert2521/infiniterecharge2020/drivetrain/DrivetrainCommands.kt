@@ -16,7 +16,6 @@ import org.sert2521.sertain.units.Chronic
 import org.sert2521.sertain.units.CompositeUnit
 import org.sert2521.sertain.units.CompositeUnitType
 import org.sert2521.sertain.units.Linear
-import org.sert2521.sertain.units.LinearUnit
 import org.sert2521.sertain.units.Meters
 import org.sert2521.sertain.units.MetricUnit
 import org.sert2521.sertain.units.MetricValue
@@ -50,15 +49,18 @@ suspend fun controlDrivetrain() = doTask {
     }
 }
 
-// Drives the robot in a straight line for a certain distance (in inches) at a given speed
-suspend fun driveCurve(speed: Double, distance: Double) = doTask {
+// Drives the robot in a straight line for a certain distance (in inches) at a given output
+suspend fun driveStraight(
+        output: Double,
+        distance: MetricValue<Linear, MetricUnit<Linear>>
+) = doTask {
     val drivetrain = use<Drivetrain>()
     action {
         drivetrain.zeroEncoders()
         onTick {
-            drivetrain.arcadeDrive(speed, 0.0)
+            drivetrain.arcadeDrive(output, 0.0)
             // Calculates the number of encoder pulses corresponding to a certain distance
-            val ticks = (PULSES_PER_REVOLUTION * distance / 2.0) / (2 * Math.PI * WHEEL_RADIUS)
+            val ticks = (PULSES_PER_REVOLUTION * distance.convertTo(Meters).value / 2.0) / (2 * Math.PI * wheelRadius.value)
             if (drivetrain.position >= ticks) {
                 drivetrain.stop()
                 this@action.cancel()
@@ -77,11 +79,11 @@ suspend fun driveCurve(
 
         val ticks = MetricValue(
                 Radians,
-                distance.convertTo(Meters).value / WHEEL_RADIUS_METERS
+                distance.convertTo(Meters).value / wheelRadius.value
         ).convertTo(EncoderTicks(PULSES_PER_REVOLUTION.toInt())).value
         val ticksPerSecond = MetricValue(
                 Radians / Seconds,
-                speed.convertTo(Meters / Seconds).value / WHEEL_RADIUS_METERS
+                speed.convertTo(Meters / Seconds).value / wheelRadius.value
         ).convertTo(EncoderTicks(PULSES_PER_REVOLUTION.toInt()) / Seconds).value
         val curve = MotionCurve(ticks, ticksPerSecond, 100.0, 100.0)
 
