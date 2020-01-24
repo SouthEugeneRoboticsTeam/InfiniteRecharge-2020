@@ -34,17 +34,18 @@ suspend fun ClimberDown() = doTask {
     }
 }
 
-suspend fun ClimberWenchGo() = doTask {
-    val run = use<ClimberWench>()
+suspend fun ClimberWinchGo() = doTask {
+    val run = use<ClimberWinch>()
     action {
         try {
             periodic(20) {
-                run.ClimberWenchGo()
-                println("Climber Wench going")
+                run.ClimberWinchGo()
+                println("Climber Winch going")
             }
         } finally {
-            println("Climber Wench stop")
-            run.StopClimberWenchGo()
+            println("Climber Winch stop")
+            run.StopClimberWinchGo()
         }
     }
 }
+

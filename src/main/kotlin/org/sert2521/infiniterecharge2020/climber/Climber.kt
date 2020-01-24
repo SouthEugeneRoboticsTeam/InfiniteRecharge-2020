@@ -31,9 +31,9 @@ class ClimberLift : Subsystem("ClimberLift") {
     }
 }
 
-class ClimberWench : Subsystem("ClimberWench") {
+class ClimberWinch : Subsystem("ClimberWinch") {
     private val intakeMotor = MotorController(
-            MotorControllers.CLIMBER_WENCH
+            MotorControllers.CLIMBER_WINCH
     ) {
         inverted = true
         brakeMode = true
@@ -42,12 +42,12 @@ class ClimberWench : Subsystem("ClimberWench") {
 
     private var intakeRunning = false
 
-    fun ClimberWenchGo() {
-        intakeMotor.setPercentOutput(CLIMBER_WENCH)
+    fun ClimberWinchGo() {
+        intakeMotor.setPercentOutput(CLIMBER_WINCH)
         intakeRunning = true
     }
 
-    fun StopClimberWenchGo() {
+    fun StopClimberWinchGo() {
         intakeMotor.disable()
         intakeRunning = false
     }
