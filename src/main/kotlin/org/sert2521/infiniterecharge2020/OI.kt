@@ -9,12 +9,12 @@ object OI {
         CONTROLLER, JOYSTICK
     }
 
-    val controlModeChooser = SendableChooser<ControlMode>().apply {
-        addOption("Joystick", ControlMode.JOYSTICK)
-        addOption("Controller", ControlMode.CONTROLLER)
-    }
+//    val controlModeChooser = SendableChooser<ControlMode>().apply {
+//        addOption("Joystick", ControlMode.JOYSTICK)
+//        addOption("Controller", ControlMode.CONTROLLER)
+//    }
 
-    val controlMode get() = controlModeChooser.selected ?: ControlMode.JOYSTICK
+    val controlMode get() = ControlMode.CONTROLLER
 
     val primaryController by lazy { XboxController(Operator.PRIMARY_CONTROLLER) }
     val primaryJoystick by lazy { Joystick(Operator.PRIMARY_STICK) }
