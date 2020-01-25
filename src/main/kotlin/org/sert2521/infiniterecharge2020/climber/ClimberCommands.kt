@@ -5,7 +5,7 @@ import org.sert2521.sertain.subsystems.doTask
 import org.sert2521.sertain.subsystems.use
 
 suspend fun ClimberUp() = doTask {
-    val run = use<ClimberLift>()
+    val run = use<Climber>()
     action {
         try {
             periodic(20) {
@@ -20,7 +20,7 @@ suspend fun ClimberUp() = doTask {
 }
 
 suspend fun ClimberDown() = doTask {
-    val run = use<ClimberLift>()
+    val run = use<Climber>()
     action {
         try {
             periodic(20) {
@@ -35,7 +35,7 @@ suspend fun ClimberDown() = doTask {
 }
 
 suspend fun ClimberWinchGo() = doTask {
-    val run = use<ClimberWinch>()
+    val run = use<Climber>()
     action {
         try {
             periodic(20) {
