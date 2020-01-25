@@ -1,7 +1,6 @@
 package org.sert2521.infiniterecharge2020.drivetrain
 
 import edu.wpi.first.wpilibj.GenericHID
-import kotlinx.coroutines.cancel
 import org.sert2521.infiniterecharge2020.OI.primaryJoystick
 import org.sert2521.infiniterecharge2020.utils.deadband
 import org.sert2521.infiniterecharge2020.OI.ControlMode
@@ -22,6 +21,7 @@ import org.sert2521.sertain.units.MetricValue
 import org.sert2521.sertain.units.Per
 import org.sert2521.sertain.units.Radians
 import org.sert2521.sertain.units.Seconds
+import org.sert2521.sertain.units.convert
 import org.sert2521.sertain.units.convertTo
 import org.sert2521.sertain.units.div
 import org.sert2521.sertain.utils.timer
@@ -49,26 +49,6 @@ suspend fun controlDrivetrain() = doTask {
     }
 }
 
-// Drives the robot in a straight line for a certain distance (in inches) at a given output
-suspend fun driveStraight(
-        output: Double,
-        distance: MetricValue<Linear, MetricUnit<Linear>>
-) = doTask {
-    val drivetrain = use<Drivetrain>()
-    action {
-        drivetrain.zeroEncoders()
-        onTick {
-            drivetrain.arcadeDrive(output, 0.0)
-            // Calculates the number of encoder pulses corresponding to a certain distance
-            val ticks = (PULSES_PER_REVOLUTION * distance.convertTo(Meters).value / 2.0) / (2 * Math.PI * wheelRadius.value)
-            if (drivetrain.position >= ticks) {
-                drivetrain.stop()
-                this@action.cancel()
-            }
-        }
-    }
-}
-
 suspend fun driveCurve(
         speed: MetricValue<CompositeUnitType<Per, Linear, Chronic>, CompositeUnit<Per, Linear, Chronic>>,
         distance: MetricValue<Linear, MetricUnit<Linear>>
@@ -88,7 +68,47 @@ suspend fun driveCurve(
         val curve = MotionCurve(ticks, ticksPerSecond, 100.0, 100.0)
 
         timer(20, 0, (curve.t7 * 1000).toLong()) {
-            drivetrain.driveToPosition(curve.d(it / 1000.0).toInt())
+            drivetrain.setTargetPosition(curve.d(it / 1000.0).toInt())
         }
     }
 }
+
+//suspend fun drivePath(
+//        trajectory: Trajectory,
+//        pose: () -> Pose2d,
+//        controller: RamseteController,
+//        feedforward: SimpleMotorFeedforward,
+//        kinematics: DifferentialDriveKinematics,
+//        wheelSpeeds: () -> DifferentialDriveWheelSpeeds,
+//        leftController: PIDController,
+//        rightController: PIDController,
+//        outputVolts: (Metric, Double) -> Unit
+//) = doTask {
+//    val drivetrain = use<Drivetrain>()
+//    action {
+//        // initialize
+//        val initialState = trajectory.sample(0.0)
+//
+//        var prevTime = 0.s
+//        var prevSpeeds = kinematics.toWheelSpeeds(ChassisSpeeds(
+//                initialState.velocityMetersPerSecond,
+//                0.0,
+//                initialState.curvatureRadPerMeter * initialState.velocityMetersPerSecond
+//        ))
+//        timer(20, 0, -1) {
+//            val curTime = it.ms.convertTo(Seconds)
+//            val dt = curTime - prevTime
+//
+//            val targetWheelSpeeds = kinematics.toWheelSpeeds(
+//                    controller.calculate(pose(), trajectory.sample(curTime.value))
+//            )
+//
+//            val leftTargetSpeed = targetWheelSpeeds.leftMetersPerSecond.mps
+//            val rightTargetSpeed = targetWheelSpeeds.rightMetersPerSecond.mps
+//
+//            val leftyTargetSpeed = (leftTargetSpeed / wheelRadius).value.rps.convertTo(encoder.ticksPerSecond)
+//            val rightyTargetSpeed = (rightTargetSpeed / wheelRadius).value.rps.convertTo(encoder.ticksPerSecond)
+//
+//        }
+//    }
+//}
