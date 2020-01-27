@@ -1,6 +1,14 @@
 package org.sert2521.infiniterecharge2020.drivetrain
 
 import edu.wpi.first.wpilibj.GenericHID
+import edu.wpi.first.wpilibj.controller.PIDController
+import edu.wpi.first.wpilibj.controller.RamseteController
+import edu.wpi.first.wpilibj.controller.SimpleMotorFeedforward
+import edu.wpi.first.wpilibj.geometry.Pose2d
+import edu.wpi.first.wpilibj.kinematics.ChassisSpeeds
+import edu.wpi.first.wpilibj.kinematics.DifferentialDriveKinematics
+import edu.wpi.first.wpilibj.kinematics.DifferentialDriveWheelSpeeds
+import edu.wpi.first.wpilibj.trajectory.Trajectory
 import org.sert2521.infiniterecharge2020.OI.primaryJoystick
 import org.sert2521.infiniterecharge2020.utils.deadband
 import org.sert2521.infiniterecharge2020.OI.ControlMode
@@ -21,7 +29,6 @@ import org.sert2521.sertain.units.MetricValue
 import org.sert2521.sertain.units.Per
 import org.sert2521.sertain.units.Radians
 import org.sert2521.sertain.units.Seconds
-import org.sert2521.sertain.units.convert
 import org.sert2521.sertain.units.convertTo
 import org.sert2521.sertain.units.div
 import org.sert2521.sertain.utils.timer
@@ -49,9 +56,9 @@ suspend fun controlDrivetrain() = doTask {
     }
 }
 
-suspend fun driveCurve(
+suspend fun <T : MetricUnit<Linear>> driveCurve(
         speed: MetricValue<CompositeUnitType<Per, Linear, Chronic>, CompositeUnit<Per, Linear, Chronic>>,
-        distance: MetricValue<Linear, MetricUnit<Linear>>
+        distance: MetricValue<Linear, T>
 ) = doTask {
     val drivetrain = use<Drivetrain>()
     action {
@@ -60,11 +67,11 @@ suspend fun driveCurve(
         val ticks = MetricValue(
                 Radians,
                 distance.convertTo(Meters).value / wheelRadius.value
-        ).convertTo(EncoderTicks(PULSES_PER_REVOLUTION.toInt())).value
+        ).convertTo(EncoderTicks(PULSES_PER_REVOLUTION)).value
         val ticksPerSecond = MetricValue(
                 Radians / Seconds,
                 speed.convertTo(Meters / Seconds).value / wheelRadius.value
-        ).convertTo(EncoderTicks(PULSES_PER_REVOLUTION.toInt()) / Seconds).value
+        ).convertTo(EncoderTicks(PULSES_PER_REVOLUTION) / Seconds).value
         val curve = MotionCurve(ticks, ticksPerSecond, 100.0, 100.0)
 
         timer(20, 0, (curve.t7 * 1000).toLong()) {
@@ -82,7 +89,7 @@ suspend fun driveCurve(
 //        wheelSpeeds: () -> DifferentialDriveWheelSpeeds,
 //        leftController: PIDController,
 //        rightController: PIDController,
-//        outputVolts: (Metric, Double) -> Unit
+//        outputVolts: (Double, Double) -> Unit
 //) = doTask {
 //    val drivetrain = use<Drivetrain>()
 //    action {
@@ -101,7 +108,7 @@ suspend fun driveCurve(
 //
 //            val targetWheelSpeeds = kinematics.toWheelSpeeds(
 //                    controller.calculate(pose(), trajectory.sample(curTime.value))
-//            )
+//            ).leftMetersPerSecond
 //
 //            val leftTargetSpeed = targetWheelSpeeds.leftMetersPerSecond.mps
 //            val rightTargetSpeed = targetWheelSpeeds.rightMetersPerSecond.mps

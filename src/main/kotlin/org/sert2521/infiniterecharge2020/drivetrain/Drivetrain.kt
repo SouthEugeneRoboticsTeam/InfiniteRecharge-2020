@@ -9,29 +9,53 @@ import org.sert2521.sertain.subsystems.Subsystem
 import org.sert2521.sertain.telemetry.linkTableEntry
 import com.kauailabs.navx.frc.AHRS
 import edu.wpi.first.wpilibj.I2C
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import org.sert2521.infiniterecharge2020.utils.withTableEntry
+import org.sert2521.sertain.coroutines.delayUntil
+import org.sert2521.sertain.coroutines.watch
+import org.sert2521.sertain.motors.MotorPidf
+import org.sert2521.sertain.telemetry.Table
+import org.sert2521.sertain.telemetry.TableEntry
+import org.sert2521.sertain.telemetry.tableEntry
 
 class Drivetrain : Subsystem("Drivetrain", ::controlDrivetrain) {
+    val kp = TableEntry("KP", 0.0, listOf(name))
+    val ki = TableEntry("KI", 0.0, listOf(name))
+    val kd = TableEntry("KD", 0.0, listOf(name))
+    val kf = TableEntry("KF", 0.0, listOf(name))
+
     val rightDrive = MotorController(MotorControllers.rightFront, MotorControllers.rightBack) {
         inverted = true
         brakeMode = true
-        sensorInverted = true
-        encoder = Encoder(PULSES_PER_REVOLUTION)
+        sensorInverted = false
+//        encoder = Encoder(PULSES_PER_REVOLUTION)
         pidf {
-            kp = .202
+            kp = 0.5
             ki = 0.0
-            kd = 0.3
+            kd = 0.0
+            kf = 0.0
         }
+//        RobotScope.withTableEntry(this@Drivetrain.kp) { pidf[0] = pidf[0]?.copy(kp = it)!! }
+//        RobotScope.withTableEntry(this@Drivetrain.ki) { pidf[0] = pidf[0]?.copy(ki = it)!! }
+//        RobotScope.withTableEntry(this@Drivetrain.kd) { pidf[0] = pidf[0]?.copy(kd = it)!! }
+//        RobotScope.withTableEntry(this@Drivetrain.kf) { pidf[0] = pidf[0]?.copy(kf = it)!! }
     }
 
     val leftDrive = MotorController(MotorControllers.leftFront, MotorControllers.leftBack) {
         brakeMode = true
-        sensorInverted = true
-        encoder = Encoder(PULSES_PER_REVOLUTION)
+        sensorInverted = false
+//        encoder = Encoder(PULSES_PER_REVOLUTION)
         pidf {
-            kp = .202
+            kp = 0.5
             ki = 0.0
-            kd = 0.3
+            kd = 0.0
+            kf = 0.0
         }
+//        RobotScope.withTableEntry(this@Drivetrain.kp) { pidf[0] = pidf[0]?.copy(kp = it)!! }
+//        RobotScope.withTableEntry(this@Drivetrain.ki) { pidf[0] = pidf[0]?.copy(ki = it)!! }
+//        RobotScope.withTableEntry(this@Drivetrain.kd) { pidf[0] = pidf[0]?.copy(kd = it)!! }
+//        RobotScope.withTableEntry(this@Drivetrain.kf) { pidf[0] = pidf[0]?.copy(kf = it)!! }
     }
 
     val gyro = AHRS(I2C.Port.kMXP)
@@ -61,7 +85,7 @@ class Drivetrain : Subsystem("Drivetrain", ::controlDrivetrain) {
         leftDrive.setPercentOutput(leftSpeed)
     }
 
-    fun setTargetSpeeds(leftSpeed: Int, rightSpeed: Int = leftSpeed) {
+    fun setTargetSpeed(leftSpeed: Int, rightSpeed: Int = leftSpeed) {
         leftDrive.ctreMotorController.set(ControlMode.Velocity, leftSpeed.toDouble())
         rightDrive.ctreMotorController.set(ControlMode.Velocity, rightSpeed.toDouble())
     }
