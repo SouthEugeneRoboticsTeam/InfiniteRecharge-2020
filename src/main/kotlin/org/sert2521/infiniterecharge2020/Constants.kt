@@ -8,3 +8,8 @@ object MotorControllers {
     val leftRear = TalonId(2)
     val rightRear = TalonId(4)
 }
+
+object PlaceHolder {
+
+    var delete = "me"
+}
