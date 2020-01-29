@@ -16,26 +16,26 @@ class Climber : Subsystem("Climber") {
         maxOutputRange = -0.75..0.75
     }
 
-    private var intakeRunning = false
+    private var climberLiftRunning = false
 
     fun ClimberLiftUp() {
         ClimberLiftMotor.setPercentOutput(CLIMBER_LIFT_SPEED)
-        intakeRunning = true
+        climberLiftRunning = true
     }
 
     fun ClimberLiftDown() {
         ClimberLiftMotor.setPercentOutput(-CLIMBER_LIFT_SPEED)
-        intakeRunning = true
+        climberLiftRunning = true
     }
 
     fun StopClimberLift() {
         ClimberLiftMotor.disable()
-        intakeRunning = false
+        climberLiftRunning = false
 
     }
 
     private val ClimberWinchMotor = MotorController(
-            MotorControllers.CLIMBER_WINCH_A, CLIMBER_WINCH_B
+            CLIMBER_WINCH_A, CLIMBER_WINCH_B
 
     ) {
         inverted = true
@@ -43,14 +43,16 @@ class Climber : Subsystem("Climber") {
         maxOutputRange = -0.75..0.75
     }
 
+    private var climberWinchRunning = false
+
     fun ClimberWinchGo() {
             ClimberWinchMotor.setPercentOutput(CLIMBER_WINCH)
-            intakeRunning = true
+            climberWinchRunning = true
     }
 
     fun StopClimberWinchGo() {
             ClimberWinchMotor.disable()
-            intakeRunning = false
+            climberWinchRunning = false
         }
     }
 
