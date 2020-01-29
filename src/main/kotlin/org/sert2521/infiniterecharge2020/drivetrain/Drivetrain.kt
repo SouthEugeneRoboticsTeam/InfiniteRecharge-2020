@@ -11,7 +11,6 @@ import com.kauailabs.navx.frc.AHRS
 import edu.wpi.first.wpilibj.I2C
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import org.sert2521.infiniterecharge2020.utils.withTableEntry
 import org.sert2521.sertain.coroutines.delayUntil
 import org.sert2521.sertain.coroutines.watch
 import org.sert2521.sertain.motors.MotorPidf
@@ -20,42 +19,30 @@ import org.sert2521.sertain.telemetry.TableEntry
 import org.sert2521.sertain.telemetry.tableEntry
 
 class Drivetrain : Subsystem("Drivetrain", ::controlDrivetrain) {
-    val kp = TableEntry("KP", 0.0, listOf(name))
-    val ki = TableEntry("KI", 0.0, listOf(name))
-    val kd = TableEntry("KD", 0.0, listOf(name))
-    val kf = TableEntry("KF", 0.0, listOf(name))
 
     val rightDrive = MotorController(MotorControllers.rightFront, MotorControllers.rightBack) {
         inverted = true
         brakeMode = true
-        sensorInverted = false
+        sensorInverted = true
 //        encoder = Encoder(PULSES_PER_REVOLUTION)
         pidf {
-            kp = 0.5
+            kp = 3.0
             ki = 0.0
             kd = 0.0
-            kf = 0.0
+            kf = 0.0725
         }
-//        RobotScope.withTableEntry(this@Drivetrain.kp) { pidf[0] = pidf[0]?.copy(kp = it)!! }
-//        RobotScope.withTableEntry(this@Drivetrain.ki) { pidf[0] = pidf[0]?.copy(ki = it)!! }
-//        RobotScope.withTableEntry(this@Drivetrain.kd) { pidf[0] = pidf[0]?.copy(kd = it)!! }
-//        RobotScope.withTableEntry(this@Drivetrain.kf) { pidf[0] = pidf[0]?.copy(kf = it)!! }
     }
 
     val leftDrive = MotorController(MotorControllers.leftFront, MotorControllers.leftBack) {
         brakeMode = true
-        sensorInverted = false
+        sensorInverted = true
 //        encoder = Encoder(PULSES_PER_REVOLUTION)
         pidf {
-            kp = 0.5
+            kp = 1.0
             ki = 0.0
             kd = 0.0
-            kf = 0.0
+            kf = 0.08
         }
-//        RobotScope.withTableEntry(this@Drivetrain.kp) { pidf[0] = pidf[0]?.copy(kp = it)!! }
-//        RobotScope.withTableEntry(this@Drivetrain.ki) { pidf[0] = pidf[0]?.copy(ki = it)!! }
-//        RobotScope.withTableEntry(this@Drivetrain.kd) { pidf[0] = pidf[0]?.copy(kd = it)!! }
-//        RobotScope.withTableEntry(this@Drivetrain.kf) { pidf[0] = pidf[0]?.copy(kf = it)!! }
     }
 
     val gyro = AHRS(I2C.Port.kMXP)
