@@ -42,20 +42,20 @@ class Flapper : Subsystem("Flapper") {
         maxOutputRange = -0.75..0.75
     }
 
-    private var intakeRunning = false
+    private var flapperRunning = false
 
     fun spinFlapper() {
         intakeMotor.setPercentOutput(FLAPPER_SPEED)
-        intakeRunning = true
+        flapperRunning = true
     }
 
     fun reverseFlapper() {
         intakeMotor.setPercentOutput(-FLAPPER_SPEED)
-        intakeRunning = true
+        flapperRunning = true
     }
 
     fun stopFlapper() {
         intakeMotor.disable()
-        intakeRunning = false
+        flapperRunning = false
     }
 }
