@@ -1,16 +1,22 @@
 package org.sert2521.infiniterecharge2020.drivetrain
 
+import com.sun.xml.internal.fastinfoset.alphabet.BuiltInRestrictedAlphabets.table
 import edu.wpi.first.wpilibj.GenericHID
+import kotlinx.coroutines.coroutineScope
 import org.sert2521.infiniterecharge2020.OI.primaryJoystick
 import org.sert2521.infiniterecharge2020.utils.deadband
 import org.sert2521.infiniterecharge2020.OI.ControlMode
 import org.sert2521.infiniterecharge2020.OI.controlMode
 import org.sert2521.infiniterecharge2020.OI.primaryController
+import org.sert2521.infiniterecharge2020.vision.Vision
 import org.sert2521.sertain.control.MotionCurve
+import org.sert2521.sertain.control.PidfConfig
+import org.sert2521.sertain.control.PidfController
 import org.sert2521.sertain.events.onTick
 import org.sert2521.sertain.motors.EncoderTicks
 import org.sert2521.sertain.subsystems.doTask
 import org.sert2521.sertain.subsystems.use
+import org.sert2521.sertain.telemetry.TableEntry
 import org.sert2521.sertain.telemetry.tableEntry
 import org.sert2521.sertain.units.Chronic
 import org.sert2521.sertain.units.CompositeUnit
@@ -27,6 +33,7 @@ import org.sert2521.sertain.units.div
 import org.sert2521.sertain.units.rps
 import org.sert2521.sertain.utils.timer
 import kotlin.math.sign
+import org.sert2521.sertain.telemetry.Table
 
 private val throttle
     get() = when (controlMode) {
@@ -46,6 +53,18 @@ suspend fun controlDrivetrain() = doTask {
             val scaledThrottle = (-throttle.sign * (throttle * throttle)).deadband(.05)
             val scaledTurn = (turn.sign * (turn * turn)).deadband(.05)
             drivetrain.arcadeDrive(scaledThrottle, scaledTurn)
+        }
+    }
+}
+
+suspend fun alignToBall() = doTask {
+    val drivetrain = use<Drivetrain>()
+    val vision = use<Vision>()
+
+    action {
+        val controller = PidfController(PidfConfig(), 0.0)
+        onTick {
+            controller.next(0.0, vision.offsetAngle.value)
         }
     }
 }
