@@ -5,7 +5,6 @@ import org.sert2521.sertain.events.whileTeleop
 import org.sert2521.sertain.robot
 import org.sert2521.sertain.subsystems.add
 
-
 suspend fun main() = robot {
     println("Robot program starting")
     add<Drivetrain>()
