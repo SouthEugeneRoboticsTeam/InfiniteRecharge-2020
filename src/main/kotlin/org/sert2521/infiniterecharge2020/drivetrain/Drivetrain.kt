@@ -3,25 +3,19 @@ package org.sert2521.infiniterecharge2020.drivetrain
 import com.ctre.phoenix.motorcontrol.ControlMode
 import org.sert2521.infiniterecharge2020.MotorControllers
 import org.sert2521.sertain.coroutines.RobotScope
-import org.sert2521.sertain.motors.Encoder
 import org.sert2521.sertain.motors.MotorController
 import org.sert2521.sertain.subsystems.Subsystem
 import org.sert2521.sertain.telemetry.linkTableEntry
 import com.kauailabs.navx.frc.AHRS
 import edu.wpi.first.wpilibj.I2C
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
-import org.sert2521.sertain.coroutines.delayUntil
-import org.sert2521.sertain.coroutines.watch
-import org.sert2521.sertain.motors.MotorPidf
 import org.sert2521.sertain.telemetry.Table
 import org.sert2521.sertain.telemetry.TableEntry
-import org.sert2521.sertain.telemetry.tableEntry
 import org.sert2521.sertain.telemetry.withTableEntry
 
 class Drivetrain : Subsystem("Drivetrain", ::controlDrivetrain) {
     val table = Table(name)
 
+    // Get PID gains from Shuffleboard
     val kp = TableEntry("KP", 2.0, table)
     val ki = TableEntry("KI", 0.005, table)
     val kd = TableEntry("KD", 0.3, table)
@@ -32,7 +26,6 @@ class Drivetrain : Subsystem("Drivetrain", ::controlDrivetrain) {
         inverted = true
         brakeMode = true
         sensorInverted = true
-//        encoder = Encoder(PULSES_PER_REVOLUTION)
         RobotScope.withTableEntry(kp) { pidf { kp = it } }
         RobotScope.withTableEntry(ki) { pidf { ki = it } }
         RobotScope.withTableEntry(kd) { pidf { kd = it } }
@@ -42,7 +35,6 @@ class Drivetrain : Subsystem("Drivetrain", ::controlDrivetrain) {
     val leftDrive = MotorController(MotorControllers.leftFront, MotorControllers.leftBack) {
         brakeMode = true
         sensorInverted = true
-//        encoder = Encoder(PULSES_PER_REVOLUTION)
         RobotScope.withTableEntry(kp) { pidf { kp = it } }
         RobotScope.withTableEntry(ki) { pidf { ki = it } }
         RobotScope.withTableEntry(kd) { pidf { kd = it } }
@@ -67,13 +59,13 @@ class Drivetrain : Subsystem("Drivetrain", ::controlDrivetrain) {
     }
 
     fun arcadeDrive(speed: Double, turn: Double) {
-        rightDrive.setPercentOutput(speed - turn)
         leftDrive.setPercentOutput(speed + turn)
+        rightDrive.setPercentOutput(speed - turn)
     }
 
-    fun tankDrive(rightSpeed: Double, leftSpeed: Double) {
-        rightDrive.setPercentOutput(rightSpeed)
+    fun tankDrive(leftSpeed: Double, rightSpeed: Double) {
         leftDrive.setPercentOutput(leftSpeed)
+        rightDrive.setPercentOutput(rightSpeed)
     }
 
     fun setTargetSpeed(leftSpeed: Int, rightSpeed: Int = leftSpeed) {
@@ -81,9 +73,9 @@ class Drivetrain : Subsystem("Drivetrain", ::controlDrivetrain) {
         rightDrive.ctreMotorController.set(ControlMode.Velocity, rightSpeed.toDouble())
     }
 
-    fun setTargetPosition(targetPosition: Int, t: Int = targetPosition) {
-        rightDrive.setTargetPosition(targetPosition)
-        leftDrive.setTargetPosition(targetPosition)
+    fun setTargetPosition(leftTargetPosition: Int, rightTargetPosition: Int) {
+        leftDrive.setTargetPosition(leftTargetPosition)
+        rightDrive.setTargetPosition(rightTargetPosition)
     }
 
     fun stop() {
