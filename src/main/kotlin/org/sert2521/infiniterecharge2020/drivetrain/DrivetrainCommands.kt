@@ -64,7 +64,8 @@ suspend fun alignToBall() = doTask {
     action {
         val controller = PidfController(PidfConfig(), 0.0)
         onTick {
-            controller.next(0.0, vision.offsetAngle.value)
+            val turnValue = controller.next(0.0, vision.offsetAngle.value)
+            drivetrain.arcadeDrive(0.0, turnValue)
         }
     }
 }
