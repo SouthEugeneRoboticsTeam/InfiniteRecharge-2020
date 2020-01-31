@@ -20,7 +20,7 @@ object OI {
     val controlMode get() = controlModeChooser.selected ?: ControlMode.CONTROLLER
 
     init {
-        RobotScope.linkTableEntry("Control Mode", listOf("OI")) { controlMode.name }
+        RobotScope.linkTableEntry("Control Mode", "OI") { controlMode.name }
     }
 
     val primaryController by lazy { XboxController(Operator.PRIMARY_CONTROLLER) }

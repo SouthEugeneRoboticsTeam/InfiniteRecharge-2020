@@ -17,32 +17,36 @@ import org.sert2521.sertain.motors.MotorPidf
 import org.sert2521.sertain.telemetry.Table
 import org.sert2521.sertain.telemetry.TableEntry
 import org.sert2521.sertain.telemetry.tableEntry
+import org.sert2521.sertain.telemetry.withTableEntry
 
 class Drivetrain : Subsystem("Drivetrain", ::controlDrivetrain) {
+    val table = Table(name)
+
+    val kp = TableEntry("KP", 2.0, table)
+    val ki = TableEntry("KI", 0.005, table)
+    val kd = TableEntry("KD", 0.3, table)
+    val kfLeft = TableEntry("KF Left", 0.08, table)
+    val kfRight = TableEntry("KF Right", 0.0725, table)
 
     val rightDrive = MotorController(MotorControllers.rightFront, MotorControllers.rightBack) {
         inverted = true
         brakeMode = true
         sensorInverted = true
 //        encoder = Encoder(PULSES_PER_REVOLUTION)
-        pidf {
-            kp = 3.0
-            ki = 0.0
-            kd = 0.0
-            kf = 0.0725
-        }
+        RobotScope.withTableEntry(kp) { pidf { kp = it } }
+        RobotScope.withTableEntry(ki) { pidf { ki = it } }
+        RobotScope.withTableEntry(kd) { pidf { kd = it } }
+        RobotScope.withTableEntry(kfRight) { pidf { kf = it } }
     }
 
     val leftDrive = MotorController(MotorControllers.leftFront, MotorControllers.leftBack) {
         brakeMode = true
         sensorInverted = true
 //        encoder = Encoder(PULSES_PER_REVOLUTION)
-        pidf {
-            kp = 1.0
-            ki = 0.0
-            kd = 0.0
-            kf = 0.08
-        }
+        RobotScope.withTableEntry(kp) { pidf { kp = it } }
+        RobotScope.withTableEntry(ki) { pidf { ki = it } }
+        RobotScope.withTableEntry(kd) { pidf { kd = it } }
+        RobotScope.withTableEntry(kfLeft) { pidf { kf = it } }
     }
 
     val gyro = AHRS(I2C.Port.kMXP)
@@ -55,11 +59,11 @@ class Drivetrain : Subsystem("Drivetrain", ::controlDrivetrain) {
 
     init {
         zeroEncoders()
-        RobotScope.linkTableEntry("Right Position", listOf(name)) { rightPosition }
-        RobotScope.linkTableEntry("Left Position", listOf(name)) { leftPosition }
-        RobotScope.linkTableEntry("Right Velocity", listOf(name)) { rightSpeed }
-        RobotScope.linkTableEntry("Left Velocity", listOf(name)) { leftSpeed }
-        RobotScope.linkTableEntry("Heading", listOf(name)) { heading }
+        RobotScope.linkTableEntry("Right Position", name) { rightPosition }
+        RobotScope.linkTableEntry("Left Position", name) { leftPosition }
+        RobotScope.linkTableEntry("Right Velocity", name) { rightSpeed }
+        RobotScope.linkTableEntry("Left Velocity", name) { leftSpeed }
+        RobotScope.linkTableEntry("Heading", name) { heading }
     }
 
     fun arcadeDrive(speed: Double, turn: Double) {

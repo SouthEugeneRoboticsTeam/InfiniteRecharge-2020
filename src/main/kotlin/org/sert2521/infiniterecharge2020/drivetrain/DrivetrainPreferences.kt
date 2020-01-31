@@ -11,9 +11,9 @@ const val KD = 0.1
 const val KF = 0.0
 
 // Number of encoder pulses for one revolution of the wheel
-const val PULSES_PER_REVOLUTION = 4096
+const val TICKS_PER_REVOLUTION = 4096
 
-val encoder = Encoder(PULSES_PER_REVOLUTION)
+val encoder = Encoder(TICKS_PER_REVOLUTION)
 
 // TODO measure wheels
-val wheelRadius = 0.0254.m
+val wheelRadius = 0.098425.m
