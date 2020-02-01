@@ -1,6 +1,7 @@
 package org.sert2521.infiniterecharge2020
 
 import org.sert2521.sertain.motors.TalonId
+import org.sert2521.sertain.motors.VictorId
 
 object MotorControllers {
     val leftFront = TalonId(1)
@@ -11,7 +12,7 @@ object MotorControllers {
     val INTAKE_A = TalonId(-1)
     val INTAKE_B = TalonId(-1)
 
-    val FLAPPER = TalonId(-1)
+    val FLAPPER = VictorId(-1)
 }
 
 object Operator {

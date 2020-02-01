@@ -1,4 +1,4 @@
-package org.sert2521.infiniterecharge2020.intake
+package org.sert2521.infiniterecharge2020.powerhub
 
 const val INTAKE_SPEED = .9
 const val FLAPPER_SPEED = .9
