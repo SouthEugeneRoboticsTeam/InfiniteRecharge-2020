@@ -6,15 +6,21 @@ import org.sert2521.sertain.events.onTick
 import org.sert2521.sertain.subsystems.doTask
 import org.sert2521.sertain.subsystems.use
 
-suspend fun intake() = doTask {
+suspend fun spin(intake: Boolean) = doTask {
     val powerHub = use<PowerHub>()
     action {
         doAll {
             onTick {
                 periodic(20) {
                     powerHub.spin()
-                    powerHub.lowerFlapper()
-                    println("Spinning intake")
+                    if (intake) {
+                        println("Trying to intake")
+                        powerHub.lowerFlapper()
+
+                    } else {
+                        println("Trying to outtake")
+                        powerHub.raiseFlapper()
+                    }
                 }
             }
         }
