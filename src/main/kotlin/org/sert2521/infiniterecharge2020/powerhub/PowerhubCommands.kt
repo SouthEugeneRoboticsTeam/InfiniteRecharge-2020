@@ -13,6 +13,7 @@ suspend fun intake() = doTask {
             onTick {
                 periodic(20) {
                     powerHub.spin()
+                    powerHub.lowerFlapper()
                     println("Spinning intake")
                 }
             }
