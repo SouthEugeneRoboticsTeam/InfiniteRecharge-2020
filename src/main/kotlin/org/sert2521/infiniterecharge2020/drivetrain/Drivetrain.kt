@@ -78,6 +78,7 @@ class Drivetrain : Subsystem("Drivetrain", ::controlDrivetrain) {
     val leftPosition get() = leftDrive.position
     val rightSpeed get() = rightDrive.velocity
     val leftSpeed get() = leftDrive.velocity
+    // Return the robot's heading in degrees, from -180 to 180
     val heading get() = -gyro.angle.IEEErem(360.0)
 
     init {
@@ -88,9 +89,9 @@ class Drivetrain : Subsystem("Drivetrain", ::controlDrivetrain) {
         RobotScope.linkTableEntry("Left Velocity", name) { leftSpeed }
         RobotScope.linkTableEntry("Heading", name) { heading }
 
-        RobotScope.linkTableEntry("OdometryX", name) { odometry.poseMeters.translation.x }
-        RobotScope.linkTableEntry("OdometryY", name) { odometry.poseMeters.translation.y }
-        RobotScope.linkTableEntry("OdometryAng", name) { odometry.poseMeters.rotation.degrees }
+        RobotScope.linkTableEntry("X Translation", name) { odometry.poseMeters.translation.x }
+        RobotScope.linkTableEntry("Y Translation", name) { odometry.poseMeters.translation.y }
+        RobotScope.linkTableEntry("Transformation Angle", name) { odometry.poseMeters.rotation.degrees }
     }
 
     fun arcadeDrive(speed: Double, turn: Double) {
@@ -110,12 +111,14 @@ class Drivetrain : Subsystem("Drivetrain", ::controlDrivetrain) {
 
     val leftSpeedSetpoint = TableEntry("LeftSpeedSetpoint", 0, "Drivetrain")
     val rightSpeedSetpoint = TableEntry("RightSpeedSetpoint", 0, "Drivetrain")
+
     fun <V : CompositeUnit<Per, Linear, Chronic>> setTargetSpeed(leftSpeed: MetricValue<Velocity, V>, rightSpeed: MetricValue<Velocity, V>) {
         val leftSetpoint = ((leftSpeed.convertTo(Meters / Seconds).value / wheelRadius.value).rdps.convertTo(motorEncoder.ticksPerSecond).value / 10).toInt()
-        leftSpeedSetpoint.value = leftSetpoint
-        leftDrive.setTargetVelocity(leftSetpoint)
         val rightSetpoint = ((rightSpeed.convertTo(Meters / Seconds).value / wheelRadius.value).rdps.convertTo(motorEncoder.ticksPerSecond).value / 10).toInt()
+        // Log speed setpoints to NT
+        leftSpeedSetpoint.value = leftSetpoint
         rightSpeedSetpoint.value = rightSetpoint
+        leftDrive.setTargetVelocity(leftSetpoint)
         rightDrive.setTargetVelocity(rightSetpoint)
     }
 
