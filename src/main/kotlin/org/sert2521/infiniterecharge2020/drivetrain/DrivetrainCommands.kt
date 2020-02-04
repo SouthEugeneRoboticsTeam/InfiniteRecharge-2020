@@ -85,33 +85,34 @@ suspend fun alignToBall() = doTask {
     val drivetrain = use<Drivetrain>()
     var loopsStill = 0
     val visionLastAlive = wpiTable("Vision").getEntry("last_alive")
-    //var lastUpdate = visionLastAlive.value.double
-    //val visionAngle = wpiTable("Vision").getEntry("xAngOff")
-    var lastAngle = 30.0//visionAngle.value.double
+    var lastUpdate = visionLastAlive.value.double
+    val visionAngle = wpiTable("Vision").getEntry("xAngOff")
+    var lastAngle = visionAngle.value.double + drivetrain.rawHeading
 
     action {
         val pidConfig = PidfConfig()
-        pidConfig.kf = 0.15
+        pidConfig.kf = 0.0
         pidConfig.kp = 0.01
         pidConfig.ki = 0.0
-        pidConfig.kd = 0.15
+        pidConfig.kd = 0.0
         val controller = PidfController2(pidConfig, 1.0)
         onTick {
-            /*if (lastUpdate != visionLastAlive.value.double){
+            if (lastUpdate != visionLastAlive.value.double){
                 lastUpdate = visionLastAlive.value.double
-                lastAngle = visionAngle.value.double
-            }*/
+                lastAngle = visionAngle.value.double + drivetrain.rawHeading
+            }
 
             val turnValue = controller.next(0.0, (drivetrain.rawHeading - lastAngle).IEEErem(360.0))
             drivetrain.arcadeDrive(0.0, -turnValue)
 
-            if (abs((drivetrain.rawHeading - lastAngle)) < 1) {
+            if (abs((drivetrain.rawHeading - lastAngle)) < 0.3) {
                 loopsStill += 1
             } else {
                 loopsStill = 0
             }
 
             if (loopsStill == 11){
+                println("done")
                 this@action.cancel()
             }
         }
