@@ -4,10 +4,11 @@ import edu.wpi.first.wpilibj.Joystick
 import edu.wpi.first.wpilibj.XboxController
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser
 import kotlinx.coroutines.CoroutineScope
-import org.sert2521.infiniterecharge2020.OI.primaryController
 import org.sert2521.infiniterecharge2020.OI.primaryJoystick
-import org.sert2521.infiniterecharge2020.OI.secondaryJoystick
+import org.sert2521.infiniterecharge2020.drivetrain.alignToBall
+import org.sert2521.infiniterecharge2020.drivetrain.controlDrivetrain
 import org.sert2521.sertain.coroutines.RobotScope
+import org.sert2521.sertain.coroutines.watch
 import org.sert2521.sertain.telemetry.linkTableEntry
 
 object OI {
@@ -33,4 +34,9 @@ object OI {
 }
 
 fun CoroutineScope.initControls() {
+    { primaryJoystick.getRawButton(1) }.watch {
+        whenTrue {
+            alignToBall()
+        }
+    }
 }

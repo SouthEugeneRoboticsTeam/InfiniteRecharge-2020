@@ -2,6 +2,7 @@ package org.sert2521.infiniterecharge2020.drivetrain
 
 import com.sun.xml.internal.fastinfoset.alphabet.BuiltInRestrictedAlphabets.table
 import edu.wpi.first.wpilibj.GenericHID
+import kotlinx.coroutines.cancel
 import kotlinx.coroutines.coroutineScope
 import org.sert2521.infiniterecharge2020.OI.primaryJoystick
 import org.sert2521.infiniterecharge2020.utils.deadband
@@ -34,6 +35,29 @@ import org.sert2521.sertain.units.rps
 import org.sert2521.sertain.utils.timer
 import kotlin.math.sign
 import org.sert2521.sertain.telemetry.Table
+import org.sert2521.sertain.telemetry.wpiTable
+import java.time.LocalDateTime
+import java.time.ZoneOffset
+import kotlin.math.IEEErem
+import kotlin.math.abs
+
+class PidfController2(config: PidfConfig, val dt: Double) {
+    private val kp = config.kp ?: 0.0
+    private val ki = config.ki ?: 0.0
+    private val kd = config.kd ?: 0.0
+    private val kf = config.kf ?: 0.0
+
+    private var integral = 0.0
+    private var lastError = 0.0
+
+    fun next(setPoint: Double, actual: Double): Double {
+        val error = setPoint - actual
+        integral += error * dt
+        val derivative = (error - lastError) / dt
+        lastError = error
+            return (kp * error) + (ki * integral) + (kd * derivative) + (kf * sign(error))
+    }
+}
 
 private val throttle
     get() = when (controlMode) {
@@ -59,13 +83,37 @@ suspend fun controlDrivetrain() = doTask {
 
 suspend fun alignToBall() = doTask {
     val drivetrain = use<Drivetrain>()
-    val vision = use<Vision>()
+    var loopsStill = 0
+    val visionLastAlive = wpiTable("Vision").getEntry("last_alive")
+    //var lastUpdate = visionLastAlive.value.double
+    //val visionAngle = wpiTable("Vision").getEntry("xAngOff")
+    var lastAngle = 30.0//visionAngle.value.double
 
     action {
-        val controller = PidfController(PidfConfig(), 0.0)
+        val pidConfig = PidfConfig()
+        pidConfig.kf = 0.15
+        pidConfig.kp = 0.01
+        pidConfig.ki = 0.0
+        pidConfig.kd = 0.15
+        val controller = PidfController2(pidConfig, 1.0)
         onTick {
-            val turnValue = controller.next(0.0, vision.offsetAngle.value)
-            drivetrain.arcadeDrive(0.0, turnValue)
+            /*if (lastUpdate != visionLastAlive.value.double){
+                lastUpdate = visionLastAlive.value.double
+                lastAngle = visionAngle.value.double
+            }*/
+
+            val turnValue = controller.next(0.0, (drivetrain.rawHeading - lastAngle).IEEErem(360.0))
+            drivetrain.arcadeDrive(0.0, -turnValue)
+
+            if (abs((drivetrain.rawHeading - lastAngle)) < 1) {
+                loopsStill += 1
+            } else {
+                loopsStill = 0
+            }
+
+            if (loopsStill == 11){
+                this@action.cancel()
+            }
         }
     }
 }

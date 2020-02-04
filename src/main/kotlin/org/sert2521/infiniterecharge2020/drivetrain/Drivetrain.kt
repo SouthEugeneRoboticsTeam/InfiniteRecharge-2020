@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj.I2C
 import org.sert2521.sertain.telemetry.Table
 import org.sert2521.sertain.telemetry.TableEntry
 import org.sert2521.sertain.telemetry.withTableEntry
+import kotlin.math.IEEErem
 
 class Drivetrain : Subsystem("Drivetrain", ::controlDrivetrain) {
     val table = Table(name)
@@ -47,7 +48,8 @@ class Drivetrain : Subsystem("Drivetrain", ::controlDrivetrain) {
     val leftPosition get() = leftDrive.position
     val rightSpeed get() = rightDrive.velocity
     val leftSpeed get() = leftDrive.velocity
-    val heading get() = gyro.angle
+    val heading get() = -gyro.angle.IEEErem(360.0)
+    val rawHeading get() = -gyro.angle
 
     init {
         zeroEncoders()
