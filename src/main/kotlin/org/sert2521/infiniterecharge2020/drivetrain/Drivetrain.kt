@@ -10,7 +10,6 @@ import com.kauailabs.navx.frc.AHRS
 import edu.wpi.first.wpilibj.I2C
 import edu.wpi.first.wpilibj.geometry.Rotation2d
 import edu.wpi.first.wpilibj.kinematics.DifferentialDriveOdometry
-import kotlinx.coroutines.launch
 import org.sert2521.sertain.events.onTick
 import org.sert2521.sertain.telemetry.Table
 import org.sert2521.sertain.telemetry.TableEntry
@@ -37,7 +36,7 @@ class Drivetrain : Subsystem("Drivetrain", ::controlDrivetrain) {
                     Rotation2d.fromDegrees(heading),
                     MetricValue(motorEncoder.ticks, leftDrive.position.toDouble()).convertTo(Radians).value * wheelRadius.value,
                     MetricValue(motorEncoder.ticks, rightDrive.position.toDouble()).convertTo(Radians).value * wheelRadius.value
-                    )
+            )
         }
     }
 
@@ -111,13 +110,19 @@ class Drivetrain : Subsystem("Drivetrain", ::controlDrivetrain) {
 
     val leftSpeedSetpoint = TableEntry("LeftSpeedSetpoint", 0, "Drivetrain")
     val rightSpeedSetpoint = TableEntry("RightSpeedSetpoint", 0, "Drivetrain")
+    val leftSpeedError = TableEntry("LeftSpeedError", 0, "Drivetrain")
+    val rightSpeedError = TableEntry("RightSpeedError", 0, "Drivetrain")
 
     fun <V : CompositeUnit<Per, Linear, Chronic>> setTargetSpeed(leftSpeed: MetricValue<Velocity, V>, rightSpeed: MetricValue<Velocity, V>) {
+        // Convert speed setpoints from meters-per-second into encoder ticks
         val leftSetpoint = ((leftSpeed.convertTo(Meters / Seconds).value / wheelRadius.value).rdps.convertTo(motorEncoder.ticksPerSecond).value / 10).toInt()
         val rightSetpoint = ((rightSpeed.convertTo(Meters / Seconds).value / wheelRadius.value).rdps.convertTo(motorEncoder.ticksPerSecond).value / 10).toInt()
         // Log speed setpoints to NT
         leftSpeedSetpoint.value = leftSetpoint
         rightSpeedSetpoint.value = rightSetpoint
+        leftSpeedError.value = this.leftSpeed - leftSetpoint
+        rightSpeedError.value = this.rightSpeed - rightSetpoint
+
         leftDrive.setTargetVelocity(leftSetpoint)
         rightDrive.setTargetVelocity(rightSetpoint)
     }
