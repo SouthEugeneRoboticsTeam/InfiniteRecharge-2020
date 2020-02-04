@@ -1,7 +1,9 @@
 package org.sert2521.infiniterecharge2020.colorwheelspin
 
 import edu.wpi.first.wpilibj.util.Color
+import jdk.nashorn.internal.objects.NativeJava.extend
 import kotlinx.coroutines.cancel
+import org.sert2521.sertain.coroutines.doAll
 import org.sert2521.sertain.coroutines.doOne
 import org.sert2521.sertain.events.onTick
 import org.sert2521.sertain.subsystems.doTask
@@ -9,16 +11,12 @@ import org.sert2521.sertain.subsystems.use
 import java.lang.System.currentTimeMillis
 import kotlin.math.abs
 
-suspend fun extend(isExtendingOut: Boolean, time: Long) = doTask {
+suspend fun retract (time: Long) = doTask {
     val colorWheelSpin = use<ColorWheelSpin>()
     val startTime = currentTimeMillis()
     action {
         onTick {
-            if (isExtendingOut) {
-                colorWheelSpin.extend(0.2)
-            } else {
-                colorWheelSpin.extend(-0.2)
-            }
+            colorWheelSpin.extend(-0.2)
             if (currentTimeMillis() - startTime < time) {
                 this@action.cancel()
             }
@@ -62,10 +60,7 @@ suspend fun spinForColors() = doTask {
 
 suspend fun spinAndExtend(isSpinningToColor: Boolean) = doTask {
     action {
-        doOne {
-            action {
-                extend(true, 9223372036854775807)//basically infinite time (biggest possible value)
-            }
+        doAll {
             action {
                 if (isSpinningToColor) {
                     spinToColor()
@@ -74,7 +69,11 @@ suspend fun spinAndExtend(isSpinningToColor: Boolean) = doTask {
                 }
             }
         }
-        extend(false, 3000)
+        doAll {
+            action {
+                retract(3000)
+            }
+        }
     }
 }
 
