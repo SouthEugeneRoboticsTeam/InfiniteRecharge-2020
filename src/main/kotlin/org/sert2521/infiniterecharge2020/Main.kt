@@ -10,7 +10,7 @@ suspend fun main() = robot {
     println("Robot program starting")
     add<Drivetrain>()
 
-    whileTeleop {
+    whileTeleop                          {
         initControls()
     }
 }
