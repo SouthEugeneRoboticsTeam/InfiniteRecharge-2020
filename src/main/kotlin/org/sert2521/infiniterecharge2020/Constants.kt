@@ -14,8 +14,3 @@ object Operator {
     val PRIMARY_STICK = 1
     val SECONDARY_STICK = 2
 }
-
-object PlaceHolder {
-
-    var delete = "me"
-}
