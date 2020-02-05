@@ -9,8 +9,8 @@ object MotorControllers {
     val rightFront = TalonId(2)
     val rightBack = TalonId(4)
 
-    val INTAKE_A = TalonId(-1)
-    val INTAKE_B = TalonId(-1)
+    val ROLLER_LEFT = TalonId(-1)
+    val ROLLER_RIGHT = TalonId(-1)
 
     val FLAPPER = VictorId(-1)
 }

@@ -7,13 +7,13 @@ import org.sert2521.sertain.subsystems.Subsystem
 
 class PowerHub : Subsystem("PowerHub") {
     private val roller = MotorController(
-            MotorControllers.INTAKE_A, INTAKE_B
+            MotorControllers.ROLLER_LEFT, ROLLER_RIGHT
     ) {
         inverted = true
         brakeMode = true
     }
 
-    private var intakeRunning = false
+    private var rollerRunning= false
 
     fun spin() {
         roller.setPercentOutput(INTAKE_SPEED)
@@ -54,4 +54,3 @@ class PowerHub : Subsystem("PowerHub") {
         flapperRunning = false
     }
 }
-
