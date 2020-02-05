@@ -30,5 +30,4 @@ object OI {
 }
 
 fun CoroutineScope.initControls() {
-
 }
