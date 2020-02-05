@@ -1,6 +1,7 @@
 package org.sert2521.infiniterecharge2020.drivetrain
 
 import com.sun.xml.internal.fastinfoset.alphabet.BuiltInRestrictedAlphabets.table
+import edu.wpi.first.networktables.NetworkTableEntry
 import edu.wpi.first.wpilibj.GenericHID
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.coroutineScope
@@ -84,10 +85,18 @@ suspend fun controlDrivetrain() = doTask {
 suspend fun alignToBall() = doTask {
     val drivetrain = use<Drivetrain>()
     var loopsStill = 0
-    val visionLastAlive = wpiTable("Vision").getEntry("last_alive")
-    var lastUpdate = visionLastAlive.value.double
-    val visionAngle = wpiTable("Vision").getEntry("xAngOff")
-    var lastAngle = visionAngle.value.double + drivetrain.rawHeading
+    var visionLastAlive = try {
+        wpiTable("Vision").getEntry("last_alive")
+    } catch (e: Throwable) {
+        null
+    }
+    var visionAngle = try {
+        wpiTable("Vision").getEntry("xAngOff")
+    } catch (e: Throwable) {
+        null
+    }
+    var lastAlive = visionLastAlive?.value?.double
+    var lastAngle = visionAngle?.value?.double?.let { it + drivetrain.rawHeading }
 
     action {
         val pidConfig = PidfConfig()
@@ -97,15 +106,27 @@ suspend fun alignToBall() = doTask {
         pidConfig.kd = 0.0
         val controller = PidfController2(pidConfig, 1.0)
         onTick {
-            if (lastUpdate != visionLastAlive.value.double){
-                lastUpdate = visionLastAlive.value.double
-                lastAngle = visionAngle.value.double + drivetrain.rawHeading
+            if (visionLastAlive == null){
+                visionLastAlive = try {
+                    wpiTable("Vision").getEntry("last_alive")
+                } catch (e: Throwable) {
+                    null
+                }
+                visionAngle = try {
+                    wpiTable("Vision").getEntry("xAngOff")
+                } catch (e: Throwable) {
+                    null
+                }
+            }
+            if (lastAlive != visionLastAlive?.value?.double){
+                lastAlive = visionLastAlive?.value?.double
+                lastAngle = visionAngle?.value?.double?.let { it + drivetrain.rawHeading }
             }
 
-            val turnValue = controller.next(0.0, (drivetrain.rawHeading - lastAngle).IEEErem(360.0))
-            drivetrain.arcadeDrive(0.0, -turnValue)
+            val turnValue = controller.next(0.0, lastAngle?.let { (drivetrain.rawHeading - lastAngle!!).IEEErem(360.0) } ?: 0.0)
+            drivetrain.arcadeDrive(1.0, -turnValue)
 
-            if (abs((drivetrain.rawHeading - lastAngle)) < 0.3) {
+            if (lastAngle?.let { abs((drivetrain.rawHeading - lastAngle!!)) < 0.3 } == true) {
                 loopsStill += 1
             } else {
                 loopsStill = 0
