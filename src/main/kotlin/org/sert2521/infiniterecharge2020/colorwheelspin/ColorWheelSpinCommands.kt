@@ -30,7 +30,7 @@ suspend fun spinToColor() = doTask {
         val colorToSpinTo: Color = Color.kBlue
         onTick {
             val sensorColor = getColor(colorWheelSpin.sensor.color)
-            if (sensorColor === colorToSpinTo) {
+            if (sensorColor != colorToSpinTo) {
                 this@action.cancel()
             }
             colorWheelSpin.spin(0.5)
@@ -45,7 +45,7 @@ suspend fun spinForColors() = doTask {
         var pastColor: Color = Color.kWhite
         onTick {
             val sensorColor = getColor(colorWheelSpin.sensor.color)
-            if (!(sensorColor === pastColor)) {
+            if (sensorColor != pastColor) {
                 pastColor = sensorColor
                 triangleSpins++
             }
