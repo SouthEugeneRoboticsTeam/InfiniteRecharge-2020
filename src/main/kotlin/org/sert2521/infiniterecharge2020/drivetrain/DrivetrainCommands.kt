@@ -86,12 +86,12 @@ suspend fun alignToBall() = doTask {
     val drivetrain = use<Drivetrain>()
     var loopsStill = 0
     var visionLastAlive = try {
-        wpiTable("Vision").getEntry("last_alive")
+        wpiTable(listOf("Vision")).getEntry("last_alive")
     } catch (e: Throwable) {
         null
     }
     var visionAngle = try {
-        wpiTable("Vision").getEntry("xAngOff")
+        wpiTable(listOf("Vision")).getEntry("xAngOff")
     } catch (e: Throwable) {
         null
     }
@@ -108,12 +108,12 @@ suspend fun alignToBall() = doTask {
         onTick {
             if (visionLastAlive == null){
                 visionLastAlive = try {
-                    wpiTable("Vision").getEntry("last_alive")
+                    wpiTable(listOf("Vision")).getEntry("last_alive")
                 } catch (e: Throwable) {
                     null
                 }
                 visionAngle = try {
-                    wpiTable("Vision").getEntry("xAngOff")
+                    wpiTable(listOf("Vision")).getEntry("xAngOff")
                 } catch (e: Throwable) {
                     null
                 }
@@ -154,7 +154,7 @@ suspend fun <T : MetricUnit<Linear>> driveCurve(
         velocity: MetricValue<CompositeUnitType<Per, Linear, Chronic>, CompositeUnit<Per, Linear, Chronic>>,
         distance: MetricValue<Linear, T>
 ) = doTask {
-    var speedSetpoint by tableEntry(0.0, "Drivetrain", name = "SpeedSetpoint")
+    //var speedSetpoint by tableEntry(0.0, "Drivetrain", name = "SpeedSetpoint")
     val dt = use<Drivetrain>()
     action {
         dt.zeroEncoders()
