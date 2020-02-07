@@ -1,28 +1,45 @@
 package org.sert2521.infiniterecharge2020.powerhub
 
-import org.sert2521.sertain.coroutines.doAll
-import org.sert2521.sertain.coroutines.periodic
+import kotlinx.coroutines.cancel
 import org.sert2521.sertain.events.onTick
 import org.sert2521.sertain.subsystems.doTask
 import org.sert2521.sertain.subsystems.use
 
-suspend fun spin(intake: Boolean) = doTask {
+suspend fun intake() = doTask {
     val powerHub = use<PowerHub>()
     action {
-        doAll {
-            onTick {
-                periodic(20) {
-                    powerHub.spin()
-                    if (intake) {
-                        println("Trying to intake")
-                        powerHub.lowerFlapper()
+        onTick {
+            powerHub.spin()
+        }
+    }
+}
 
-                    } else {
-                        println("Trying to outtake")
-                        powerHub.raiseFlapper()
-                    }
-                }
+suspend fun raiseflapper() = doTask {
+    val powerhub = use<PowerHub>()
+    val time = System.currentTimeMillis()
+    action {
+        onTick {
+            powerhub.raiseFlapper()
+            if (System.currentTimeMillis() - time <= 1000) {
+                this@action.cancel()
             }
         }
     }
 }
+
+suspend fun lowerflapper() = doTask {
+    val powerhub = use<PowerHub>()
+    val time = System.currentTimeMillis()
+    action {
+        onTick {
+            powerhub.lowerFlapper()
+            if (System.currentTimeMillis() - time <= 1000) {
+                this@action.cancel()
+            }
+        }
+    }
+}
+
+
+
+
