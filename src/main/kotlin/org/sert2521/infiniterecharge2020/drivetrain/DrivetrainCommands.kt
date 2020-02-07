@@ -154,7 +154,7 @@ suspend fun <T : MetricUnit<Linear>> driveCurve(
         velocity: MetricValue<CompositeUnitType<Per, Linear, Chronic>, CompositeUnit<Per, Linear, Chronic>>,
         distance: MetricValue<Linear, T>
 ) = doTask {
-    //var speedSetpoint by tableEntry(0.0, "Drivetrain", name = "SpeedSetpoint")
+    var speedSetpoint by tableEntry(0.0, "Drivetrain", name = "SpeedSetpoint")
     val dt = use<Drivetrain>()
     action {
         dt.zeroEncoders()
