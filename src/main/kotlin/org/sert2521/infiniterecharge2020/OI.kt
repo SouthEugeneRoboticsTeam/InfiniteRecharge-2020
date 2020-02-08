@@ -7,7 +7,10 @@ import kotlinx.coroutines.CoroutineScope
 import org.sert2521.infiniterecharge2020.OI.primaryController
 import org.sert2521.infiniterecharge2020.OI.primaryJoystick
 import org.sert2521.infiniterecharge2020.OI.secondaryJoystick
+import org.sert2521.infiniterecharge2020.autonomous.centerInitPowerPortTrenchRun
+import org.sert2521.infiniterecharge2020.autonomous.rightInitPowerPortTrenchRun
 import org.sert2521.sertain.coroutines.RobotScope
+import org.sert2521.sertain.coroutines.watch
 import org.sert2521.sertain.telemetry.linkTableEntry
 
 object OI {

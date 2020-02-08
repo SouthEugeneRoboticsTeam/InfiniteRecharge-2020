@@ -80,6 +80,9 @@ class Drivetrain : Subsystem("Drivetrain", ::controlDrivetrain) {
     // Return the robot's heading in degrees, from -180 to 180
     val heading get() = -gyro.angle.IEEErem(360.0)
 
+    val xTranslation get() = odometry.poseMeters.translation.x
+    val yTranslation get() = odometry.poseMeters.translation.y
+
     init {
         zeroEncoders()
         RobotScope.linkTableEntry("Right Position", name) { rightPosition }
@@ -88,8 +91,8 @@ class Drivetrain : Subsystem("Drivetrain", ::controlDrivetrain) {
         RobotScope.linkTableEntry("Left Velocity", name) { leftSpeed }
         RobotScope.linkTableEntry("Heading", name) { heading }
 
-        RobotScope.linkTableEntry("X Translation", name) { odometry.poseMeters.translation.x }
-        RobotScope.linkTableEntry("Y Translation", name) { odometry.poseMeters.translation.y }
+        RobotScope.linkTableEntry("X Translation", name) { xTranslation }
+        RobotScope.linkTableEntry("Y Translation", name) { yTranslation }
         RobotScope.linkTableEntry("Transformation Angle", name) { odometry.poseMeters.rotation.degrees }
     }
 
