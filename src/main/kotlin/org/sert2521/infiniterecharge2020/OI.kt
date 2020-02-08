@@ -4,9 +4,6 @@ import edu.wpi.first.wpilibj.Joystick
 import edu.wpi.first.wpilibj.XboxController
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser
 import kotlinx.coroutines.CoroutineScope
-import org.sert2521.infiniterecharge2020.OI.primaryController
-import org.sert2521.infiniterecharge2020.OI.primaryJoystick
-import org.sert2521.infiniterecharge2020.OI.secondaryJoystick
 import org.sert2521.sertain.coroutines.RobotScope
 import org.sert2521.sertain.telemetry.linkTableEntry
 

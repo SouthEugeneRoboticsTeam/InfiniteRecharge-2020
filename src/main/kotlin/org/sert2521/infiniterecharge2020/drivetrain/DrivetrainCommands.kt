@@ -1,11 +1,12 @@
 package org.sert2521.infiniterecharge2020.drivetrain
 
 import edu.wpi.first.wpilibj.GenericHID
-import org.sert2521.infiniterecharge2020.OI.primaryJoystick
-import org.sert2521.infiniterecharge2020.utils.deadband
+import kotlin.math.sign
 import org.sert2521.infiniterecharge2020.OI.ControlMode
 import org.sert2521.infiniterecharge2020.OI.controlMode
 import org.sert2521.infiniterecharge2020.OI.primaryController
+import org.sert2521.infiniterecharge2020.OI.primaryJoystick
+import org.sert2521.infiniterecharge2020.utils.deadband
 import org.sert2521.sertain.control.MotionCurve
 import org.sert2521.sertain.events.onTick
 import org.sert2521.sertain.motors.EncoderTicks
@@ -26,7 +27,6 @@ import org.sert2521.sertain.units.convertTo
 import org.sert2521.sertain.units.div
 import org.sert2521.sertain.units.rps
 import org.sert2521.sertain.utils.timer
-import kotlin.math.sign
 
 private val throttle
     get() = when (controlMode) {
@@ -59,10 +59,10 @@ val Number.mpsss: MetricValue<Jerk, MetricUnit<Jerk>> get() = MetricValue(Meters
 val Number.mpms get() = MetricValue(Meters / Milliseconds, toDouble())
 
 suspend fun <T : MetricUnit<Linear>> driveCurve(
-        jerk: MetricValue<Jerk, MetricUnit<Jerk>>,
-        acceleration: MetricValue<Acceleration, MetricUnit<Acceleration>>,
-        velocity: MetricValue<CompositeUnitType<Per, Linear, Chronic>, CompositeUnit<Per, Linear, Chronic>>,
-        distance: MetricValue<Linear, T>
+    jerk: MetricValue<Jerk, MetricUnit<Jerk>>,
+    acceleration: MetricValue<Acceleration, MetricUnit<Acceleration>>,
+    velocity: MetricValue<CompositeUnitType<Per, Linear, Chronic>, CompositeUnit<Per, Linear, Chronic>>,
+    distance: MetricValue<Linear, T>
 ) = doTask {
     var speedSetpoint by tableEntry(0.0, "Drivetrain", name = "SpeedSetpoint")
     val dt = use<Drivetrain>()
@@ -84,4 +84,3 @@ suspend fun <T : MetricUnit<Linear>> driveCurve(
         }
     }
 }
-

@@ -1,15 +1,15 @@
 package org.sert2521.infiniterecharge2020.drivetrain
 
 import com.ctre.phoenix.motorcontrol.ControlMode
+import com.kauailabs.navx.frc.AHRS
+import edu.wpi.first.wpilibj.I2C
 import org.sert2521.infiniterecharge2020.MotorControllers
 import org.sert2521.sertain.coroutines.RobotScope
 import org.sert2521.sertain.motors.MotorController
 import org.sert2521.sertain.subsystems.Subsystem
-import org.sert2521.sertain.telemetry.linkTableEntry
-import com.kauailabs.navx.frc.AHRS
-import edu.wpi.first.wpilibj.I2C
 import org.sert2521.sertain.telemetry.Table
 import org.sert2521.sertain.telemetry.TableEntry
+import org.sert2521.sertain.telemetry.linkTableEntry
 import org.sert2521.sertain.telemetry.withTableEntry
 
 class Drivetrain : Subsystem("Drivetrain", ::controlDrivetrain) {
