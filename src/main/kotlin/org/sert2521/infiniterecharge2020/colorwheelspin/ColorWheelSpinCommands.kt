@@ -1,6 +1,8 @@
 package org.sert2521.infiniterecharge2020.colorwheelspin
 
+import edu.wpi.first.wpilibj.DriverStation
 import edu.wpi.first.wpilibj.util.Color
+import edu.wpi.first.wpilibj.util.Color.kBlack
 import jdk.nashorn.internal.objects.NativeJava.extend
 import kotlinx.coroutines.cancel
 import org.sert2521.sertain.coroutines.doAll
@@ -12,11 +14,11 @@ import java.lang.System.currentTimeMillis
 import kotlin.math.abs
 
 suspend fun retract (time: Long) = doTask {
-    val colorWheelSpin = use<ColorWheelSpinner>()
+    val colorWheelSpinner = use<ColorWheelSpinner>()
     val startTime = currentTimeMillis()
     action {
         onTick {
-            colorWheelSpin.useMotor(-0.5)
+            colorWheelSpinner.useMotor(-0.5)
             if (currentTimeMillis() - startTime < time) {
                 this@action.cancel()
             }
@@ -25,26 +27,30 @@ suspend fun retract (time: Long) = doTask {
 }
 
 suspend fun spinToColor() = doTask {
-    val colorWheelSpin = use<ColorWheelSpinner>()
+    val colorWheelSpinner = use<ColorWheelSpinner>()
+    val frcColor = DriverStation.getInstance().gameSpecificMessage.first()
+    if(colorWheelSpinner.frcColorToTargetColor[frcColor] == null){
+        return@doTask
+    }
+    val colorToSpinTo: Color = colorWheelSpinner.frcColorToTargetColor[frcColor].let { kBlack }
     action {
-        val colorToSpinTo: Color = Color.kBlue
         onTick {
-            val sensorColor = getColor(colorWheelSpin.sensor.color)
+            val sensorColor = getColor(colorWheelSpinner.sensor.color)
             if (sensorColor == colorToSpinTo) {
                 this@action.cancel()
             }
-            colorWheelSpin.useMotor(0.5)
+            colorWheelSpinner.useMotor(0.5)
         }
     }
 }
 
 suspend fun spinForColors() = doTask {
-    val colorWheelSpin = use<ColorWheelSpinner>()
+    val colorWheelSpinner = use<ColorWheelSpinner>()
     action {
         var triangleSpins = 0
         var pastColor: Color = Color.kWhite
         onTick {
-            val sensorColor = getColor(colorWheelSpin.sensor.color)
+            val sensorColor = getColor(colorWheelSpinner.sensor.color)
             if (sensorColor != pastColor) {
                 pastColor = sensorColor
                 triangleSpins++
@@ -53,7 +59,7 @@ suspend fun spinForColors() = doTask {
                 this@action.cancel()
             }
             pastColor = sensorColor
-            colorWheelSpin.useMotor(0.5)
+            colorWheelSpinner.useMotor(0.5)
         }
     }
 }
