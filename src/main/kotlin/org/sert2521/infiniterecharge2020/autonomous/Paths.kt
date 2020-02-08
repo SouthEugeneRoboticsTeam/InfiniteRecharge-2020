@@ -72,16 +72,23 @@ suspend fun rightInitPowerPortTrenchRun() = doTask {
     val drivetrain = use<Drivetrain>()
     action {
         drivetrain.odometry.resetPosition(Pose2d(-2.2, -1.22, Rotation2d(0.0)), Rotation2d(0.0))
-        // TODO: TUNE MORE ON PRACTICE BOT
         val initToPowerPort = TrajectoryGenerator.generateTrajectory(
                 Pose2d(-2.2, -1.22, Rotation2d(0.0)),
                 listOf(),
                 Pose2d(0.0, 0.0, Rotation2d(Math.toRadians(0.0))),
                 TrajectoryConfig(2.0, 2.0).setKinematics(kinematics)
         )
+        val powerPortToTrench = TrajectoryGenerator.generateTrajectory(
+                Pose2d(0.0, 0.0, Rotation2d(0.0)),
+                listOf(),
+                Pose2d(-.75, -1.40, Rotation2d((-180.0).convert(Degrees to Radians))),
+                TrajectoryConfig(2.0, 2.0).setKinematics(kinematics).setReversed(true)
+        )
 
         println("INITIATION LINE TO POWER PORT:")
         println(initToPowerPort.states)
+        println("POWER PORT TO TRENCH")
+        println(powerPortToTrench.states)
 
         println("Time from initiation line to Power Port: ${initToPowerPort.totalTimeSeconds}")
         runPath(
@@ -91,25 +98,15 @@ suspend fun rightInitPowerPortTrenchRun() = doTask {
                 kinematics,
                 { l, r -> drivetrain.setTargetSpeed(l.mps, r.mps) }
         )
-
-        val powerPorttoTrench = TrajectoryGenerator.generateTrajectory(
-                Pose2d(drivetrain.odometry.poseMeters.translation.x, drivetrain.odometry.poseMeters.translation.y, Rotation2d(0.0)),
-                listOf(),
-                Pose2d(-.75, -1.95, Rotation2d((-180.0).convert(Degrees to Radians))),
-                TrajectoryConfig(2.0, 2.0).setKinematics(kinematics).setReversed(true)
-        )
-
-        println("Going from Power Port to Trench! Expected runtime: ${powerPorttoTrench.totalTimeSeconds}")
-        println(powerPorttoTrench.states)
-
-        runPath(powerPorttoTrench,
+        println("Going from Power Port to Trench! Expected runtime: ${powerPortToTrench.totalTimeSeconds}")
+        runPath(powerPortToTrench,
                 { drivetrain.pose },
                 RamseteController(),
                 kinematics,
                 { l, r -> drivetrain.setTargetSpeed(l.mps, r.mps) })
         val trenchBallPickup = TrajectoryGenerator.generateTrajectory(
                 listOf(Pose2d(drivetrain.odometry.poseMeters.translation.x, drivetrain.odometry.poseMeters.translation.y, Rotation2d(drivetrain.heading.convert(Degrees to Radians))),
-                        Pose2d(-.75 - 5.0, -1.75, Rotation2d((-180.0).convert(Degrees to Radians))))
+                        Pose2d(-.75 - 5.0, -1.40, Rotation2d((-180.0).convert(Degrees to Radians))))
                 , TrajectoryConfig(2.0, 2.0).setKinematics(kinematics)
         )
         println("Running down the Trench! Expected runtime: ${trenchBallPickup.totalTimeSeconds}")

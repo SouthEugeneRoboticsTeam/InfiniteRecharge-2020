@@ -7,6 +7,7 @@ import edu.wpi.first.wpilibj.geometry.Translation2d
 import edu.wpi.first.wpilibj.trajectory.TrajectoryConfig
 import edu.wpi.first.wpilibj.trajectory.TrajectoryGenerator
 import kotlinx.coroutines.launch
+import org.sert2521.infiniterecharge2020.autonomous.centerInitPowerPortTrenchRun
 import org.sert2521.infiniterecharge2020.autonomous.rightInitPowerPortTrenchRun
 import org.sert2521.infiniterecharge2020.drivetrain.Drivetrain
 import org.sert2521.infiniterecharge2020.drivetrain.kinematics
@@ -38,11 +39,10 @@ suspend fun main() = robot {
         initControls()
     }
 
-    onAuto {
+    whileAuto {
         println("Resetting gyro and encoders")
         val dt = access<Drivetrain>()
         dt.gyro.reset()
         dt.zeroEncoders()
-        rightInitPowerPortTrenchRun()
     }
 }
