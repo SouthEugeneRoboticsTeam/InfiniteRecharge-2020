@@ -1,17 +1,15 @@
 package org.sert2521.infiniterecharge2020.colorwheelspin
 
 import edu.wpi.first.wpilibj.util.Color
-import jdk.nashorn.internal.objects.NativeJava.extend
+import java.lang.System.currentTimeMillis
+import kotlin.math.abs
 import kotlinx.coroutines.cancel
 import org.sert2521.sertain.coroutines.doAll
-import org.sert2521.sertain.coroutines.doOne
 import org.sert2521.sertain.events.onTick
 import org.sert2521.sertain.subsystems.doTask
 import org.sert2521.sertain.subsystems.use
-import java.lang.System.currentTimeMillis
-import kotlin.math.abs
 
-suspend fun retract (time: Long) = doTask {
+suspend fun retract(time: Long) = doTask {
     val colorWheelSpin = use<ColorWheelSpin>()
     val startTime = currentTimeMillis()
     action {
