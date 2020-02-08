@@ -85,18 +85,10 @@ suspend fun controlDrivetrain() = doTask {
 suspend fun alignToBall() = doTask {
     val drivetrain = use<Drivetrain>()
     var loopsStill = 0
-    var visionLastAlive = try {
-        wpiTable(listOf("Vision")).getEntry("last_alive")
-    } catch (e: Throwable) {
-        null
-    }
-    var visionAngle = try {
-        wpiTable(listOf("Vision")).getEntry("xAngOff")
-    } catch (e: Throwable) {
-        null
-    }
-    var lastAlive = visionLastAlive?.value?.double
-    var lastAngle = visionAngle?.value?.double?.let { it + drivetrain.rawHeading }
+    var visionLastAlive = TableEntry("last_alive", 0.0, "Vision")
+    var visionAngle = TableEntry("xAngOff", 0.0, "Vision")
+    var lastAlive = visionLastAlive.value
+    var lastAngle = visionAngle.value
 
     action {
         val pidConfig = PidfConfig()
@@ -106,27 +98,15 @@ suspend fun alignToBall() = doTask {
         pidConfig.kd = 0.0
         val controller = PidfController2(pidConfig, 1.0)
         onTick {
-            if (visionLastAlive == null){
-                visionLastAlive = try {
-                    wpiTable(listOf("Vision")).getEntry("last_alive")
-                } catch (e: Throwable) {
-                    null
-                }
-                visionAngle = try {
-                    wpiTable(listOf("Vision")).getEntry("xAngOff")
-                } catch (e: Throwable) {
-                    null
-                }
-            }
-            if (lastAlive != visionLastAlive?.value?.double){
-                lastAlive = visionLastAlive?.value?.double
-                lastAngle = visionAngle?.value?.double?.let { it + drivetrain.rawHeading }
+            if (lastAlive != visionLastAlive.value){
+                lastAlive = visionLastAlive.value
+                lastAngle = visionAngle.value
             }
 
-            val turnValue = controller.next(0.0, lastAngle?.let { (drivetrain.rawHeading - lastAngle!!).IEEErem(360.0) } ?: 0.0)
+            val turnValue = controller.next(0.0, (drivetrain.rawHeading - lastAngle).IEEErem(360.0))
             drivetrain.arcadeDrive(1.0, -turnValue)
 
-            if (lastAngle?.let { abs((drivetrain.rawHeading - lastAngle!!)) < 0.3 } == true) {
+            if (abs(drivetrain.rawHeading - lastAngle) < 0.3) {
                 loopsStill += 1
             } else {
                 loopsStill = 0
