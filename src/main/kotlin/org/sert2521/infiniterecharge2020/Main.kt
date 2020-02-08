@@ -8,12 +8,12 @@ import org.sert2521.sertain.robot
 val primaryJoystick by lazy { Joystick(Operator.PRIMARY_CONTROLLER) }
 
 suspend fun main() = robot {
-    { primaryJoystick.getRawButton(Operator.SPIN_FOR_COLORS) }.watch {
+    { primaryJoystick.getRawButton(Operator.ROTATION_CONTROL) }.watch {
         whenFalse {
             spinAndExtend(false)
         }
     };
-    { primaryJoystick.getRawButton(Operator.SPIN_TO_COLOR) }.watch {
+{ primaryJoystick.getRawButton(Operator.POSITION_CONTROL) }.watch {
         whenFalse {
             spinAndExtend(true)
         }

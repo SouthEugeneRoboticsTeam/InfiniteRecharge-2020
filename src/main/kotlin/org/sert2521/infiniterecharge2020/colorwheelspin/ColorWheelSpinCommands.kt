@@ -12,11 +12,11 @@ import java.lang.System.currentTimeMillis
 import kotlin.math.abs
 
 suspend fun retract (time: Long) = doTask {
-    val colorWheelSpin = use<ColorWheelSpin>()
+    val colorWheelSpin = use<ColorWheelSpinner>()
     val startTime = currentTimeMillis()
     action {
         onTick {
-            colorWheelSpin.extend(-0.2)
+            colorWheelSpin.useMotor(-0.5)
             if (currentTimeMillis() - startTime < time) {
                 this@action.cancel()
             }
@@ -25,21 +25,21 @@ suspend fun retract (time: Long) = doTask {
 }
 
 suspend fun spinToColor() = doTask {
-    val colorWheelSpin = use<ColorWheelSpin>()
+    val colorWheelSpin = use<ColorWheelSpinner>()
     action {
         val colorToSpinTo: Color = Color.kBlue
         onTick {
             val sensorColor = getColor(colorWheelSpin.sensor.color)
-            if (sensorColor != colorToSpinTo) {
+            if (sensorColor == colorToSpinTo) {
                 this@action.cancel()
             }
-            colorWheelSpin.spin(0.5)
+            colorWheelSpin.useMotor(0.5)
         }
     }
 }
 
 suspend fun spinForColors() = doTask {
-    val colorWheelSpin = use<ColorWheelSpin>()
+    val colorWheelSpin = use<ColorWheelSpinner>()
     action {
         var triangleSpins = 0
         var pastColor: Color = Color.kWhite
@@ -53,7 +53,7 @@ suspend fun spinForColors() = doTask {
                 this@action.cancel()
             }
             pastColor = sensorColor
-            colorWheelSpin.spin(0.5)
+            colorWheelSpin.useMotor(0.5)
         }
     }
 }

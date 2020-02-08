@@ -6,17 +6,12 @@ import org.sert2521.infiniterecharge2020.MotorControllers
 import org.sert2521.sertain.motors.MotorController
 import org.sert2521.sertain.subsystems.Subsystem
 
-class ColorWheelSpin : Subsystem("ColorWheelSpin") {
+class ColorWheelSpinner : Subsystem("ColorWheelSpinner") {
     val sensor = ColorSensorV3(I2C.Port.kOnboard)
 
-    private val extender = MotorController(MotorControllers.extender)
     private val spinner = MotorController(MotorControllers.spinner)
 
-    fun extend(speed: Double) {
-        extender.setPercentOutput(speed)
-    }
-
-    fun spin(speed: Double) {
+    fun useMotor(speed: Double) {
         spinner.setPercentOutput(speed)
     }
 }
