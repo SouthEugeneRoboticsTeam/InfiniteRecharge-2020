@@ -4,8 +4,8 @@ import org.sert2521.sertain.motors.TalonId
 
 object MotorControllers {
     val leftFront = TalonId(1)
-    val leftBack = TalonId(3)
-    val rightFront = TalonId(2)
+    val leftBack = TalonId(2)
+    val rightFront = TalonId(3)
     val rightBack = TalonId(4)
 }
 
