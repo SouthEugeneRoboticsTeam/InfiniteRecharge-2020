@@ -33,5 +33,9 @@ class Climber : Subsystem("Climber") {
     fun climberLiftDown() {
         climberLiftMotor.setPercentOutput(-CLIMBER_LIFT_SPEED)
     }
+
+    fun climberStop() {
+        climberLiftMotor.setPercentOutput(0.0)
+    }
 }
 
