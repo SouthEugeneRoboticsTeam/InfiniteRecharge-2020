@@ -29,7 +29,7 @@ dependencies {
     compile "com.kauailabs.navx.frc:navx-java:3.1.344"
     compile "com.ctre.phoenix:api-java:5.14.1"
     compile "org.jetbrains.kotlin:kotlin-reflect:1.3.61"
-    compile 'com.github.SouthEugeneRoboticsTeam:sertain:0.0.8'
+    compile 'com.github.SouthEugeneRoboticsTeam:sertain:0.0.10'
 
     compile wpi.deps.wpilib()
     compile wpi.deps.vendor.java()
