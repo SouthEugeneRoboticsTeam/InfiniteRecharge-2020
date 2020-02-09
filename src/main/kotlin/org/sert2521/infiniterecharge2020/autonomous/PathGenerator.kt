@@ -16,6 +16,10 @@ import org.sert2521.sertain.units.convert
 class PathGenerator() : Subsystem("Path Generator") {
     val drivetrain = access<Drivetrain>()
 
+    enum class endLocation {
+        TRENCH, LOADING_STATION
+    }
+
     fun pushBack(pushDistance: Double): Trajectory {
         return TrajectoryGenerator.generateTrajectory(
                 listOf(Pose2d(drivetrain.xTranslation, drivetrain.yTranslation, Rotation2d(0.0)),
@@ -41,6 +45,13 @@ class PathGenerator() : Subsystem("Path Generator") {
     fun trenchRun(distance: Double): Trajectory {
         return TrajectoryGenerator.generateTrajectory(listOf(Pose2d(drivetrain.xTranslation, drivetrain.yTranslation, Rotation2d(drivetrain.heading.convert(Degrees to Radians))),
                 Pose2d(drivetrain.xTranslation - distance, drivetrain.yTranslation, Rotation2d((-180.0).convert(Degrees to Radians))))
-                , TrajectoryConfig(2.0, 2.0).setKinematics(kinematics))
+                , TrajectoryConfig(3.0, 3.0).setKinematics(kinematics))
+    }
+
+    // TODO: THE TARGET TRANSLATION SHOULD BE SOMETHING MORE LIKE 2.5m INSTEAD OF 1.0m
+    fun loadingStation(): Trajectory {
+        return TrajectoryGenerator.generateTrajectory(listOf(Pose2d(drivetrain.xTranslation, drivetrain.yTranslation, Rotation2d(drivetrain.heading.convert(Degrees to Radians))),
+                Pose2d(drivetrain.xTranslation - 1.0, drivetrain.yTranslation + 1.0, Rotation2d((-90.0).convert(Degrees to Radians))))
+                , TrajectoryConfig(2.0, 2.0).setKinematics(kinematics).setReversed(true))
     }
 }

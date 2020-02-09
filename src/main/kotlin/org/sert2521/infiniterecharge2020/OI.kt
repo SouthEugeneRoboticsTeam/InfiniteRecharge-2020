@@ -7,8 +7,9 @@ import kotlinx.coroutines.CoroutineScope
 import org.sert2521.infiniterecharge2020.OI.primaryController
 import org.sert2521.infiniterecharge2020.OI.primaryJoystick
 import org.sert2521.infiniterecharge2020.OI.secondaryJoystick
-import org.sert2521.infiniterecharge2020.autonomous.centerInitPowerPortTrenchRun
-import org.sert2521.infiniterecharge2020.autonomous.rightInitPowerPortTrenchRun
+import org.sert2521.infiniterecharge2020.autonomous.PathGenerator
+import org.sert2521.infiniterecharge2020.autonomous.centerInitPowerPort
+import org.sert2521.infiniterecharge2020.autonomous.rightInitPowerPort
 import org.sert2521.sertain.coroutines.RobotScope
 import org.sert2521.sertain.coroutines.watch
 import org.sert2521.sertain.telemetry.linkTableEntry
@@ -36,4 +37,24 @@ object OI {
 }
 
 fun CoroutineScope.initControls() {
+    ({ primaryController.xButton }).watch {
+        whenTrue {
+            centerInitPowerPort(true, PathGenerator.endLocation.TRENCH)
+        }
+    }
+    ({ primaryController.yButton }).watch {
+        whenTrue {
+            rightInitPowerPort(true, PathGenerator.endLocation.TRENCH)
+        }
+    }
+    ({ primaryController.aButton }).watch {
+        whenTrue {
+            centerInitPowerPort(true, PathGenerator.endLocation.LOADING_STATION)
+        }
+    }
+    ({ primaryController.bButton }).watch {
+        whenTrue {
+            rightInitPowerPort(true, PathGenerator.endLocation.LOADING_STATION)
+        }
+    }
 }
