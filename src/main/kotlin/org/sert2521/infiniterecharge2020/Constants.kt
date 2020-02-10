@@ -9,10 +9,10 @@ object MotorControllers {
     val rightFront = TalonId(2)
     val rightBack = TalonId(4)
 
-    val ROLLER_LEFT = TalonId(-1)
-    val ROLLER_RIGHT = TalonId(-1)
+    val ROLLER_LEFT = TalonId(11)
+    val ROLLER_RIGHT = TalonId(12)
 
-    val FLAPPER = VictorId(-1)
+    val FLAPPER = VictorId(8)
 }
 
 object Operator {
@@ -20,4 +20,10 @@ object Operator {
     val PRIMARY_STICK = 1
     val SECONDARY_STICK = 2
 
+}
+
+
+object Sensors {
+    val REED_SENSOR_TOP = 2
+    val REED_SENSOR_BOTTOM = 3
 }
