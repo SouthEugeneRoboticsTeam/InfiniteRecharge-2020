@@ -21,9 +21,13 @@ class Climber : Subsystem("Climber") {
     val atBottom get() = !topLimitSwitch.get()
     val atTop get() = !bottomLimitSwitch.get()
 
+    val position = climberLiftMotor.position
+
     init {
+        climberLiftMotor.position = 0
         RobotScope.linkTableEntry("At Bottom", name) { atBottom }
         RobotScope.linkTableEntry("At Top", name) { atTop }
+        RobotScope.linkTableEntry("Climber Position", name) { position }
     }
 
     fun climberLiftUp() {

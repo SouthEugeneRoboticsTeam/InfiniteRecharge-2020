@@ -12,6 +12,8 @@ suspend fun climberUp() = doTask {
             periodic(20) {
                 if (!climber.atTop) {
                     climber.climberLiftUp()
+                } else {
+                    climber.climberStop()
                 }
             }
         } finally {
@@ -28,6 +30,8 @@ suspend fun climberDown() = doTask {
             periodic(20) {
                 if (!climber.atBottom) {
                     climber.climberLiftDown()
+                } else {
+                    climber.climberStop()
                 }
             }
         } finally {
