@@ -4,7 +4,6 @@ import com.revrobotics.ColorSensorV3
 import edu.wpi.first.wpilibj.I2C
 import edu.wpi.first.wpilibj.util.Color.*
 import org.sert2521.infiniterecharge2020.MotorControllers
-import org.sert2521.infiniterecharge2020.MotorControllers.spinner
 import org.sert2521.sertain.motors.MotorController
 import org.sert2521.sertain.subsystems.Subsystem
 
@@ -16,7 +15,7 @@ class ColorWheelSpinner : Subsystem("ColorWheelSpinner") {
 
     private val spinner = MotorController(MotorControllers.spinner)
 
-    fun useMotor(speed: Double) {
-        spinner.setPercentOutput(speed)
+    fun output(value: Double) {
+        spinner.setPercentOutput(value)
     }
 }
