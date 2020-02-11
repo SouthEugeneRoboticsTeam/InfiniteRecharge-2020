@@ -9,7 +9,6 @@ object MotorControllers {
     val rightBack = TalonId(4)
 
     val CLIMBER_LIFT = TalonId(5)
-
 }
 
 object Operator {
@@ -22,4 +21,3 @@ object Sensors {
     val BOTTOM_LIMIT_SWITCH = 1
     val TOP_LIMIT_SWITCH = 0
 }
-

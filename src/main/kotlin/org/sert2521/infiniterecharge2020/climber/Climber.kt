@@ -1,7 +1,6 @@
-package org.sert2521.infiniterecharge2020.climber;
+package org.sert2521.infiniterecharge2020.climber
 
 import edu.wpi.first.wpilibj.DigitalInput
-import kotlinx.coroutines.CoroutineScope
 import org.sert2521.infiniterecharge2020.MotorControllers
 import org.sert2521.infiniterecharge2020.Sensors.BOTTOM_LIMIT_SWITCH
 import org.sert2521.infiniterecharge2020.Sensors.TOP_LIMIT_SWITCH
@@ -42,4 +41,3 @@ class Climber : Subsystem("Climber") {
         climberLiftMotor.setPercentOutput(0.0)
     }
 }
-

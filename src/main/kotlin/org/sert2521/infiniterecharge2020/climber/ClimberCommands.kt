@@ -1,7 +1,6 @@
 package org.sert2521.infiniterecharge2020.climber
 
 import org.sert2521.sertain.coroutines.periodic
-import org.sert2521.sertain.events.onTick
 import org.sert2521.sertain.subsystems.doTask
 import org.sert2521.sertain.subsystems.use
 
@@ -10,7 +9,7 @@ suspend fun climberUp() = doTask {
     action {
         try {
             periodic(20) {
-                if (!climber.atTop) {
+                if (!climber.atTop && climber.position < POSITION_AT_TOP) {
                     climber.climberLiftUp()
                 } else {
                     climber.climberStop()
@@ -21,14 +20,12 @@ suspend fun climberUp() = doTask {
         }
     }
 }
-
-
 suspend fun climberDown() = doTask {
     val climber = use<Climber>()
     action {
         try {
             periodic(20) {
-                if (!climber.atBottom) {
+                if (!climber.atBottom && climber.position > POSITION_AT_BOTTOM) {
                     climber.climberLiftDown()
                 } else {
                     climber.climberStop()
@@ -39,6 +36,3 @@ suspend fun climberDown() = doTask {
         }
     }
 }
-
-
-
