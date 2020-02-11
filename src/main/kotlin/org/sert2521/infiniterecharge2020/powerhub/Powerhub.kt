@@ -14,14 +14,17 @@ class PowerHub : Subsystem("PowerHub") {
     private val roller = MotorController(
             MotorControllers.ROLLER_LEFT, ROLLER_RIGHT
     ) {
-        inverted = true
         brakeMode = true
+        eachFollower {
+            inverted = true
+        }
     }
 
     private val flapperMotor = MotorController(
             MotorControllers.FLAPPER
     ) {
         brakeMode = true
+        inverted = true
     }
 
     val topReedSensor = DigitalInput(REED_SENSOR_TOP)
@@ -62,5 +65,10 @@ class PowerHub : Subsystem("PowerHub") {
     fun closeFlapper() {
         flapperMotor.setPercentOutput(-FLAPPER_SPEED)
         flapperRunning = true
+    }
+
+    fun stopFlapper() {
+        flapperMotor.setPercentOutput(0.0)
+        flapperRunning = false
     }
 }

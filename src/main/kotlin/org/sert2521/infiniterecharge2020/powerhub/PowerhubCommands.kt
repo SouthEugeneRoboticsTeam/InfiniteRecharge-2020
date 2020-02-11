@@ -1,5 +1,6 @@
 package org.sert2521.infiniterecharge2020.powerhub
 
+import org.sert2521.sertain.coroutines.periodic
 import org.sert2521.sertain.events.onTick
 import org.sert2521.sertain.subsystems.doTask
 import org.sert2521.sertain.subsystems.use
@@ -9,17 +10,29 @@ suspend fun spin(isOuttaking: Boolean) = doTask {
     action {
         onTick {
             try {
-                if (isOuttaking) {
-                    if (!powerHub.flapOpen) {
-                        powerHub.openFlapper()
+                periodic(20) {
+                    if (isOuttaking) {
+                        if (!powerHub.flapOpen) {
+                            println("Opening Flapper")
+                            powerHub.openFlapper()
+                        } else {
+                            println("Stopping open")
+                            powerHub.stopFlapper()
+                        }
+                    } else {
+                        if (!powerHub.flapClosed) {
+                            println("Closing Flapper")
+                            powerHub.closeFlapper()
+                        } else {
+                            println("Stopping close")
+                            powerHub.stopFlapper()
+                        }
                     }
-                } else {
-                    if (!powerHub.flapClosed) {
-                        powerHub.closeFlapper()
-                    }
+                    powerHub.spin()
                 }
-                powerHub.spin()
             } finally {
+                println("STOPPING EVERYTHING")
+                powerHub.stopFlapper()
                 powerHub.stopSpin()
             }
         }
