@@ -87,8 +87,8 @@ suspend fun alignToBall() = doTask {
     val drivetrain = use<Drivetrain>()
     var visionLastAlive = TableEntry("last_alive", 0.0, "Vision")
     var visionAngle = TableEntry("xAngOff", 0.0, "Vision")
-    var lastAlive = visionLastAlive.value
-    var lastAngle = visionAngle.value
+    var lastAlive = visionLastAlive.value + drivetrain.rawHeading
+    var lastAngle = visionAngle.value + drivetrain.rawHeading
 
     action {
         val pidConfig = PidfConfig()
@@ -99,12 +99,12 @@ suspend fun alignToBall() = doTask {
         val controller = PidfController2(pidConfig, 1.0)
         onTick {
             if (lastAlive != visionLastAlive.value){
-                lastAlive = visionLastAlive.value
-                lastAngle = visionAngle.value
+                lastAlive = visionLastAlive.value + drivetrain.rawHeading
+                lastAngle = visionAngle.value + drivetrain.rawHeading
             }
 
             val turnValue = controller.next(0.0, (drivetrain.rawHeading - lastAngle).IEEErem(360.0))
-            drivetrain.arcadeDrive(1.0, -turnValue)
+            drivetrain.arcadeDrive(0.3, -turnValue)
         }
     }
 }
