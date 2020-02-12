@@ -12,6 +12,7 @@ import org.sert2521.infiniterecharge2020.powerhouse.banish
 import org.sert2521.infiniterecharge2020.powerhouse.closeHouse
 import org.sert2521.infiniterecharge2020.powerhouse.welcome
 import org.sert2521.sertain.coroutines.RobotScope
+import org.sert2521.sertain.coroutines.doAll
 import org.sert2521.sertain.coroutines.watch
 import org.sert2521.sertain.telemetry.linkTableEntry
 
@@ -39,10 +40,16 @@ object OI {
 
 fun CoroutineScope.initControls() {
     { primaryJoystick.getRawButton(1) }.watch {
-        whenTrue {
+        whileTrue {
             println("Should be aligning")
-            alignToBall()
-            welcome()
+            doAll {
+                action {
+                    welcome()
+                }
+                action {
+                    alignToBall()
+                }
+            }
         }
     }
     ({ primaryController.aButton }).watch {
