@@ -7,6 +7,10 @@ import kotlinx.coroutines.CoroutineScope
 import org.sert2521.infiniterecharge2020.OI.primaryJoystick
 import org.sert2521.infiniterecharge2020.drivetrain.alignToBall
 import org.sert2521.infiniterecharge2020.drivetrain.controlDrivetrain
+import org.sert2521.infiniterecharge2020.OI.primaryController
+import org.sert2521.infiniterecharge2020.powerhouse.banish
+import org.sert2521.infiniterecharge2020.powerhouse.closeHouse
+import org.sert2521.infiniterecharge2020.powerhouse.welcome
 import org.sert2521.sertain.coroutines.RobotScope
 import org.sert2521.sertain.coroutines.watch
 import org.sert2521.sertain.telemetry.linkTableEntry
@@ -37,6 +41,21 @@ fun CoroutineScope.initControls() {
     { primaryJoystick.getRawButton(1) }.watch {
         whenTrue {
             alignToBall()
+        }
+    }
+    ({ primaryController.aButton }).watch {
+        whileTrue {
+            println("Should be intaking")
+            welcome()
+        }
+    }
+    ({ primaryController.bButton }).watch {
+        whileTrue {
+            println("B BUTTON PRESS")
+            banish()
+        }
+        whenFalse {
+            closeHouse()
         }
     }
 }
