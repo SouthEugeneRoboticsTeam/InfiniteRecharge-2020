@@ -10,6 +10,7 @@ import org.sert2521.infiniterecharge2020.utils.deadband
 import org.sert2521.infiniterecharge2020.OI.ControlMode
 import org.sert2521.infiniterecharge2020.OI.controlMode
 import org.sert2521.infiniterecharge2020.OI.primaryController
+import org.sert2521.infiniterecharge2020.powerhouse.PowerHouse
 import org.sert2521.infiniterecharge2020.vision.Vision
 import org.sert2521.sertain.control.MotionCurve
 import org.sert2521.sertain.control.PidfConfig
@@ -84,7 +85,6 @@ suspend fun controlDrivetrain() = doTask {
 
 suspend fun alignToBall() = doTask {
     val drivetrain = use<Drivetrain>()
-    var loopsStill = 0
     var visionLastAlive = TableEntry("last_alive", 0.0, "Vision")
     var visionAngle = TableEntry("xAngOff", 0.0, "Vision")
     var lastAlive = visionLastAlive.value
@@ -105,17 +105,6 @@ suspend fun alignToBall() = doTask {
 
             val turnValue = controller.next(0.0, (drivetrain.rawHeading - lastAngle).IEEErem(360.0))
             drivetrain.arcadeDrive(1.0, -turnValue)
-
-            if (abs(drivetrain.rawHeading - lastAngle) < 0.3) {
-                loopsStill += 1
-            } else {
-                loopsStill = 0
-            }
-
-            if (loopsStill == 11){
-                println("done")
-                this@action.cancel()
-            }
         }
     }
 }

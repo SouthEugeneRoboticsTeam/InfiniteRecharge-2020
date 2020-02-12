@@ -40,7 +40,9 @@ object OI {
 fun CoroutineScope.initControls() {
     { primaryJoystick.getRawButton(1) }.watch {
         whenTrue {
+            println("Should be aligning")
             alignToBall()
+            welcome()
         }
     }
     ({ primaryController.aButton }).watch {
