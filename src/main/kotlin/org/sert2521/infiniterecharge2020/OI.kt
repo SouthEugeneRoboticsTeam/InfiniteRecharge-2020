@@ -5,6 +5,9 @@ import edu.wpi.first.wpilibj.XboxController
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser
 import kotlinx.coroutines.CoroutineScope
 import org.sert2521.infiniterecharge2020.OI.primaryController
+import org.sert2521.infiniterecharge2020.powerhouse.banish
+import org.sert2521.infiniterecharge2020.powerhouse.closeHouse
+import org.sert2521.infiniterecharge2020.powerhouse.welcome
 import org.sert2521.infiniterecharge2020.OI.primaryJoystick
 import org.sert2521.infiniterecharge2020.OI.secondaryJoystick
 import org.sert2521.infiniterecharge2020.autonomous.PathGenerator
@@ -37,6 +40,21 @@ object OI {
 }
 
 fun CoroutineScope.initControls() {
+    ({ primaryController.aButton }).watch {
+        whileTrue {
+            println("Should be intaking")
+            welcome()
+        }
+    }
+    ({ primaryController.bButton }).watch {
+        whileTrue {
+            println("B BUTTON PRESS")
+            banish()
+        }
+        whenFalse {
+            closeHouse()
+        }
+    }
     ({ primaryController.xButton }).watch {
         whenTrue {
             centerInitPowerPort(true, PathGenerator.endLocation.TRENCH)
