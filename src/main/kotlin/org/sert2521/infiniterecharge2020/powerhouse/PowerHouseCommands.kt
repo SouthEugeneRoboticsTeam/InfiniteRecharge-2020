@@ -12,7 +12,7 @@ suspend fun welcome() = doTask {
     action {
         try {
             onTick {
-                powerHouse.intake()
+                powerHouse.spin()
             }.join()
         } finally {
             powerHouse.stopSpin()
@@ -27,7 +27,7 @@ suspend fun banish() = doTask {
         openHouse()
         try {
             onTick {
-                powerHouse.intake()
+                powerHouse.spin()
             }.join()
         } finally {
             powerHouse.stopSpin()
