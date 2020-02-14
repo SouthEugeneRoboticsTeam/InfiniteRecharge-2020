@@ -17,19 +17,7 @@ import org.sert2521.sertain.motors.EncoderTicks
 import org.sert2521.sertain.subsystems.doTask
 import org.sert2521.sertain.subsystems.use
 import org.sert2521.sertain.telemetry.tableEntry
-import org.sert2521.sertain.units.Chronic
-import org.sert2521.sertain.units.CompositeUnit
-import org.sert2521.sertain.units.CompositeUnitType
-import org.sert2521.sertain.units.Linear
-import org.sert2521.sertain.units.Meters
-import org.sert2521.sertain.units.MetricUnit
-import org.sert2521.sertain.units.MetricValue
-import org.sert2521.sertain.units.Milliseconds
-import org.sert2521.sertain.units.Per
-import org.sert2521.sertain.units.Seconds
-import org.sert2521.sertain.units.convertTo
-import org.sert2521.sertain.units.div
-import org.sert2521.sertain.units.rps
+import org.sert2521.sertain.units.*
 import org.sert2521.sertain.utils.timer
 import kotlin.math.sign
 
@@ -91,16 +79,17 @@ suspend fun <T : MetricUnit<Linear>> driveCurve(
 }
 
 suspend fun runPath(
+        drivetrain: Drivetrain,
         trajectory: Trajectory,
-        getPose: () -> Pose2d,
-        follower: RamseteController,
-        kinematics: DifferentialDriveKinematics,
-        outputMetersPerSecond: (left: Double, right: Double) -> Unit
+        getPose: () -> Pose2d = { drivetrain.pose },
+        follower: RamseteController = RamseteController(),
+        pathKinematics: DifferentialDriveKinematics = kinematics,
+        outputMetersPerSecond: (left: Double, right: Double) -> Unit = { l, r -> drivetrain.setTargetSpeed(l.mps, r.mps) }
 ) {
     timer(20, 0, (trajectory.totalTimeSeconds * 1000).toLong().also { println("Path time: $it") }) {
         val curTime = it.toDouble() / 1000
 
-        val targetWheelSpeeds = kinematics.toWheelSpeeds(
+        val targetWheelSpeeds = pathKinematics.toWheelSpeeds(
                 follower.calculate(getPose(), trajectory.sample(curTime))
         )
 

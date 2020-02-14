@@ -22,29 +22,29 @@ suspend fun rightInitPowerPort(pushBack: Boolean, endLocation: PathGenerator.end
     action {
         if (pushBack) {
             val pushBackPath = pathGenerator.pushBack(0.30)
-            runPath(pushBackPath, { drivetrain.pose }, RamseteController(), kinematics, { l, r -> drivetrain.setTargetSpeed(l.mps, r.mps) })
+            runPath(drivetrain, pushBackPath)
         }
 
         val toPowerPortPath = pathGenerator.initToPowerPort()
         println(toPowerPortPath.states)
-        runPath(toPowerPortPath, { drivetrain.pose }, RamseteController(), kinematics, { l, r -> drivetrain.setTargetSpeed(l.mps, r.mps) })
+        runPath(drivetrain, toPowerPortPath)
 
         if (endLocation == PathGenerator.endLocation.TRENCH) {
             val toTrenchFromPortPath = pathGenerator.powerPortToTrench()
             println(toTrenchFromPortPath.states)
-            runPath(toTrenchFromPortPath, { drivetrain.pose }, RamseteController(), kinematics, { l, r -> drivetrain.setTargetSpeed(l.mps, r.mps) })
+            runPath(drivetrain, toTrenchFromPortPath)
 
             val trenchRunPath = pathGenerator.trenchRun(5.0)
             println(trenchRunPath.states)
             doOne {
                 action{
-                    runPath(trenchRunPath, { drivetrain.pose }, RamseteController(), kinematics, { l, r -> drivetrain.setTargetSpeed(l.mps, r.mps) })
+                    runPath(drivetrain, trenchRunPath)
                     welcome()
                 }
             }
         } else if (endLocation == PathGenerator.endLocation.LOADING_STATION) {
             val loadingStationPath = pathGenerator.loadingStation()
-            runPath(loadingStationPath, { drivetrain.pose }, RamseteController(), kinematics, { l, r -> drivetrain.setTargetSpeed(l.mps, r.mps) })
+            runPath(drivetrain, loadingStationPath)
         }
     }
 }
@@ -57,29 +57,29 @@ suspend fun centerInitPowerPort(pushBack: Boolean, endLocation: PathGenerator.en
     action {
         if (pushBack) {
             val pushBackPath = pathGenerator.pushBack(0.30)
-            runPath(pushBackPath, { drivetrain.pose }, RamseteController(), kinematics, { l, r -> drivetrain.setTargetSpeed(l.mps, r.mps) })
+            runPath(drivetrain, pushBackPath)
         }
 
         val toPowerPortPath = pathGenerator.initToPowerPort()
         println(toPowerPortPath.states)
-        runPath(toPowerPortPath, { drivetrain.pose }, RamseteController(), kinematics, { l, r -> drivetrain.setTargetSpeed(l.mps, r.mps) })
+        runPath(drivetrain, toPowerPortPath)
 
         if (endLocation == PathGenerator.endLocation.TRENCH) {
             val toTrenchFromPortPath = pathGenerator.powerPortToTrench()
             println(toTrenchFromPortPath.states)
-            runPath(toTrenchFromPortPath, { drivetrain.pose }, RamseteController(), kinematics, { l, r -> drivetrain.setTargetSpeed(l.mps, r.mps) })
+            runPath(drivetrain, toTrenchFromPortPath)
 
             val trenchRunPath = pathGenerator.trenchRun(5.0)
             println(trenchRunPath.states)
             doOne {
                 action{
-                    runPath(trenchRunPath, { drivetrain.pose }, RamseteController(), kinematics, { l, r -> drivetrain.setTargetSpeed(l.mps, r.mps) })
+                    runPath(drivetrain, trenchRunPath)
                     welcome()
                 }
             }
         } else if (endLocation == PathGenerator.endLocation.LOADING_STATION) {
             val loadingStationPath = pathGenerator.loadingStation()
-            runPath(loadingStationPath, { drivetrain.pose }, RamseteController(), kinematics, { l, r -> drivetrain.setTargetSpeed(l.mps, r.mps) })
+            runPath(drivetrain, loadingStationPath)
         }
     }
 }
