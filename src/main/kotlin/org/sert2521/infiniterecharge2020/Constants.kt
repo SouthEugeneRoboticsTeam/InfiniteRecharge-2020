@@ -19,9 +19,7 @@ object Operator {
     const val PRIMARY_CONTROLLER = 0
     const val PRIMARY_STICK = 1
     const val SECONDARY_STICK = 2
-
 }
-
 
 object Sensors {
     const val CLOSE_SWITCH = 3
