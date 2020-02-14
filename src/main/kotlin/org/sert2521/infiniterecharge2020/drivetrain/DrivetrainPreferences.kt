@@ -14,6 +14,6 @@ const val TICKS_PER_REVOLUTION = 4096
 val motorEncoder = Encoder(TICKS_PER_REVOLUTION)
 
 // TODO measure wheels
-val wheelRadius = 0.095.m
+val wheelRadius = 0.09525.m
 
-val kinematics = DifferentialDriveKinematics(0.59690)
+val kinematics = DifferentialDriveKinematics(0.575)
