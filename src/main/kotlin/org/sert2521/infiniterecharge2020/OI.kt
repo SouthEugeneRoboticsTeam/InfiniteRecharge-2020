@@ -1,5 +1,6 @@
 package org.sert2521.infiniterecharge2020
 
+import edu.wpi.first.wpilibj.GenericHID
 import edu.wpi.first.wpilibj.Joystick
 import edu.wpi.first.wpilibj.XboxController
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser
@@ -7,6 +8,7 @@ import kotlinx.coroutines.CoroutineScope
 import org.sert2521.infiniterecharge2020.OI.primaryController
 import org.sert2521.infiniterecharge2020.powerhouse.banish
 import org.sert2521.infiniterecharge2020.powerhouse.closeHouse
+import org.sert2521.infiniterecharge2020.powerhouse.reverseWelcome
 import org.sert2521.infiniterecharge2020.powerhouse.welcome
 import org.sert2521.sertain.coroutines.RobotScope
 import org.sert2521.sertain.coroutines.watch
@@ -35,19 +37,24 @@ object OI {
 }
 
 fun CoroutineScope.initControls() {
-    ({ primaryController.aButton }).watch {
+    ({ primaryController.getBumper(GenericHID.Hand.kRight) }).watch {
         whileTrue {
             println("Should be intaking")
             welcome()
         }
     }
-    ({ primaryController.bButton }).watch {
+    ({ primaryController.getBumper(GenericHID.Hand.kLeft) }).watch {
         whileTrue {
             println("B BUTTON PRESS")
             banish()
         }
         whenFalse {
             closeHouse()
+        }
+    }
+    ({ primaryController.getTriggerAxis(GenericHID.Hand.kLeft) > .5 }).watch {
+        whileTrue {
+            reverseWelcome()
         }
     }
 }
