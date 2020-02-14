@@ -68,8 +68,12 @@ suspend fun closeHouse() = doTask {
 suspend fun reverseWelcome() = doTask {
     val powerHouse = use<PowerHouse>()
     action {
-        onTick {
-            powerHouse.spinReverse()
+        try {
+            onTick {
+                powerHouse.spinReverse()
+            }.join()
+        } finally {
+            powerHouse.stopSpin()
         }
     }
 }
