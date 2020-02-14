@@ -3,6 +3,9 @@ package org.sert2521.infiniterecharge2020.autonomous
 import edu.wpi.first.wpilibj.controller.RamseteController
 import edu.wpi.first.wpilibj.geometry.Pose2d
 import edu.wpi.first.wpilibj.geometry.Rotation2d
+import kotlinx.coroutines.cancelAndJoin
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import org.sert2521.infiniterecharge2020.drivetrain.Drivetrain
 import org.sert2521.infiniterecharge2020.drivetrain.kinematics
 import org.sert2521.infiniterecharge2020.drivetrain.runPath
@@ -31,11 +34,8 @@ suspend fun rightInitPowerPort(pushBack: Boolean, endLocation: PathGenerator.end
         println(toPowerPortPath.states)
         runPath(drivetrain, toPowerPortPath)
 
-        doOne {
-            action {
-                timer(3000, 3000){ }
-                banish()
-            }
+        val banishJob = launch {
+            banish()
         }
 
         if (endLocation == PathGenerator.endLocation.TRENCH) {
@@ -44,13 +44,14 @@ suspend fun rightInitPowerPort(pushBack: Boolean, endLocation: PathGenerator.end
             runPath(drivetrain, toTrenchFromPortPath)
 
             val trenchRunPath = pathGenerator.trenchRun(5.0)
-            println(trenchRunPath.states)
-            doOne {
-                action{
-                    runPath(drivetrain, trenchRunPath)
-                    welcome()
-                }
+
+            val welcomeJob = launch {
+                welcome()
             }
+
+            println(trenchRunPath.states)
+            runPath(drivetrain, trenchRunPath)
+            welcomeJob.cancel()
         } else if (endLocation == PathGenerator.endLocation.LOADING_STATION) {
             val loadingStationPath = pathGenerator.loadingStation()
             runPath(drivetrain, loadingStationPath)
@@ -73,12 +74,12 @@ suspend fun centerInitPowerPort(pushBack: Boolean, endLocation: PathGenerator.en
         println(toPowerPortPath.states)
         runPath(drivetrain, toPowerPortPath)
 
-        doOne {
-            action {
-                timer(3000, 3000){ }
-                banish()
-            }
+        val banishJob = launch {
+            banish()
         }
+
+        delay(3000)
+        banishJob.cancelAndJoin()
 
         if (endLocation == PathGenerator.endLocation.TRENCH) {
             val toTrenchFromPortPath = pathGenerator.powerPortToTrench()
@@ -86,13 +87,13 @@ suspend fun centerInitPowerPort(pushBack: Boolean, endLocation: PathGenerator.en
             runPath(drivetrain, toTrenchFromPortPath)
 
             val trenchRunPath = pathGenerator.trenchRun(5.0)
-            println(trenchRunPath.states)
-            doOne {
-                action{
-                    runPath(drivetrain, trenchRunPath)
-                    welcome()
-                }
+            val welcomeJob = launch {
+                welcome()
             }
+
+            println(trenchRunPath.states)
+            runPath(drivetrain, trenchRunPath)
+            welcomeJob.cancel()
         } else if (endLocation == PathGenerator.endLocation.LOADING_STATION) {
             val loadingStationPath = pathGenerator.loadingStation()
             runPath(drivetrain, loadingStationPath)
