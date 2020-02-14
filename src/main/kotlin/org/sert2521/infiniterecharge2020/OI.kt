@@ -10,6 +10,9 @@ import org.sert2521.infiniterecharge2020.OI.secondaryJoystick
 import org.sert2521.infiniterecharge2020.autonomous.PathGenerator
 import org.sert2521.infiniterecharge2020.autonomous.centerInitPowerPort
 import org.sert2521.infiniterecharge2020.autonomous.rightInitPowerPort
+import org.sert2521.infiniterecharge2020.powerhouse.banish
+import org.sert2521.infiniterecharge2020.powerhouse.closeHouse
+import org.sert2521.infiniterecharge2020.powerhouse.welcome
 import org.sert2521.sertain.coroutines.RobotScope
 import org.sert2521.sertain.coroutines.watch
 import org.sert2521.sertain.telemetry.linkTableEntry
@@ -37,6 +40,21 @@ object OI {
 }
 
 fun CoroutineScope.initControls() {
+    ({ primaryController.aButton }).watch {
+        whileTrue {
+            println("Should be intaking")
+            welcome()
+        }
+    }
+    ({ primaryController.bButton }).watch {
+        whileTrue {
+            println("B BUTTON PRESS")
+            banish()
+        }
+        whenFalse {
+            closeHouse()
+        }
+    }
     ({ primaryController.xButton }).watch {
         whenTrue {
             centerInitPowerPort(true, PathGenerator.endLocation.TRENCH)
