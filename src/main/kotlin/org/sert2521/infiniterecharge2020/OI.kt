@@ -4,7 +4,12 @@ import edu.wpi.first.wpilibj.Joystick
 import edu.wpi.first.wpilibj.XboxController
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser
 import kotlinx.coroutines.CoroutineScope
+import org.sert2521.infiniterecharge2020.OI.primaryController
+import org.sert2521.infiniterecharge2020.powerhouse.banish
+import org.sert2521.infiniterecharge2020.powerhouse.closeHouse
+import org.sert2521.infiniterecharge2020.powerhouse.welcome
 import org.sert2521.sertain.coroutines.RobotScope
+import org.sert2521.sertain.coroutines.watch
 import org.sert2521.sertain.telemetry.linkTableEntry
 
 object OI {
@@ -30,4 +35,19 @@ object OI {
 }
 
 fun CoroutineScope.initControls() {
+    ({ primaryController.aButton }).watch {
+        whileTrue {
+            println("Should be intaking")
+            welcome()
+        }
+    }
+    ({ primaryController.bButton }).watch {
+        whileTrue {
+            println("B BUTTON PRESS")
+            banish()
+        }
+        whenFalse {
+            closeHouse()
+        }
+    }
 }
