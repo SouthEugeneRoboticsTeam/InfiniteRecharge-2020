@@ -5,6 +5,7 @@ import edu.wpi.first.wpilibj.Joystick
 import edu.wpi.first.wpilibj.XboxController
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.yield
 import org.sert2521.sertain.coroutines.RobotScope
 import org.sert2521.sertain.telemetry.linkTableEntry
 
@@ -14,8 +15,9 @@ object OI {
     }
 
     enum class DriverCameraSource(val key: String) {
-        FRONT("Front"), CLIMBER("Climber")
+        FRONT("Front"), Ball("Ball")
     }
+
 
     // TODO: Figure out why this isn't working
     val controlModeChooser = SendableChooser<ControlMode>().apply {
@@ -33,8 +35,15 @@ object OI {
     val primaryJoystick by lazy { Joystick(Operator.PRIMARY_STICK) }
     val secondaryJoystick by lazy { Joystick(Operator.SECONDARY_STICK) }
 
-    fun setDriverCamera(source: DriverCameraSource) {
-        NetworkTableInstance.getDefault().getEntry("/current_camera").setString(source.key)
+    suspend fun nextDriverCamera() {
+        for(camera in DriverCameraSource.values()) {
+            NetworkTableInstance.getDefault().getEntry("/current_camera").setString(camera.key)
+            yield()
+        }
+    }
+
+    fun climberCamera() {
+        NetworkTableInstance.getDefault().getEntry("/current_camera").setString("Climber")
     }
 }
 
