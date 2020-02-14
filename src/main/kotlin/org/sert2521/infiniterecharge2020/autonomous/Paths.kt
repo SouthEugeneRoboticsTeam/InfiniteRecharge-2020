@@ -7,7 +7,9 @@ import org.sert2521.infiniterecharge2020.drivetrain.Drivetrain
 import org.sert2521.infiniterecharge2020.drivetrain.kinematics
 import org.sert2521.infiniterecharge2020.drivetrain.runPath
 import org.sert2521.infiniterecharge2020.powerhouse.PowerHouse
+import org.sert2521.infiniterecharge2020.powerhouse.banish
 import org.sert2521.infiniterecharge2020.powerhouse.welcome
+import org.sert2521.infiniterecharge2020.utils.timer
 import org.sert2521.sertain.coroutines.doAll
 import org.sert2521.sertain.coroutines.doOne
 import org.sert2521.sertain.subsystems.doTask
@@ -28,6 +30,13 @@ suspend fun rightInitPowerPort(pushBack: Boolean, endLocation: PathGenerator.end
         val toPowerPortPath = pathGenerator.initToPowerPort()
         println(toPowerPortPath.states)
         runPath(drivetrain, toPowerPortPath)
+
+        doOne {
+            action {
+                timer(3000, 3000){ }
+                banish()
+            }
+        }
 
         if (endLocation == PathGenerator.endLocation.TRENCH) {
             val toTrenchFromPortPath = pathGenerator.powerPortToTrench()
@@ -63,6 +72,13 @@ suspend fun centerInitPowerPort(pushBack: Boolean, endLocation: PathGenerator.en
         val toPowerPortPath = pathGenerator.initToPowerPort()
         println(toPowerPortPath.states)
         runPath(drivetrain, toPowerPortPath)
+
+        doOne {
+            action {
+                timer(3000, 3000){ }
+                banish()
+            }
+        }
 
         if (endLocation == PathGenerator.endLocation.TRENCH) {
             val toTrenchFromPortPath = pathGenerator.powerPortToTrench()
