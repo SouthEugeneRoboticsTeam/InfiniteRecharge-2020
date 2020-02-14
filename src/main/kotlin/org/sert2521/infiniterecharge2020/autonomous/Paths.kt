@@ -15,6 +15,7 @@ import org.sert2521.infiniterecharge2020.powerhouse.welcome
 import org.sert2521.infiniterecharge2020.utils.timer
 import org.sert2521.sertain.coroutines.doAll
 import org.sert2521.sertain.coroutines.doOne
+import org.sert2521.sertain.events.onTick
 import org.sert2521.sertain.subsystems.doTask
 import org.sert2521.sertain.subsystems.use
 import org.sert2521.sertain.units.mps
@@ -34,9 +35,12 @@ suspend fun rightInitPowerPort(pushBack: Boolean, endLocation: PathGenerator.end
         println(toPowerPortPath.states)
         runPath(drivetrain, toPowerPortPath)
 
-        val banishJob = launch {
+        val banishJob = onTick {
             banish()
         }
+
+        delay(3000)
+        banishJob.cancelAndJoin()
 
         if (endLocation == PathGenerator.endLocation.TRENCH) {
             val toTrenchFromPortPath = pathGenerator.powerPortToTrench()
@@ -45,13 +49,14 @@ suspend fun rightInitPowerPort(pushBack: Boolean, endLocation: PathGenerator.end
 
             val trenchRunPath = pathGenerator.trenchRun(5.0)
 
-            val welcomeJob = launch {
+            val welcomeJob = onTick {
                 welcome()
             }
 
             println(trenchRunPath.states)
             runPath(drivetrain, trenchRunPath)
             welcomeJob.cancel()
+
         } else if (endLocation == PathGenerator.endLocation.LOADING_STATION) {
             val loadingStationPath = pathGenerator.loadingStation()
             runPath(drivetrain, loadingStationPath)
@@ -74,7 +79,7 @@ suspend fun centerInitPowerPort(pushBack: Boolean, endLocation: PathGenerator.en
         println(toPowerPortPath.states)
         runPath(drivetrain, toPowerPortPath)
 
-        val banishJob = launch {
+        val banishJob = onTick {
             banish()
         }
 
@@ -87,13 +92,14 @@ suspend fun centerInitPowerPort(pushBack: Boolean, endLocation: PathGenerator.en
             runPath(drivetrain, toTrenchFromPortPath)
 
             val trenchRunPath = pathGenerator.trenchRun(5.0)
-            val welcomeJob = launch {
+            val welcomeJob = onTick {
                 welcome()
             }
 
             println(trenchRunPath.states)
             runPath(drivetrain, trenchRunPath)
             welcomeJob.cancel()
+
         } else if (endLocation == PathGenerator.endLocation.LOADING_STATION) {
             val loadingStationPath = pathGenerator.loadingStation()
             runPath(drivetrain, loadingStationPath)
