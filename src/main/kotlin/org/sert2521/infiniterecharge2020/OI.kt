@@ -1,5 +1,6 @@
 package org.sert2521.infiniterecharge2020
 
+import edu.wpi.first.wpilibj.GenericHID
 import edu.wpi.first.wpilibj.Joystick
 import edu.wpi.first.wpilibj.XboxController
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser
@@ -40,39 +41,39 @@ object OI {
 }
 
 fun CoroutineScope.initControls() {
-    ({ primaryController.aButton }).watch {
+    ({ primaryController.getBumper(GenericHID.Hand.kRight) }).watch {
         whileTrue {
             println("Should be intaking")
             welcome()
         }
     }
-    ({ primaryController.bButton }).watch {
+    ({ primaryController.getBumper(GenericHID.Hand.kLeft) }).watch {
         whileTrue {
-            println("B BUTTON PRESS")
+            println("Running intake")
             banish()
         }
         whenFalse {
             closeHouse()
         }
     }
-    ({ primaryController.xButton }).watch {
-        whenTrue {
-            centerInitPowerPort(true, PathGenerator.endLocation.TRENCH)
-        }
-    }
-    ({ primaryController.yButton }).watch {
-        whenTrue {
-            rightInitPowerPort(true, PathGenerator.endLocation.TRENCH)
-        }
-    }
-    ({ primaryController.aButton }).watch {
-        whenTrue {
-            centerInitPowerPort(true, PathGenerator.endLocation.LOADING_STATION)
-        }
-    }
-    ({ primaryController.bButton }).watch {
-        whenTrue {
-            rightInitPowerPort(true, PathGenerator.endLocation.LOADING_STATION)
-        }
-    }
+//    ({ primaryController.xButton }).watch {
+//        whenTrue {
+//            centerInitPowerPort(true, PathGenerator.endLocation.TRENCH)
+//        }
+//    }
+//    ({ primaryController.yButton }).watch {
+//        whenTrue {
+//            rightInitPowerPort(true, PathGenerator.endLocation.TRENCH)
+//        }
+//    }
+//    ({ primaryController.aButton }).watch {
+//        whenTrue {
+//            centerInitPowerPort(true, PathGenerator.endLocation.LOADING_STATION)
+//        }
+//    }
+//    ({ primaryController.bButton }).watch {
+//        whenTrue {
+//            rightInitPowerPort(true, PathGenerator.endLocation.LOADING_STATION)
+//        }
+//    }
 }
