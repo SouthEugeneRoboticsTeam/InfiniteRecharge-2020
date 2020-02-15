@@ -40,7 +40,7 @@ class PowerHouse : Subsystem("PowerHouse") {
         RobotScope.linkTableEntry("Flap Open", name) { flapOpen }
     }
 
-    fun intake() {
+    fun spin() {
         roller.setPercentOutput(ROLLER_SPEED)
         rollerRunning = true
     }
