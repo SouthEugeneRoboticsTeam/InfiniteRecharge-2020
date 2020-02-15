@@ -1,11 +1,11 @@
 package org.sert2521.infiniterecharge2020.climber
 
+import kotlin.math.abs
 import org.sert2521.infiniterecharge2020.OI
 import org.sert2521.infiniterecharge2020.utils.deadband
 import org.sert2521.sertain.events.onTick
 import org.sert2521.sertain.subsystems.doTask
 import org.sert2521.sertain.subsystems.use
-import kotlin.math.abs
 
 val winchSpeed get() = OI.secondaryJoystick.y.deadband(0.02)
 
@@ -46,7 +46,7 @@ suspend fun climberDown() = doTask {
 suspend fun runWinch() = doTask {
     val climber = use<Climber>()
     action {
-        println("Winch Speed: ${winchSpeed}")
+        println("Winch Speed: $winchSpeed")
         onTick {
             climber.runWinchClockwise(abs(winchSpeed))
         }

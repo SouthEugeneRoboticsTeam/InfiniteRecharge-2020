@@ -2,12 +2,10 @@ package org.sert2521.infiniterecharge2020.climber
 
 import edu.wpi.first.wpilibj.DigitalInput
 import org.sert2521.infiniterecharge2020.MotorControllers
-import org.sert2521.infiniterecharge2020.Sensors.TOP_LIMIT_SWITCH
 import org.sert2521.infiniterecharge2020.Sensors.BOTTOM_LIMIT_SWITCH
-import org.sert2521.sertain.control.MotionCurve
+import org.sert2521.infiniterecharge2020.Sensors.TOP_LIMIT_SWITCH
 import org.sert2521.sertain.coroutines.RobotScope
 import org.sert2521.sertain.coroutines.watch
-import org.sert2521.sertain.events.onTick
 import org.sert2521.sertain.motors.MotorController
 import org.sert2521.sertain.subsystems.Subsystem
 import org.sert2521.sertain.telemetry.linkTableEntry
@@ -20,6 +18,8 @@ class Climber : Subsystem("Climber") {
             MotorControllers.winchFront, MotorControllers.winchRear
     )
 
+    // Ah. Now would be time to look away from the code (or at least not closely)
+    // TODO: FIX THESE INCREDIBLE NAMES CORUTSEY OF MOISEUR WILL.I.AM
     val topLimitSwitch = DigitalInput(BOTTOM_LIMIT_SWITCH)
     val bottomLimitSwitch = DigitalInput(TOP_LIMIT_SWITCH)
 
@@ -51,6 +51,7 @@ class Climber : Subsystem("Climber") {
         }
     }
 
+    // TODO: Call this climberLiftUp
     fun setOutput(output: Double) {
         if (position > POSITION_AT_TOP - 500) {
             liftMotor.setPercentOutput(output / 2)
@@ -72,7 +73,7 @@ class Climber : Subsystem("Climber") {
     }
 
     fun runWinchClockwise(speed: Double) {
-        println("Speed: ${speed}")
+        println("Speed: $speed")
         winchMotor.setPercentOutput(speed)
     }
 
