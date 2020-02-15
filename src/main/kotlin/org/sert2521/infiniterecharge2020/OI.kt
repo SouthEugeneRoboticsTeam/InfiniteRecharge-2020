@@ -47,7 +47,7 @@ fun CoroutineScope.initControls() {
                     welcome()
                 }
                 action {
-                    alignToBall()
+                    alignToBall(3.5)
                 }
             }
         }

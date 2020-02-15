@@ -1,6 +1,5 @@
 package org.sert2521.infiniterecharge2020.drivetrain
 
-import com.sun.xml.internal.fastinfoset.alphabet.BuiltInRestrictedAlphabets.table
 import edu.wpi.first.networktables.NetworkTableEntry
 import edu.wpi.first.wpilibj.GenericHID
 import kotlinx.coroutines.cancel
@@ -100,7 +99,7 @@ suspend fun alignToBall(offset: Double) = doTask {
         onTick {
             if (lastAlive != visionLastAlive.value){
                 lastAlive = visionLastAlive.value + drivetrain.rawHeading
-                lastAngle = visionAngle.value + drivetrain.rawHeading + (sign(visionAngle.value) * offset)
+                lastAngle = visionAngle.value + drivetrain.rawHeading - (sign(visionAngle.value) * offset)
             }
 
             val turnValue = controller.next(0.0, (drivetrain.rawHeading - lastAngle).IEEErem(360.0))
