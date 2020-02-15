@@ -14,7 +14,6 @@ val motorEncoder = Encoder(TICKS_PER_REVOLUTION)
 
 val SLOW_MODE = false
 
-// TODO measure wheels
 val wheelRadius = 0.09525.m
 
 val kinematics = DifferentialDriveKinematics(0.575)
