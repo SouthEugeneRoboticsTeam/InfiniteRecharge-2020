@@ -1,6 +1,10 @@
 package org.sert2521.infiniterecharge2020.drivetrain
 
 import edu.wpi.first.wpilibj.GenericHID
+import edu.wpi.first.wpilibj.controller.RamseteController
+import edu.wpi.first.wpilibj.geometry.Pose2d
+import edu.wpi.first.wpilibj.kinematics.DifferentialDriveKinematics
+import edu.wpi.first.wpilibj.trajectory.Trajectory
 import kotlin.math.IEEErem
 import kotlin.math.sign
 import org.sert2521.infiniterecharge2020.OI.ControlMode
@@ -9,6 +13,7 @@ import org.sert2521.infiniterecharge2020.OI.primaryController
 import org.sert2521.infiniterecharge2020.OI.primaryJoystick
 import org.sert2521.infiniterecharge2020.utils.PidfController2
 import org.sert2521.infiniterecharge2020.utils.deadband
+import org.sert2521.infiniterecharge2020.utils.timer
 import org.sert2521.sertain.control.MotionCurve
 import org.sert2521.sertain.control.PidfConfig
 import org.sert2521.sertain.events.onTick
@@ -17,19 +22,9 @@ import org.sert2521.sertain.subsystems.doTask
 import org.sert2521.sertain.subsystems.use
 import org.sert2521.sertain.telemetry.TableEntry
 import org.sert2521.sertain.telemetry.tableEntry
-import org.sert2521.sertain.units.Chronic
-import org.sert2521.sertain.units.CompositeUnit
-import org.sert2521.sertain.units.CompositeUnitType
-import org.sert2521.sertain.units.Linear
+import org.sert2521.sertain.units.*
 import org.sert2521.sertain.units.Meters
-import org.sert2521.sertain.units.MetricUnit
-import org.sert2521.sertain.units.MetricValue
 import org.sert2521.sertain.units.Milliseconds
-import org.sert2521.sertain.units.Per
-import org.sert2521.sertain.units.Seconds
-import org.sert2521.sertain.units.convertTo
-import org.sert2521.sertain.units.div
-import org.sert2521.sertain.units.rps
 import org.sert2521.sertain.utils.timer
 
 private val throttle
@@ -112,5 +107,27 @@ suspend fun <T : MetricUnit<Linear>> driveCurve(
                     ((curve.v(it.toDouble()).mpms.convertTo(Meters / Seconds) / wheelRadius).value.rps.convertTo(EncoderTicks(TICKS_PER_REVOLUTION) / Seconds).value * 10).toInt()
             dt.setTargetSpeed(setPoint)
         }
+    }
+}
+
+suspend fun runPath(
+    drivetrain: Drivetrain,
+    trajectory: Trajectory,
+    getPose: () -> Pose2d = { drivetrain.pose },
+    follower: RamseteController = RamseteController(),
+    pathKinematics: DifferentialDriveKinematics = kinematics,
+    outputMetersPerSecond: (left: Double, right: Double) -> Unit = { l, r -> drivetrain.setTargetSpeed(l.mps, r.mps) }
+) {
+    timer(20, 0, (trajectory.totalTimeSeconds * 1000).toLong().also { println("Path time: $it") }) {
+        val curTime = it.toDouble() / 1000
+
+        val targetWheelSpeeds = pathKinematics.toWheelSpeeds(
+                follower.calculate(getPose(), trajectory.sample(curTime))
+        )
+
+        val leftSpeedSetpoint = targetWheelSpeeds.leftMetersPerSecond
+        val rightSpeedSetpoint = targetWheelSpeeds.rightMetersPerSecond
+
+        outputMetersPerSecond(leftSpeedSetpoint, rightSpeedSetpoint)
     }
 }

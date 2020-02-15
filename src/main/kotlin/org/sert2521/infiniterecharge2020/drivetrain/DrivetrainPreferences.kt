@@ -1,6 +1,7 @@
 package org.sert2521.infiniterecharge2020.drivetrain
 
 import edu.wpi.first.wpilibj.Preferences
+import edu.wpi.first.wpilibj.kinematics.DifferentialDriveKinematics
 import org.sert2521.sertain.motors.Encoder
 import org.sert2521.sertain.units.m
 
@@ -9,7 +10,10 @@ val driveSpeedScalar get() = Preferences.getInstance().getDouble("drive_speed_sc
 // Number of encoder pulses for one revolution of the wheel
 const val TICKS_PER_REVOLUTION = 4096
 
-val encoder = Encoder(TICKS_PER_REVOLUTION)
+val motorEncoder = Encoder(TICKS_PER_REVOLUTION)
 
-// TODO measure wheels
-val wheelRadius = 0.098425.m
+val SLOW_MODE = false
+
+val wheelRadius = 0.09525.m
+
+val kinematics = DifferentialDriveKinematics(0.575)
