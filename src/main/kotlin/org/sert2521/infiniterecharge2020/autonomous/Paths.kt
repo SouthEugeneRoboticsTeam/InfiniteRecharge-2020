@@ -33,6 +33,7 @@ suspend fun rightInitPowerPort(pushBack: Boolean, endLocation: PathGenerator.end
 
         delay(3000)
         banishJob.cancelAndJoin()
+        delay(1000)
 
         if (endLocation == PathGenerator.endLocation.TRENCH) {
             val toTrenchFromPortPath = pathGenerator.powerPortToTrench()
@@ -76,13 +77,14 @@ suspend fun centerInitPowerPort(pushBack: Boolean, endLocation: PathGenerator.en
 
         delay(3000)
         banishJob.cancelAndJoin()
+        delay(1000)
 
         if (endLocation == PathGenerator.endLocation.TRENCH) {
             val toTrenchFromPortPath = pathGenerator.powerPortToTrench()
             println(toTrenchFromPortPath.states)
             runPath(drivetrain, toTrenchFromPortPath)
 
-            val trenchRunPath = pathGenerator.trenchRun(5.0)
+            val trenchRunPath = pathGenerator.trenchRun(6.0)
             val welcomeJob = launch {
                 welcome()
             }

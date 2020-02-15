@@ -72,12 +72,8 @@ class Climber : Subsystem("Climber") {
         liftMotor.setPercentOutput(0.0)
     }
 
-    fun runWinchClockwise(speed: Double) {
+    fun runWinch(speed: Double) {
         println("Speed: $speed")
         winchMotor.setPercentOutput(speed)
-    }
-
-    fun runWinchCC(speed: Double) {
-        winchMotor.setPercentOutput(-speed)
     }
 }

@@ -13,12 +13,14 @@ import org.sert2521.infiniterecharge2020.OI.setClimberCamera
 import org.sert2521.infiniterecharge2020.OI.setNextDriverCamera
 import org.sert2521.infiniterecharge2020.climber.climberDown
 import org.sert2521.infiniterecharge2020.climber.climberUp
+import org.sert2521.infiniterecharge2020.climber.reverseRunWinch
 import org.sert2521.infiniterecharge2020.climber.runWinch
 import org.sert2521.infiniterecharge2020.drivetrain.alignToBall
 import org.sert2521.infiniterecharge2020.powerhouse.banish
 import org.sert2521.infiniterecharge2020.powerhouse.closeHouse
 import org.sert2521.infiniterecharge2020.powerhouse.reverseWelcome
 import org.sert2521.infiniterecharge2020.powerhouse.welcome
+import org.sert2521.infiniterecharge2020.utils.deadband
 import org.sert2521.sertain.coroutines.RobotScope
 import org.sert2521.sertain.coroutines.doAll
 import org.sert2521.sertain.coroutines.watch
@@ -81,8 +83,8 @@ fun CoroutineScope.initControls() {
     }
     ({ secondaryJoystick.getRawButton(9) && secondaryJoystick.trigger }).watch {
         whileTrue {
-            println("Winching...")
-            runWinch()
+            println("Winching: ${secondaryJoystick.y.deadband(0.02)}")
+            runWinch { secondaryJoystick.y.deadband(0.02) }
         }
     }
 

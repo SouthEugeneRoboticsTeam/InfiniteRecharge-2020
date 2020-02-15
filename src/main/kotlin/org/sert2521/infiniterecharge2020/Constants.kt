@@ -9,15 +9,14 @@ object MotorControllers {
     val rightFront = TalonId(3)
     val rightBack = TalonId(4)
 
-    // AHHH INCONSISTENCIES IN CAPITALIZATION
     val climber = TalonId(5)
     val winchFront = TalonId(9)
     val winchRear = TalonId(10)
 
-    val ROLLER_LEFT = TalonId(11)
-    val ROLLER_RIGHT = TalonId(12)
+    val rollerLeft = TalonId(11)
+    val rollerRight = TalonId(12)
 
-    val FLAPPER = VictorId(8)
+    val flap = VictorId(8)
 }
 
 object Operator {

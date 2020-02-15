@@ -98,7 +98,7 @@ class Drivetrain : Subsystem("Drivetrain", ::controlDrivetrain) {
     }
 
     fun arcadeDrive(speed: Double, turn: Double) {
-        if (SLOW_MODE) {
+        if (slowMode.value) {
             leftDrive.setPercentOutput((speed / 2) + turn)
             rightDrive.setPercentOutput((speed / 2) - turn)
         }
@@ -107,7 +107,7 @@ class Drivetrain : Subsystem("Drivetrain", ::controlDrivetrain) {
     }
 
     fun tankDrive(leftSpeed: Double, rightSpeed: Double) {
-        if (SLOW_MODE) {
+        if (slowMode.value) {
             leftDrive.setPercentOutput(leftSpeed / 2)
             rightDrive.setPercentOutput(rightSpeed / 2)
         }
