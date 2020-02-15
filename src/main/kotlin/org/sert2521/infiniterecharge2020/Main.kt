@@ -1,6 +1,7 @@
 package org.sert2521.infiniterecharge2020
 
 import org.sert2521.infiniterecharge2020.autonomous.PathGenerator
+import org.sert2521.infiniterecharge2020.climber.Climber
 import org.sert2521.infiniterecharge2020.drivetrain.Drivetrain
 import org.sert2521.infiniterecharge2020.powerhouse.PowerHouse
 import org.sert2521.infiniterecharge2020.powerhouse.closeHouse
@@ -14,8 +15,9 @@ import org.sert2521.sertain.subsystems.add
 suspend fun main() = robot {
     println("Robot program starting")
     add<Drivetrain>()
-    add<PathGenerator>()
+    add<Climber>()
     add<PowerHouse>()
+    add<PathGenerator>()
 
     onEnable {
         closeHouse()

@@ -8,8 +8,12 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser
 import kotlinx.coroutines.CoroutineScope
 import org.sert2521.infiniterecharge2020.OI.primaryController
 import org.sert2521.infiniterecharge2020.OI.primaryJoystick
+import org.sert2521.infiniterecharge2020.OI.secondaryJoystick
 import org.sert2521.infiniterecharge2020.OI.setClimberCamera
 import org.sert2521.infiniterecharge2020.OI.setNextDriverCamera
+import org.sert2521.infiniterecharge2020.climber.climberDown
+import org.sert2521.infiniterecharge2020.climber.climberUp
+import org.sert2521.infiniterecharge2020.climber.runWinch
 import org.sert2521.infiniterecharge2020.drivetrain.alignToBall
 import org.sert2521.infiniterecharge2020.powerhouse.banish
 import org.sert2521.infiniterecharge2020.powerhouse.closeHouse
@@ -61,6 +65,27 @@ object OI {
 }
 
 fun CoroutineScope.initControls() {
+
+    // CLIMBER
+    ({ primaryController.pov == 0 }).watch {
+        whileTrue {
+            println("GOING UP")
+            climberUp()
+        }
+    }
+    ({ primaryController.pov == 180 }).watch {
+        whileTrue {
+            println("GOING DOWN")
+            climberDown()
+        }
+    }
+    ({ secondaryJoystick.getRawButton(9) && secondaryJoystick.trigger }).watch {
+        whileTrue {
+            println("Winching...")
+            runWinch()
+        }
+    }
+
     // INTAKE
     ({ primaryController.getBumper(GenericHID.Hand.kRight) }).watch {
         whileTrue {
