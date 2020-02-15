@@ -42,7 +42,7 @@ object OI {
         }
     }
 
-    fun climberCamera() {
+    suspend fun climberCamera() {
         NetworkTableInstance.getDefault().getEntry("/current_camera").setString("Climber")
     }
 }
