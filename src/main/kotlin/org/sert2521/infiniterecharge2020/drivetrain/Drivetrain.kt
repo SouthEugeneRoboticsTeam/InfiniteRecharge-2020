@@ -3,6 +3,7 @@ package org.sert2521.infiniterecharge2020.drivetrain
 import com.ctre.phoenix.motorcontrol.ControlMode
 import com.kauailabs.navx.frc.AHRS
 import edu.wpi.first.wpilibj.I2C
+import kotlin.math.IEEErem
 import org.sert2521.infiniterecharge2020.MotorControllers
 import org.sert2521.sertain.coroutines.RobotScope
 import org.sert2521.sertain.motors.MotorController
@@ -47,7 +48,8 @@ class Drivetrain : Subsystem("Drivetrain", ::controlDrivetrain) {
     val leftPosition get() = leftDrive.position
     val rightSpeed get() = rightDrive.velocity
     val leftSpeed get() = leftDrive.velocity
-    val heading get() = gyro.angle
+    val heading get() = -gyro.angle.IEEErem(360.0)
+    val rawHeading get() = -gyro.angle
 
     init {
         zeroEncoders()
