@@ -1,22 +1,16 @@
 package org.sert2521.infiniterecharge2020.drivetrain
 
-import edu.wpi.first.networktables.NetworkTableEntry
 import edu.wpi.first.wpilibj.GenericHID
+import kotlin.math.IEEErem
 import kotlin.math.sign
-import kotlinx.coroutines.cancel
-import kotlinx.coroutines.coroutineScope
-import org.sert2521.infiniterecharge2020.OI.primaryJoystick
-import org.sert2521.infiniterecharge2020.utils.deadband
 import org.sert2521.infiniterecharge2020.OI.ControlMode
 import org.sert2521.infiniterecharge2020.OI.controlMode
 import org.sert2521.infiniterecharge2020.OI.primaryController
 import org.sert2521.infiniterecharge2020.OI.primaryJoystick
+import org.sert2521.infiniterecharge2020.utils.PidfController2
 import org.sert2521.infiniterecharge2020.utils.deadband
-import org.sert2521.infiniterecharge2020.powerhouse.PowerHouse
-import org.sert2521.infiniterecharge2020.vision.Vision
 import org.sert2521.sertain.control.MotionCurve
 import org.sert2521.sertain.control.PidfConfig
-import org.sert2521.sertain.control.PidfController
 import org.sert2521.sertain.events.onTick
 import org.sert2521.sertain.motors.EncoderTicks
 import org.sert2521.sertain.subsystems.doTask
@@ -37,31 +31,6 @@ import org.sert2521.sertain.units.convertTo
 import org.sert2521.sertain.units.div
 import org.sert2521.sertain.units.rps
 import org.sert2521.sertain.utils.timer
-import kotlin.math.sign
-import org.sert2521.sertain.telemetry.Table
-import org.sert2521.sertain.telemetry.wpiTable
-import java.time.LocalDateTime
-import java.time.ZoneOffset
-import kotlin.math.IEEErem
-import kotlin.math.abs
-
-class PidfController2(config: PidfConfig, val dt: Double) {
-    private val kp = config.kp ?: 0.0
-    private val ki = config.ki ?: 0.0
-    private val kd = config.kd ?: 0.0
-    private val kf = config.kf ?: 0.0
-
-    private var integral = 0.0
-    private var lastError = 0.0
-
-    fun next(setPoint: Double, actual: Double): Double {
-        val error = setPoint - actual
-        integral += error * dt
-        val derivative = (error - lastError) / dt
-        lastError = error
-            return (kp * error) + (ki * integral) + (kd * derivative) + (kf * sign(error))
-    }
-}
 
 private val throttle
     get() = when (controlMode) {
@@ -100,7 +69,7 @@ suspend fun alignToBall(offset: Double) = doTask {
         pidConfig.kd = 0.0
         val controller = PidfController2(pidConfig, 1.0)
         onTick {
-            if (lastAlive != visionLastAlive.value){
+            if (lastAlive != visionLastAlive.value) {
                 lastAlive = visionLastAlive.value + drivetrain.rawHeading
                 lastAngle = visionAngle.value + drivetrain.rawHeading - (sign(visionAngle.value) * offset)
             }

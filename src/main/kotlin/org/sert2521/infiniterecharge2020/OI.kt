@@ -6,12 +6,11 @@ import edu.wpi.first.wpilibj.Joystick
 import edu.wpi.first.wpilibj.XboxController
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser
 import kotlinx.coroutines.CoroutineScope
-import org.sert2521.infiniterecharge2020.OI.primaryJoystick
-import org.sert2521.infiniterecharge2020.drivetrain.alignToBall
-import org.sert2521.infiniterecharge2020.drivetrain.controlDrivetrain
 import org.sert2521.infiniterecharge2020.OI.primaryController
+import org.sert2521.infiniterecharge2020.OI.primaryJoystick
 import org.sert2521.infiniterecharge2020.OI.setClimberCamera
 import org.sert2521.infiniterecharge2020.OI.setNextDriverCamera
+import org.sert2521.infiniterecharge2020.drivetrain.alignToBall
 import org.sert2521.infiniterecharge2020.powerhouse.banish
 import org.sert2521.infiniterecharge2020.powerhouse.closeHouse
 import org.sert2521.infiniterecharge2020.powerhouse.reverseWelcome
@@ -62,8 +61,31 @@ object OI {
 }
 
 fun CoroutineScope.initControls() {
+    // INTAKE
+    ({ primaryController.getBumper(GenericHID.Hand.kRight) }).watch {
+        whileTrue {
+            println("Should be intaking")
+            welcome()
+        }
+    }
+    ({ primaryController.getBumper(GenericHID.Hand.kLeft) }).watch {
+        whileTrue {
+            println("Should be outtaking")
+            banish()
+        }
+        whenFalse {
+            closeHouse()
+        }
+    }
+    ({ primaryController.getTriggerAxis(GenericHID.Hand.kLeft) > .5 }).watch {
+        whileTrue {
+            println("Reversing the intake")
+            reverseWelcome()
+        }
+    }
 
-    { primaryJoystick.getRawButton(1) }.watch {
+    // AUTO-ALIGN
+    ({ primaryJoystick.getRawButton(1) }).watch {
         whileTrue {
             println("Should be aligning")
             doAll {
@@ -76,6 +98,8 @@ fun CoroutineScope.initControls() {
             }
         }
     }
+
+    // DRIVER CAMERAS
     ({ primaryController.aButton }).watch {
         whenTrue {
             setNextDriverCamera()
@@ -85,29 +109,6 @@ fun CoroutineScope.initControls() {
     ({ primaryController.bButton }).watch {
         whenTrue {
             setClimberCamera()
-        }
-    }
-
-    ({ primaryController.getBumper(GenericHID.Hand.kRight) }).watch {
-        whileTrue {
-            println("Should be intaking")
-            welcome()
-        }
-    }
-
-    ({ primaryController.getBumper(GenericHID.Hand.kLeft) }).watch {
-        whileTrue {
-            println("B BUTTON PRESS")
-            banish()
-        }
-        whenFalse {
-            closeHouse()
-        }
-    }
-
-    ({ primaryController.getTriggerAxis(GenericHID.Hand.kLeft) > .5 }).watch {
-        whileTrue {
-            reverseWelcome()
         }
     }
 }
