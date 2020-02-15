@@ -9,6 +9,11 @@ object MotorControllers {
     val rightFront = TalonId(3)
     val rightBack = TalonId(4)
 
+    // AHHH INCONSISTENCIES IN CAPITALIZATION
+    val climber = TalonId(5)
+    val winchFront = TalonId(9)
+    val winchRear = TalonId(10)
+
     val ROLLER_LEFT = TalonId(11)
     val ROLLER_RIGHT = TalonId(12)
 
@@ -24,4 +29,7 @@ object Operator {
 object Sensors {
     const val CLOSE_SWITCH = 3
     const val OPEN_SWITCH = 2
+
+    val BOTTOM_LIMIT_SWITCH = 1
+    val TOP_LIMIT_SWITCH = 0
 }

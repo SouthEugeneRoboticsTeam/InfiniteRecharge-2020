@@ -9,7 +9,6 @@ import org.sert2521.infiniterecharge2020.drivetrain.Drivetrain
 import org.sert2521.infiniterecharge2020.drivetrain.runPath
 import org.sert2521.infiniterecharge2020.powerhouse.banish
 import org.sert2521.infiniterecharge2020.powerhouse.welcome
-import org.sert2521.sertain.events.onTick
 import org.sert2521.sertain.subsystems.doTask
 import org.sert2521.sertain.subsystems.use
 
@@ -49,7 +48,6 @@ suspend fun rightInitPowerPort(pushBack: Boolean, endLocation: PathGenerator.end
             println(trenchRunPath.states)
             runPath(drivetrain, trenchRunPath)
             welcomeJob.cancel()
-
         } else if (endLocation == PathGenerator.endLocation.LOADING_STATION) {
             val loadingStationPath = pathGenerator.loadingStation()
             runPath(drivetrain, loadingStationPath)
@@ -92,7 +90,6 @@ suspend fun centerInitPowerPort(pushBack: Boolean, endLocation: PathGenerator.en
             println(trenchRunPath.states)
             runPath(drivetrain, trenchRunPath)
             welcomeJob.cancel()
-
         } else if (endLocation == PathGenerator.endLocation.LOADING_STATION) {
             val loadingStationPath = pathGenerator.loadingStation()
             runPath(drivetrain, loadingStationPath)

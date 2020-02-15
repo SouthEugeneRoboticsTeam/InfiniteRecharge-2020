@@ -3,17 +3,14 @@ package org.sert2521.infiniterecharge2020.drivetrain
 import com.ctre.phoenix.motorcontrol.ControlMode
 import com.kauailabs.navx.frc.AHRS
 import edu.wpi.first.wpilibj.I2C
+import edu.wpi.first.wpilibj.geometry.Rotation2d
+import edu.wpi.first.wpilibj.kinematics.DifferentialDriveOdometry
 import kotlin.math.IEEErem
 import org.sert2521.infiniterecharge2020.MotorControllers
 import org.sert2521.sertain.coroutines.RobotScope
+import org.sert2521.sertain.events.onTick
 import org.sert2521.sertain.motors.MotorController
 import org.sert2521.sertain.subsystems.Subsystem
-import org.sert2521.sertain.telemetry.linkTableEntry
-import com.kauailabs.navx.frc.AHRS
-import edu.wpi.first.wpilibj.I2C
-import edu.wpi.first.wpilibj.geometry.Rotation2d
-import edu.wpi.first.wpilibj.kinematics.DifferentialDriveOdometry
-import org.sert2521.sertain.events.onTick
 import org.sert2521.sertain.telemetry.Table
 import org.sert2521.sertain.telemetry.TableEntry
 import org.sert2521.sertain.telemetry.linkTableEntry
@@ -29,7 +26,6 @@ import org.sert2521.sertain.units.Seconds
 import org.sert2521.sertain.units.convertTo
 import org.sert2521.sertain.units.div
 import org.sert2521.sertain.units.rdps
-import kotlin.math.IEEErem
 
 class Drivetrain : Subsystem("Drivetrain", ::controlDrivetrain) {
     val table = Table(name)
@@ -83,6 +79,7 @@ class Drivetrain : Subsystem("Drivetrain", ::controlDrivetrain) {
     val leftSpeed get() = leftDrive.velocity
     // Return the robot's heading in degrees, from -180 to 180
     val heading get() = -gyro.angle.IEEErem(360.0)
+    val rawHeading get() = -gyro.angle
 
     val xTranslation get() = odometry.poseMeters.translation.x
     val yTranslation get() = odometry.poseMeters.translation.y
