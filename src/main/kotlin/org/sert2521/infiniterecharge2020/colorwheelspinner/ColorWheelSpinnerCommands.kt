@@ -1,16 +1,16 @@
-package org.sert2521.infiniterecharge2020.colorwheelspin
+package org.sert2521.infiniterecharge2020.colorwheelspinner
 
 import edu.wpi.first.wpilibj.DriverStation
 import edu.wpi.first.wpilibj.util.Color
+import kotlin.math.abs
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.coroutineScope
 import org.sert2521.sertain.events.onTick
 import org.sert2521.sertain.subsystems.doTask
 import org.sert2521.sertain.subsystems.use
 import org.sert2521.sertain.utils.timer
-import kotlin.math.abs
 
-suspend fun retract (time: Long) = doTask {
+suspend fun retract(time: Long) = doTask {
     val colorWheelSpinner = use<ColorWheelSpinner>()
     action {
         timer(20, 0, time) {

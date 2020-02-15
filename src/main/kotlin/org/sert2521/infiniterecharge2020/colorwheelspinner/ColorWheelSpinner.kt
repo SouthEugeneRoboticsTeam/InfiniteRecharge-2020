@@ -1,10 +1,9 @@
-package org.sert2521.infiniterecharge2020.colorwheelspin
+package org.sert2521.infiniterecharge2020.colorwheelspinner
 
 import com.revrobotics.ColorSensorV3
 import edu.wpi.first.wpilibj.DriverStation
 import edu.wpi.first.wpilibj.I2C
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard
-import edu.wpi.first.wpilibj.util.Color.*
+import edu.wpi.first.wpilibj.util.Color
 import org.sert2521.infiniterecharge2020.MotorControllers
 import org.sert2521.sertain.coroutines.RobotScope
 import org.sert2521.sertain.motors.MotorController
@@ -20,7 +19,7 @@ class ColorWheelSpinner : Subsystem("ColorWheelSpinner") {
         RobotScope.linkTableEntry("Target Color", name) { frcColorToString[DriverStation.getInstance().gameSpecificMessage.first()] }
     }
 
-    val frcColorToTargetColor = mapOf('Y' to kGreen, 'B' to kRed, 'G' to kYellow, 'R' to kBlue)
+    val frcColorToTargetColor = mapOf('Y' to Color.kGreen, 'B' to Color.kRed, 'G' to Color.kYellow, 'R' to Color.kBlue)
 
     private val spinner = MotorController(MotorControllers.spinner)
 
