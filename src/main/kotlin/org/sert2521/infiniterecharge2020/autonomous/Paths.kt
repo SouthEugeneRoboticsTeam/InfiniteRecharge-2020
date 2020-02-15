@@ -1,24 +1,17 @@
 package org.sert2521.infiniterecharge2020.autonomous
 
-import edu.wpi.first.wpilibj.controller.RamseteController
 import edu.wpi.first.wpilibj.geometry.Pose2d
 import edu.wpi.first.wpilibj.geometry.Rotation2d
 import kotlinx.coroutines.cancelAndJoin
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.sert2521.infiniterecharge2020.drivetrain.Drivetrain
-import org.sert2521.infiniterecharge2020.drivetrain.kinematics
 import org.sert2521.infiniterecharge2020.drivetrain.runPath
-import org.sert2521.infiniterecharge2020.powerhouse.PowerHouse
 import org.sert2521.infiniterecharge2020.powerhouse.banish
 import org.sert2521.infiniterecharge2020.powerhouse.welcome
-import org.sert2521.infiniterecharge2020.utils.timer
-import org.sert2521.sertain.coroutines.doAll
-import org.sert2521.sertain.coroutines.doOne
 import org.sert2521.sertain.events.onTick
 import org.sert2521.sertain.subsystems.doTask
 import org.sert2521.sertain.subsystems.use
-import org.sert2521.sertain.units.mps
 
 suspend fun rightInitPowerPort(pushBack: Boolean, endLocation: PathGenerator.endLocation) = doTask {
     val drivetrain = use<Drivetrain>()
@@ -35,7 +28,7 @@ suspend fun rightInitPowerPort(pushBack: Boolean, endLocation: PathGenerator.end
         println(toPowerPortPath.states)
         runPath(drivetrain, toPowerPortPath)
 
-        val banishJob = onTick {
+        val banishJob = launch {
             banish()
         }
 
@@ -49,7 +42,7 @@ suspend fun rightInitPowerPort(pushBack: Boolean, endLocation: PathGenerator.end
 
             val trenchRunPath = pathGenerator.trenchRun(5.0)
 
-            val welcomeJob = onTick {
+            val welcomeJob = launch {
                 welcome()
             }
 
@@ -79,7 +72,7 @@ suspend fun centerInitPowerPort(pushBack: Boolean, endLocation: PathGenerator.en
         println(toPowerPortPath.states)
         runPath(drivetrain, toPowerPortPath)
 
-        val banishJob = onTick {
+        val banishJob = launch {
             banish()
         }
 
@@ -92,7 +85,7 @@ suspend fun centerInitPowerPort(pushBack: Boolean, endLocation: PathGenerator.en
             runPath(drivetrain, toTrenchFromPortPath)
 
             val trenchRunPath = pathGenerator.trenchRun(5.0)
-            val welcomeJob = onTick {
+            val welcomeJob = launch {
                 welcome()
             }
 
