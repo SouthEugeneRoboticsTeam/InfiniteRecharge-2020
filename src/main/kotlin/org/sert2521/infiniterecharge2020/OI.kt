@@ -110,7 +110,7 @@ fun CoroutineScope.initControls() {
     }
 
     // AUTO-ALIGN
-    ({ primaryJoystick.getRawButton(1) }).watch {
+    ({ primaryController.yButton }).watch {
         whileTrue {
             println("Should be aligning")
             doAll {
