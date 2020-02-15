@@ -6,9 +6,9 @@ import edu.wpi.first.wpilibj.Joystick
 import edu.wpi.first.wpilibj.XboxController
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser
 import kotlinx.coroutines.CoroutineScope
-import org.sert2521.infiniterecharge2020.OI.setNextDriverCamera
 import org.sert2521.infiniterecharge2020.OI.primaryController
 import org.sert2521.infiniterecharge2020.OI.setClimberCamera
+import org.sert2521.infiniterecharge2020.OI.setNextDriverCamera
 import org.sert2521.infiniterecharge2020.powerhouse.banish
 import org.sert2521.infiniterecharge2020.powerhouse.closeHouse
 import org.sert2521.infiniterecharge2020.powerhouse.reverseWelcome
@@ -25,7 +25,6 @@ object OI {
     enum class DriverCameraSource(val key: String) {
         FRONT("Front"), Ball("Ball")
     }
-
 
     // TODO: Figure out why this isn't working
     val controlModeChooser = SendableChooser<ControlMode>().apply {
@@ -94,5 +93,4 @@ fun CoroutineScope.initControls() {
             reverseWelcome()
         }
     }
-
 }
