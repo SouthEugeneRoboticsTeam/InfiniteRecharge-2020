@@ -1,6 +1,7 @@
 package org.sert2521.infiniterecharge2020
 
 import org.sert2521.sertain.motors.TalonId
+import org.sert2521.sertain.motors.VictorId
 
 object MotorControllers {
     val leftFront = TalonId(1)
@@ -11,12 +12,22 @@ object MotorControllers {
     val climber = TalonId(5)
     val winchFront = TalonId(9)
     val winchRear = TalonId(10)
+    
+  val ROLLER_LEFT = TalonId(11)
+    val ROLLER_RIGHT = TalonId(12)
+
+    val FLAPPER = VictorId(8)
 }
 
 object Operator {
-    val PRIMARY_CONTROLLER = 0
-    val PRIMARY_STICK = 1
-    val SECONDARY_STICK = 2
+    const val PRIMARY_CONTROLLER = 0
+    const val PRIMARY_STICK = 1
+    const val SECONDARY_STICK = 2
+}
+
+object Sensors {
+    const val CLOSE_SWITCH = 3
+    const val OPEN_SWITCH = 2
 }
 
 object Sensors {
