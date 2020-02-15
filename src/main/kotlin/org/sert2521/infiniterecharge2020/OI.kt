@@ -8,12 +8,8 @@ import kotlinx.coroutines.CoroutineScope
 import org.sert2521.infiniterecharge2020.OI.primaryController
 import org.sert2521.infiniterecharge2020.powerhouse.banish
 import org.sert2521.infiniterecharge2020.powerhouse.closeHouse
+import org.sert2521.infiniterecharge2020.powerhouse.reverseWelcome
 import org.sert2521.infiniterecharge2020.powerhouse.welcome
-import org.sert2521.infiniterecharge2020.OI.primaryJoystick
-import org.sert2521.infiniterecharge2020.OI.secondaryJoystick
-import org.sert2521.infiniterecharge2020.autonomous.PathGenerator
-import org.sert2521.infiniterecharge2020.autonomous.centerInitPowerPort
-import org.sert2521.infiniterecharge2020.autonomous.rightInitPowerPort
 import org.sert2521.sertain.coroutines.RobotScope
 import org.sert2521.sertain.coroutines.watch
 import org.sert2521.sertain.telemetry.linkTableEntry
@@ -41,6 +37,7 @@ object OI {
 }
 
 fun CoroutineScope.initControls() {
+    // INTAKE
     ({ primaryController.getBumper(GenericHID.Hand.kRight) }).watch {
         whileTrue {
             println("Should be intaking")
@@ -49,31 +46,17 @@ fun CoroutineScope.initControls() {
     }
     ({ primaryController.getBumper(GenericHID.Hand.kLeft) }).watch {
         whileTrue {
-            println("Running intake")
+            println("Should be outtaking")
             banish()
         }
         whenFalse {
             closeHouse()
         }
     }
-//    ({ primaryController.xButton }).watch {
-//        whenTrue {
-//            centerInitPowerPort(true, PathGenerator.endLocation.TRENCH)
-//        }
-//    }
-//    ({ primaryController.yButton }).watch {
-//        whenTrue {
-//            rightInitPowerPort(true, PathGenerator.endLocation.TRENCH)
-//        }
-//    }
-//    ({ primaryController.aButton }).watch {
-//        whenTrue {
-//            centerInitPowerPort(true, PathGenerator.endLocation.LOADING_STATION)
-//        }
-//    }
-//    ({ primaryController.bButton }).watch {
-//        whenTrue {
-//            rightInitPowerPort(true, PathGenerator.endLocation.LOADING_STATION)
-//        }
-//    }
+    ({ primaryController.getTriggerAxis(GenericHID.Hand.kLeft) > .5 }).watch {
+        whileTrue {
+            println("Reversing the intake")
+            reverseWelcome()
+        }
+    }
 }

@@ -3,8 +3,8 @@ package org.sert2521.infiniterecharge2020.powerhouse
 import edu.wpi.first.wpilibj.DigitalInput
 import org.sert2521.infiniterecharge2020.MotorControllers
 import org.sert2521.infiniterecharge2020.MotorControllers.ROLLER_RIGHT
-import org.sert2521.infiniterecharge2020.Sensors.OPEN_SWITCH
 import org.sert2521.infiniterecharge2020.Sensors.CLOSE_SWITCH
+import org.sert2521.infiniterecharge2020.Sensors.OPEN_SWITCH
 import org.sert2521.sertain.coroutines.RobotScope
 import org.sert2521.sertain.motors.MotorController
 import org.sert2521.sertain.subsystems.Subsystem

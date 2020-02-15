@@ -1,11 +1,9 @@
 package org.sert2521.infiniterecharge2020
 
 import org.sert2521.infiniterecharge2020.autonomous.PathGenerator
-import org.sert2521.infiniterecharge2020.autonomous.centerInitPowerPort
 import org.sert2521.infiniterecharge2020.drivetrain.Drivetrain
 import org.sert2521.infiniterecharge2020.powerhouse.PowerHouse
 import org.sert2521.infiniterecharge2020.powerhouse.closeHouse
-import org.sert2521.sertain.events.False
 import org.sert2521.sertain.events.onEnable
 import org.sert2521.sertain.events.whileAuto
 import org.sert2521.sertain.events.whileTeleop
@@ -21,9 +19,6 @@ suspend fun main() = robot {
 
     onEnable {
         closeHouse()
-        val dt = access<Drivetrain>()
-        dt.gyro.reset()
-        dt.zeroEncoders()
     }
 
     whileTeleop {
@@ -35,6 +30,5 @@ suspend fun main() = robot {
         val dt = access<Drivetrain>()
         dt.gyro.reset()
         dt.zeroEncoders()
-        centerInitPowerPort(false, PathGenerator.endLocation.TRENCH)
     }
 }

@@ -1,16 +1,17 @@
 package org.sert2521.infiniterecharge2020.drivetrain
 
 import edu.wpi.first.wpilibj.GenericHID
-import edu.wpi.first.wpilibj.Timer
 import edu.wpi.first.wpilibj.controller.RamseteController
 import edu.wpi.first.wpilibj.geometry.Pose2d
 import edu.wpi.first.wpilibj.kinematics.DifferentialDriveKinematics
 import edu.wpi.first.wpilibj.trajectory.Trajectory
-import org.sert2521.infiniterecharge2020.OI.primaryJoystick
-import org.sert2521.infiniterecharge2020.utils.deadband
+import kotlin.math.sign
 import org.sert2521.infiniterecharge2020.OI.ControlMode
 import org.sert2521.infiniterecharge2020.OI.controlMode
 import org.sert2521.infiniterecharge2020.OI.primaryController
+import org.sert2521.infiniterecharge2020.OI.primaryJoystick
+import org.sert2521.infiniterecharge2020.utils.deadband
+import org.sert2521.infiniterecharge2020.utils.timer
 import org.sert2521.sertain.control.MotionCurve
 import org.sert2521.sertain.events.onTick
 import org.sert2521.sertain.motors.EncoderTicks
@@ -18,8 +19,9 @@ import org.sert2521.sertain.subsystems.doTask
 import org.sert2521.sertain.subsystems.use
 import org.sert2521.sertain.telemetry.tableEntry
 import org.sert2521.sertain.units.*
+import org.sert2521.sertain.units.Meters
+import org.sert2521.sertain.units.Milliseconds
 import org.sert2521.sertain.utils.timer
-import kotlin.math.sign
 
 private val throttle
     get() = when (controlMode) {
@@ -52,10 +54,10 @@ val Number.mpsss: MetricValue<Jerk, MetricUnit<Jerk>> get() = MetricValue(Meters
 val Number.mpms get() = MetricValue(Meters / Milliseconds, toDouble())
 
 suspend fun <T : MetricUnit<Linear>> driveCurve(
-        jerk: MetricValue<Jerk, MetricUnit<Jerk>>,
-        acceleration: MetricValue<Acceleration, MetricUnit<Acceleration>>,
-        velocity: MetricValue<CompositeUnitType<Per, Linear, Chronic>, CompositeUnit<Per, Linear, Chronic>>,
-        distance: MetricValue<Linear, T>
+    jerk: MetricValue<Jerk, MetricUnit<Jerk>>,
+    acceleration: MetricValue<Acceleration, MetricUnit<Acceleration>>,
+    velocity: MetricValue<CompositeUnitType<Per, Linear, Chronic>, CompositeUnit<Per, Linear, Chronic>>,
+    distance: MetricValue<Linear, T>
 ) = doTask {
     var speedSetpoint by tableEntry(0.0, "Drivetrain", name = "SpeedSetpoint")
     val dt = use<Drivetrain>()
@@ -79,12 +81,12 @@ suspend fun <T : MetricUnit<Linear>> driveCurve(
 }
 
 suspend fun runPath(
-        drivetrain: Drivetrain,
-        trajectory: Trajectory,
-        getPose: () -> Pose2d = { drivetrain.pose },
-        follower: RamseteController = RamseteController(),
-        pathKinematics: DifferentialDriveKinematics = kinematics,
-        outputMetersPerSecond: (left: Double, right: Double) -> Unit = { l, r -> drivetrain.setTargetSpeed(l.mps, r.mps) }
+    drivetrain: Drivetrain,
+    trajectory: Trajectory,
+    getPose: () -> Pose2d = { drivetrain.pose },
+    follower: RamseteController = RamseteController(),
+    pathKinematics: DifferentialDriveKinematics = kinematics,
+    outputMetersPerSecond: (left: Double, right: Double) -> Unit = { l, r -> drivetrain.setTargetSpeed(l.mps, r.mps) }
 ) {
     timer(20, 0, (trajectory.totalTimeSeconds * 1000).toLong().also { println("Path time: $it") }) {
         val curTime = it.toDouble() / 1000

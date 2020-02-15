@@ -1,9 +1,7 @@
 package org.sert2521.infiniterecharge2020.drivetrain
 
 import edu.wpi.first.wpilibj.Preferences
-import edu.wpi.first.wpilibj.drive.DifferentialDrive
 import edu.wpi.first.wpilibj.kinematics.DifferentialDriveKinematics
-import org.sert2521.sertain.events.False
 import org.sert2521.sertain.motors.Encoder
 import org.sert2521.sertain.units.m
 
