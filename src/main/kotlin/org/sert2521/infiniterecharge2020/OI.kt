@@ -9,7 +9,6 @@ import kotlinx.coroutines.CoroutineScope
 import org.sert2521.infiniterecharge2020.OI.setNextDriverCamera
 import org.sert2521.infiniterecharge2020.OI.primaryController
 import org.sert2521.infiniterecharge2020.OI.setClimberCamera
-import org.sert2521.infiniterecharge2020.OI.primaryController
 import org.sert2521.infiniterecharge2020.powerhouse.banish
 import org.sert2521.infiniterecharge2020.powerhouse.closeHouse
 import org.sert2521.infiniterecharge2020.powerhouse.reverseWelcome
@@ -70,15 +69,16 @@ fun CoroutineScope.initControls() {
     ({ primaryController.bButton }).watch {
         whenTrue {
             setClimberCamera()
+        }
     }
-      
+
     ({ primaryController.getBumper(GenericHID.Hand.kRight) }).watch {
         whileTrue {
             println("Should be intaking")
             welcome()
         }
     }
-      
+
     ({ primaryController.getBumper(GenericHID.Hand.kLeft) }).watch {
         whileTrue {
             println("B BUTTON PRESS")
@@ -88,9 +88,11 @@ fun CoroutineScope.initControls() {
             closeHouse()
         }
     }
+
     ({ primaryController.getTriggerAxis(GenericHID.Hand.kLeft) > .5 }).watch {
         whileTrue {
             reverseWelcome()
         }
     }
+
 }
