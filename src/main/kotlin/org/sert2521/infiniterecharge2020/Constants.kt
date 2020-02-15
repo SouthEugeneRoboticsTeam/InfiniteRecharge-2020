@@ -8,7 +8,9 @@ object MotorControllers {
     val rightFront = TalonId(3)
     val rightBack = TalonId(4)
 
-    val CLIMBER_LIFT = TalonId(5)
+    val climber = TalonId(5)
+    val winchFront = TalonId(9)
+    val winchRear = TalonId(10)
 }
 
 object Operator {
