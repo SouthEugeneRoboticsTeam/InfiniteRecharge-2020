@@ -7,13 +7,11 @@ import edu.wpi.first.wpilibj.XboxController
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser
 import kotlinx.coroutines.CoroutineScope
 import org.sert2521.infiniterecharge2020.OI.primaryController
-import org.sert2521.infiniterecharge2020.OI.primaryJoystick
 import org.sert2521.infiniterecharge2020.OI.secondaryJoystick
 import org.sert2521.infiniterecharge2020.OI.setClimberCamera
 import org.sert2521.infiniterecharge2020.OI.setNextDriverCamera
 import org.sert2521.infiniterecharge2020.climber.climberDown
 import org.sert2521.infiniterecharge2020.climber.climberUp
-import org.sert2521.infiniterecharge2020.climber.reverseRunWinch
 import org.sert2521.infiniterecharge2020.climber.runWinch
 import org.sert2521.infiniterecharge2020.drivetrain.alignToBall
 import org.sert2521.infiniterecharge2020.powerhouse.banish

@@ -70,7 +70,7 @@ suspend fun alignToBall(offset: Double) = doTask {
             }
 
             val turnValue = controller.next(0.0, (drivetrain.rawHeading - lastAngle).IEEErem(360.0))
-            drivetrain.arcadeDrive(1.0, -turnValue)
+            drivetrain.arcadeDrive(autoAlignSpeed, -turnValue)
         }
     }
 }

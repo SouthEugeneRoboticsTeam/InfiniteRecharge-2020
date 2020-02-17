@@ -6,6 +6,7 @@ import kotlinx.coroutines.cancelAndJoin
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.sert2521.infiniterecharge2020.drivetrain.Drivetrain
+import org.sert2521.infiniterecharge2020.drivetrain.alignToBall
 import org.sert2521.infiniterecharge2020.drivetrain.runPath
 import org.sert2521.infiniterecharge2020.powerhouse.banish
 import org.sert2521.infiniterecharge2020.powerhouse.closeHouse
@@ -13,6 +14,7 @@ import org.sert2521.infiniterecharge2020.powerhouse.welcome
 import org.sert2521.sertain.subsystems.doTask
 import org.sert2521.sertain.subsystems.use
 
+// NOTE: Currently not running in under 15 seconds
 suspend fun rightInitPowerPort(pushBack: Boolean, endLocation: PathGenerator.endLocation) = doTask {
     val drivetrain = use<Drivetrain>()
     val pathGenerator = use<PathGenerator>()
@@ -32,7 +34,8 @@ suspend fun rightInitPowerPort(pushBack: Boolean, endLocation: PathGenerator.end
             banish()
         }
 
-        delay(3000)
+        // TODO: Could be even shorter
+        delay(2000)
         banishJob.cancelAndJoin()
         closeHouse()
 
@@ -41,14 +44,22 @@ suspend fun rightInitPowerPort(pushBack: Boolean, endLocation: PathGenerator.end
             println(toTrenchFromPortPath.states)
             runPath(drivetrain, toTrenchFromPortPath)
 
-            val trenchRunPath = pathGenerator.trenchRun(5.0)
+            val trenchRunPath = pathGenerator.trenchRun(2.0)
+            println(trenchRunPath.states)
 
             val welcomeJob = launch {
                 welcome()
             }
 
-            println(trenchRunPath.states)
             runPath(drivetrain, trenchRunPath)
+
+            val alignJob = launch {
+                alignToBall(0.0)
+            }
+
+            // TODO: This needs to be tuned. At 3000, I needed to disable in order to stop the robot from crashing into a table
+            delay(3000)
+            alignJob.cancel()
             welcomeJob.cancel()
         } else if (endLocation == PathGenerator.endLocation.LOADING_STATION) {
             val loadingStationPath = pathGenerator.loadingStation()
@@ -56,7 +67,7 @@ suspend fun rightInitPowerPort(pushBack: Boolean, endLocation: PathGenerator.end
         }
     }
 }
-
+// NOTE: Currently not running in under 15 seconds
 suspend fun centerInitPowerPort(pushBack: Boolean, endLocation: PathGenerator.endLocation) = doTask {
     val drivetrain = use<Drivetrain>()
     val pathGenerator = use<PathGenerator>()
@@ -76,7 +87,8 @@ suspend fun centerInitPowerPort(pushBack: Boolean, endLocation: PathGenerator.en
             banish()
         }
 
-        delay(3000)
+        // TODO: Could be even shorter?
+        delay(2000)
         banishJob.cancelAndJoin()
         closeHouse()
 
@@ -85,13 +97,22 @@ suspend fun centerInitPowerPort(pushBack: Boolean, endLocation: PathGenerator.en
             println(toTrenchFromPortPath.states)
             runPath(drivetrain, toTrenchFromPortPath)
 
-            val trenchRunPath = pathGenerator.trenchRun(6.0)
+            val trenchRunPath = pathGenerator.trenchRun(2.0)
+            println(trenchRunPath.states)
+
             val welcomeJob = launch {
                 welcome()
             }
 
-            println(trenchRunPath.states)
             runPath(drivetrain, trenchRunPath)
+
+            val alignJob = launch {
+                alignToBall(0.0)
+            }
+
+            // TODO: This needs to be tuned. At 3000, I needed to disable in order to stop the robot from crashing into a table
+            delay(3000)
+            alignJob.cancel()
             welcomeJob.cancel()
         } else if (endLocation == PathGenerator.endLocation.LOADING_STATION) {
             val loadingStationPath = pathGenerator.loadingStation()

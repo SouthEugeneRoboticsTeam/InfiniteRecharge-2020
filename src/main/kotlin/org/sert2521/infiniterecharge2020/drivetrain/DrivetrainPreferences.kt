@@ -14,6 +14,7 @@ const val TICKS_PER_REVOLUTION = 4096
 val motorEncoder = Encoder(TICKS_PER_REVOLUTION)
 
 val slowMode get() = TableEntry("SlowMode", false)
+val autoAlignSpeed = 0.5
 
 val wheelRadius = 0.09525.m
 

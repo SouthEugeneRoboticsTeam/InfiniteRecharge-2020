@@ -24,7 +24,7 @@ class PathGenerator() : Subsystem("Path Generator") {
         return TrajectoryGenerator.generateTrajectory(
                 listOf(Pose2d(drivetrain.xTranslation, drivetrain.yTranslation, Rotation2d(0.0)),
                         Pose2d(drivetrain.xTranslation - pushDistance, drivetrain.yTranslation, Rotation2d((0.0)))),
-                TrajectoryConfig(2.0, 1.0).setKinematics(kinematics).setReversed(true)
+                TrajectoryConfig(1.0, 1.0).setKinematics(kinematics).setReversed(true)
         )
     }
 
@@ -32,26 +32,26 @@ class PathGenerator() : Subsystem("Path Generator") {
         return TrajectoryGenerator.generateTrajectory(
                 listOf(Pose2d(drivetrain.xTranslation, drivetrain.yTranslation, Rotation2d(0.0)),
                         Pose2d(0.0, 0.0, Rotation2d((0.0)))),
-                TrajectoryConfig(3.0, 1.0).setKinematics(kinematics)
+                TrajectoryConfig(1.0, 1.0).setKinematics(kinematics)
         )
     }
 
     fun powerPortToTrench(): Trajectory {
         return TrajectoryGenerator.generateTrajectory(listOf(Pose2d(drivetrain.xTranslation, drivetrain.yTranslation, Rotation2d(drivetrain.heading.convert(Degrees to Radians))),
-                Pose2d(-.75, -1.6, Rotation2d((171.0).convert(Degrees to Radians)))),
-                TrajectoryConfig(2.0, 1.0).setKinematics(kinematics).setReversed(true))
+                Pose2d(-.75, -1.65, Rotation2d((171.0).convert(Degrees to Radians)))),
+                TrajectoryConfig(1.0, 1.0).setKinematics(kinematics).setReversed(true))
     }
 
     fun trenchRun(distance: Double): Trajectory {
         return TrajectoryGenerator.generateTrajectory(listOf(Pose2d(drivetrain.xTranslation, drivetrain.yTranslation, Rotation2d(drivetrain.heading.convert(Degrees to Radians))),
                 Pose2d(drivetrain.xTranslation - distance, drivetrain.yTranslation, Rotation2d((-180.0).convert(Degrees to Radians)))),
-                TrajectoryConfig(2.0, 1.0).setKinematics(kinematics))
+                TrajectoryConfig(1.0, 1.0).setKinematics(kinematics))
     }
 
     // TODO: THE TARGET TRANSLATION SHOULD BE SOMETHING MORE LIKE 2.5m INSTEAD OF 1.0m
     fun loadingStation(): Trajectory {
         return TrajectoryGenerator.generateTrajectory(listOf(Pose2d(drivetrain.xTranslation, drivetrain.yTranslation, Rotation2d(drivetrain.heading.convert(Degrees to Radians))),
                 Pose2d(drivetrain.xTranslation - 1.0, drivetrain.yTranslation + 1.0, Rotation2d((-90.0).convert(Degrees to Radians)))),
-                TrajectoryConfig(2.0, 1.0).setKinematics(kinematics).setReversed(true))
+                TrajectoryConfig(1.0, 1.0).setKinematics(kinematics).setReversed(true))
     }
 }
