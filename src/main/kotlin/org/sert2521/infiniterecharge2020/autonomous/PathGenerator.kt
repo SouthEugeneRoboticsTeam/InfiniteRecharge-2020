@@ -38,7 +38,7 @@ class PathGenerator() : Subsystem("Path Generator") {
 
     fun powerPortToTrench(): Trajectory {
         return TrajectoryGenerator.generateTrajectory(listOf(Pose2d(drivetrain.xTranslation, drivetrain.yTranslation, Rotation2d(drivetrain.heading.convert(Degrees to Radians))),
-                Pose2d(-.75, -1.65, Rotation2d((171.0).convert(Degrees to Radians)))),
+                Pose2d(-.75, -1.6, Rotation2d((171.0).convert(Degrees to Radians)))),
                 TrajectoryConfig(2.0, 1.0).setKinematics(kinematics).setReversed(true))
     }
 

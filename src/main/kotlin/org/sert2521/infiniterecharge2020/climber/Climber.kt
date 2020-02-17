@@ -76,4 +76,8 @@ class Climber : Subsystem("Climber") {
         println("Speed: $speed")
         winchMotor.setPercentOutput(speed)
     }
+
+    fun stopWinch() {
+        winchMotor.disable()
+    }
 }

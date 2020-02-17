@@ -8,6 +8,7 @@ import kotlinx.coroutines.launch
 import org.sert2521.infiniterecharge2020.drivetrain.Drivetrain
 import org.sert2521.infiniterecharge2020.drivetrain.runPath
 import org.sert2521.infiniterecharge2020.powerhouse.banish
+import org.sert2521.infiniterecharge2020.powerhouse.closeHouse
 import org.sert2521.infiniterecharge2020.powerhouse.welcome
 import org.sert2521.sertain.subsystems.doTask
 import org.sert2521.sertain.subsystems.use
@@ -33,7 +34,7 @@ suspend fun rightInitPowerPort(pushBack: Boolean, endLocation: PathGenerator.end
 
         delay(3000)
         banishJob.cancelAndJoin()
-        delay(1000)
+        closeHouse()
 
         if (endLocation == PathGenerator.endLocation.TRENCH) {
             val toTrenchFromPortPath = pathGenerator.powerPortToTrench()
@@ -77,7 +78,7 @@ suspend fun centerInitPowerPort(pushBack: Boolean, endLocation: PathGenerator.en
 
         delay(3000)
         banishJob.cancelAndJoin()
-        delay(1000)
+        closeHouse()
 
         if (endLocation == PathGenerator.endLocation.TRENCH) {
             val toTrenchFromPortPath = pathGenerator.powerPortToTrench()

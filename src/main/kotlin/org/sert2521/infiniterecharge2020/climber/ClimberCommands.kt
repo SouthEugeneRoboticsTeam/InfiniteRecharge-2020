@@ -45,8 +45,12 @@ suspend fun climberDown() = doTask {
 suspend fun runWinch(output: () -> Double) = doTask {
     val climber = use<Climber>()
     action {
-        onTick {
-            climber.runWinch(abs(output()))
+        try {
+            onTick {
+                climber.runWinch(abs(output()))
+            }.join()
+        } finally {
+            climber.stopWinch()
         }
     }
 }
