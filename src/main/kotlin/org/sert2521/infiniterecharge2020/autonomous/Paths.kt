@@ -13,17 +13,15 @@ import org.sert2521.infiniterecharge2020.powerhouse.closeHouse
 import org.sert2521.infiniterecharge2020.powerhouse.welcome
 import org.sert2521.sertain.subsystems.doTask
 import org.sert2521.sertain.subsystems.use
-import java.nio.file.Path
 
 suspend fun auto(startLocation: Pair<Pose2d, Rotation2d>, tasks: List<PathGenerator.tasks>) = doTask {
     val drivetrain = use<Drivetrain>()
     val pathGenerator = use<PathGenerator>()
     drivetrain.odometry.resetPosition(startLocation.first, startLocation.second)
 
-
     action {
         tasks.forEach {
-            if (it == PathGenerator.tasks.UNLOAD){
+            if (it == PathGenerator.tasks.UNLOAD) {
                 val toPowerPortPath = pathGenerator.initToPowerPort()
                 println(toPowerPortPath.states)
                 runPath(drivetrain, toPowerPortPath)

@@ -25,7 +25,6 @@ class PathGenerator() : Subsystem("Path Generator") {
         UNLOAD, TRENCH, BALLS3, BALLS2, PUSHBACK, LOADINGSTATION
     }
 
-
     fun pushBack(pushDistance: Double): Trajectory {
         return TrajectoryGenerator.generateTrajectory(
                 listOf(Pose2d(drivetrain.xTranslation, drivetrain.yTranslation, Rotation2d(0.0)),
