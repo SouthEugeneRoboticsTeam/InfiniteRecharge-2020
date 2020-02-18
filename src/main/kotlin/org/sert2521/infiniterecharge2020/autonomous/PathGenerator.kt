@@ -16,9 +16,15 @@ import org.sert2521.sertain.units.convert
 class PathGenerator() : Subsystem("Path Generator") {
     val drivetrain = access<Drivetrain>()
 
-    enum class endLocation {
-        TRENCH, LOADING_STATION
+    object startlocation {
+        val RIGHT = Pair(Pose2d(-2.2, -1.22, Rotation2d(0.0)), Rotation2d(0.0))
+        val CENTER = Pair(Pose2d(-2.143, 0.0, Rotation2d(0.0)), Rotation2d(0.0))
     }
+
+    enum class tasks {
+        UNLOAD, TRENCH, BALLS3, BALLS2, PUSHBACK, LOADINGSTATION
+    }
+
 
     fun pushBack(pushDistance: Double): Trajectory {
         return TrajectoryGenerator.generateTrajectory(

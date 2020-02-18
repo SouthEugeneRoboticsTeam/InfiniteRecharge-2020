@@ -2,7 +2,7 @@ package org.sert2521.infiniterecharge2020
 
 import kotlinx.coroutines.launch
 import org.sert2521.infiniterecharge2020.autonomous.PathGenerator
-import org.sert2521.infiniterecharge2020.autonomous.centerInitPowerPort
+import org.sert2521.infiniterecharge2020.autonomous.auto
 import org.sert2521.infiniterecharge2020.climber.Climber
 import org.sert2521.infiniterecharge2020.drivetrain.Drivetrain
 import org.sert2521.infiniterecharge2020.powerhouse.PowerHouse
@@ -33,6 +33,9 @@ suspend fun main() = robot {
         val dt = access<Drivetrain>()
         dt.gyro.reset()
         dt.zeroEncoders()
-        centerInitPowerPort(false, PathGenerator.endLocation.TRENCH)
+        auto(PathGenerator.startlocation.CENTER, listOf(PathGenerator.tasks.LOADINGSTATION,
+                                                        PathGenerator.tasks.UNLOAD,
+                                                        PathGenerator.tasks.TRENCH,
+                                                        PathGenerator.tasks.BALLS3))
     }
 }
