@@ -29,6 +29,8 @@ import org.sert2521.sertain.units.rdps
 
 class Drivetrain : Subsystem("Drivetrain", ::controlDrivetrain) {
     val table = Table(name)
+    val PIDspeed = TableEntry("PIDspeed", 2.0, table)
+    val speed = TableEntry("speed", 2.0, table)
 
     init {
         RobotScope.onTick {
@@ -52,20 +54,20 @@ class Drivetrain : Subsystem("Drivetrain", ::controlDrivetrain) {
         brakeMode = true
         sensorInverted = true
         encoder = motorEncoder
-        RobotScope.withTableEntry(kp) { pidf { kp = it } }
-        RobotScope.withTableEntry(ki) { pidf { ki = it } }
-        RobotScope.withTableEntry(kd) { pidf { kd = it } }
-        RobotScope.withTableEntry(kfRight) { pidf { kf = it } }
+        RobotScope.withTableEntry(kp) { pidf { kp = it / PIDspeed.value} }
+        RobotScope.withTableEntry(ki) { pidf { ki = it / PIDspeed.value} }
+        RobotScope.withTableEntry(kd) { pidf { kd = it / PIDspeed.value} }
+        RobotScope.withTableEntry(kfRight) { pidf { kf = it / PIDspeed.value} }
     }
 
     val leftDrive = MotorController(MotorControllers.leftFront, MotorControllers.leftBack) {
         brakeMode = true
         sensorInverted = true
         encoder = motorEncoder
-        RobotScope.withTableEntry(kp) { pidf { kp = it } }
-        RobotScope.withTableEntry(ki) { pidf { ki = it } }
-        RobotScope.withTableEntry(kd) { pidf { kd = it } }
-        RobotScope.withTableEntry(kfLeft) { pidf { kf = it } }
+        RobotScope.withTableEntry(kp) { pidf { kp = it / PIDspeed.value } }
+        RobotScope.withTableEntry(ki) { pidf { ki = it / PIDspeed.value} }
+        RobotScope.withTableEntry(kd) { pidf { kd = it / PIDspeed.value } }
+        RobotScope.withTableEntry(kfLeft) { pidf { kf = it / PIDspeed.value} }
     }
 
     val gyro = AHRS(I2C.Port.kMXP)
@@ -97,22 +99,14 @@ class Drivetrain : Subsystem("Drivetrain", ::controlDrivetrain) {
         RobotScope.linkTableEntry("Transformation Angle", name) { odometry.poseMeters.rotation.degrees }
     }
 
-    fun arcadeDrive(speed: Double, turn: Double) {
-        if (slowMode.value) {
-            leftDrive.setPercentOutput((speed / 2) + turn)
-            rightDrive.setPercentOutput((speed / 2) - turn)
-        }
-        leftDrive.setPercentOutput(speed + turn)
-        rightDrive.setPercentOutput(speed - turn)
+    fun arcadeDrive(speedInput: Double, turn: Double) {
+        leftDrive.setPercentOutput((speedInput + turn) * speed.value)
+        rightDrive.setPercentOutput((speedInput - turn) * speed.value)
     }
 
     fun tankDrive(leftSpeed: Double, rightSpeed: Double) {
-        if (slowMode.value) {
-            leftDrive.setPercentOutput(leftSpeed / 2)
-            rightDrive.setPercentOutput(rightSpeed / 2)
-        }
-        leftDrive.setPercentOutput(leftSpeed)
-        rightDrive.setPercentOutput(rightSpeed)
+        leftDrive.setPercentOutput(leftSpeed * speed.value)
+        rightDrive.setPercentOutput(rightSpeed * speed.value)
     }
 
     fun setTargetSpeed(leftSpeed: Int, rightSpeed: Int = leftSpeed) {
