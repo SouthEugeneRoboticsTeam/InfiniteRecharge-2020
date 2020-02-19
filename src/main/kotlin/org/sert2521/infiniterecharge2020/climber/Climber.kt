@@ -20,11 +20,11 @@ class Climber : Subsystem("Climber") {
 
     // Ah. Now would be time to look away from the code (or at least not closely)
     // TODO: FIX THESE INCREDIBLE NAMES CORUTSEY OF MOISEUR WILL.I.AM
-    val topLimitSwitch = DigitalInput(BOTTOM_LIMIT_SWITCH)
-    val bottomLimitSwitch = DigitalInput(TOP_LIMIT_SWITCH)
+    val topLimitSwitch = DigitalInput(TOP_LIMIT_SWITCH)
+    val bottomLimitSwitch = DigitalInput(BOTTOM_LIMIT_SWITCH)
 
-    val atBottom get() = topLimitSwitch.get()
-    val atTop get() = !bottomLimitSwitch.get()
+    val atBottom get() = bottomLimitSwitch.get()
+    val atTop get() = topLimitSwitch.get()
 
     var position
         get() = liftMotor.position
