@@ -18,7 +18,6 @@ suspend fun main() = robot {
     add<Drivetrain>()
     add<Climber>()
     add<PowerHouse>()
-    add<PathGenerator>()
 
     onEnable {
         closeHouse()
