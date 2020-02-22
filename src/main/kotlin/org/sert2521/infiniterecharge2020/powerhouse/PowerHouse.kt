@@ -2,7 +2,7 @@ package org.sert2521.infiniterecharge2020.powerhouse
 
 import edu.wpi.first.wpilibj.DigitalInput
 import org.sert2521.infiniterecharge2020.MotorControllers
-import org.sert2521.infiniterecharge2020.MotorControllers.ROLLER_RIGHT
+import org.sert2521.infiniterecharge2020.MotorControllers.rollerRight
 import org.sert2521.infiniterecharge2020.Sensors.CLOSE_SWITCH
 import org.sert2521.infiniterecharge2020.Sensors.OPEN_SWITCH
 import org.sert2521.sertain.coroutines.RobotScope
@@ -12,7 +12,7 @@ import org.sert2521.sertain.telemetry.linkTableEntry
 
 class PowerHouse : Subsystem("PowerHouse") {
     private val roller = MotorController(
-            MotorControllers.ROLLER_LEFT, ROLLER_RIGHT
+            MotorControllers.rollerLeft, rollerRight
     ) {
         brakeMode = true
         eachFollower {
@@ -21,7 +21,7 @@ class PowerHouse : Subsystem("PowerHouse") {
     }
 
     private val flap = MotorController(
-            MotorControllers.FLAPPER
+            MotorControllers.flap
     ) {
         brakeMode = true
     }

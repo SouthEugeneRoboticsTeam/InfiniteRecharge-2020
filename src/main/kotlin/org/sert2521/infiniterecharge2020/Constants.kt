@@ -9,10 +9,14 @@ object MotorControllers {
     val rightFront = TalonId(3)
     val rightBack = TalonId(4)
 
-    val ROLLER_LEFT = TalonId(11)
-    val ROLLER_RIGHT = TalonId(12)
+    val climber = TalonId(5)
+    val winchFront = TalonId(9)
+    val winchRear = TalonId(10)
 
-    val FLAPPER = VictorId(8)
+    val rollerLeft = TalonId(11)
+    val rollerRight = TalonId(12)
+
+    val flap = VictorId(8)
 }
 
 object Operator {
@@ -24,4 +28,7 @@ object Operator {
 object Sensors {
     const val CLOSE_SWITCH = 3
     const val OPEN_SWITCH = 2
+
+    val BOTTOM_LIMIT_SWITCH = 1
+    val TOP_LIMIT_SWITCH = 0
 }
