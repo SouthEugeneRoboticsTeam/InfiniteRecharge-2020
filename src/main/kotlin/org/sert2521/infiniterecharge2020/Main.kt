@@ -13,6 +13,7 @@ import org.sert2521.sertain.robot
 import org.sert2521.sertain.subsystems.access
 import org.sert2521.sertain.subsystems.add
 
+// The robot code
 suspend fun main() = robot {
     println("Robot program starting")
     add<Drivetrain>()
