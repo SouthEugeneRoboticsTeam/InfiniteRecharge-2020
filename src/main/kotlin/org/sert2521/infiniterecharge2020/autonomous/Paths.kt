@@ -22,7 +22,7 @@ suspend fun auto(startLocation: Pair<Pose2d, Rotation2d>, tasks: List<PathGenera
     action {
         tasks.forEach {
             if (it == PathGenerator.tasks.UNLOAD) {
-                val toPowerPortPath = pathGenerator.initToPowerPort()
+                val toPowerPortPath = pathGenerator.powerPort()
                 println(toPowerPortPath.states)
                 runPath(drivetrain, toPowerPortPath)
 
@@ -37,14 +37,23 @@ suspend fun auto(startLocation: Pair<Pose2d, Rotation2d>, tasks: List<PathGenera
             }
 
             if (it == PathGenerator.tasks.TRENCH) {
-                val toTrenchFromPortPath = pathGenerator.powerPortToTrench()
+                val toTrenchFromPortPath = pathGenerator.corner()
                 println(toTrenchFromPortPath.states)
                 runPath(drivetrain, toTrenchFromPortPath)
 
                 val trenchRunPath = pathGenerator.trenchRun(2.0)
                 println(trenchRunPath.states)
-
                 runPath(drivetrain, trenchRunPath)
+            }
+
+            if (it == PathGenerator.tasks.REVERSE_TRENCH) {
+                val trenchRunPath = pathGenerator.trenchRun(-2.0)
+                println(trenchRunPath.states)
+                runPath(drivetrain, trenchRunPath)
+
+                val toTrenchFromPortPath = pathGenerator.corner()
+                println(toTrenchFromPortPath.states)
+                runPath(drivetrain, toTrenchFromPortPath)
             }
 
             if (it == PathGenerator.tasks.BALLS2) {
@@ -81,11 +90,6 @@ suspend fun auto(startLocation: Pair<Pose2d, Rotation2d>, tasks: List<PathGenera
                 val pushBackPath = pathGenerator.pushBack(0.30)
                 runPath(drivetrain, pushBackPath)
             }
-
-            if (it == PathGenerator.tasks.PUSHBACK) {
-                val loadingStationPath = pathGenerator.loadingStation()
-                runPath(drivetrain, loadingStationPath)
-            }
         }
     }
 }
@@ -93,26 +97,28 @@ suspend fun auto(startLocation: Pair<Pose2d, Rotation2d>, tasks: List<PathGenera
 // TODO: name better
 object autos {
     suspend fun centerToPowerPortToBalls() {
-        auto(PathGenerator.startlocation.CENTER, listOf(PathGenerator.tasks.LOADINGSTATION,
-                PathGenerator.tasks.UNLOAD,
+        auto(PathGenerator.startlocation.CENTER, listOf(PathGenerator.tasks.UNLOAD,
                 PathGenerator.tasks.TRENCH,
                 PathGenerator.tasks.BALLS3))
     }
 
     suspend fun rightToPowerPortToBalls() {
-        auto(PathGenerator.startlocation.RIGHT, listOf(PathGenerator.tasks.LOADINGSTATION,
-                PathGenerator.tasks.UNLOAD,
+        auto(PathGenerator.startlocation.RIGHT, listOf(PathGenerator.tasks.UNLOAD,
                 PathGenerator.tasks.TRENCH,
                 PathGenerator.tasks.BALLS3))
     }
 
     suspend fun centerToBallsToPort() {
-        auto(PathGenerator.startlocation.CENTER, listOf(PathGenerator.tasks.BALLS2,
+        auto(PathGenerator.startlocation.CENTER, listOf(PathGenerator.tasks.TRENCH,
+                PathGenerator.tasks.BALLS2,
+                PathGenerator.tasks.REVERSE_TRENCH,
                 PathGenerator.tasks.UNLOAD))
     }
 
     suspend fun rightToBallsToPort() {
-        auto(PathGenerator.startlocation.RIGHT, listOf(PathGenerator.tasks.BALLS2,
+        auto(PathGenerator.startlocation.RIGHT, listOf(PathGenerator.tasks.TRENCH,
+                PathGenerator.tasks.BALLS2,
+                PathGenerator.tasks.REVERSE_TRENCH,
                 PathGenerator.tasks.UNLOAD))
     }
 }

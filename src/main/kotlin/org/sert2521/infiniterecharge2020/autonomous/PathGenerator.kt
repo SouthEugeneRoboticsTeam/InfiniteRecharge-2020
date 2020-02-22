@@ -22,7 +22,7 @@ class PathGenerator {
     }
 
     enum class tasks {
-        UNLOAD, TRENCH, BALLS3, BALLS2, PUSHBACK, LOADINGSTATION
+        UNLOAD, REVERSE_TRENCH, TRENCH, BALLS3, BALLS2, PUSHBACK, LOADINGSTATION
     }
 
     fun pushBack(pushDistance: Double): Trajectory {
@@ -33,7 +33,7 @@ class PathGenerator {
         )
     }
 
-    fun initToPowerPort(): Trajectory {
+    fun powerPort(): Trajectory {
         return TrajectoryGenerator.generateTrajectory(
                 listOf(Pose2d(drivetrain.xTranslation, drivetrain.yTranslation, Rotation2d(0.0)),
                         Pose2d(0.0, 0.0, Rotation2d((0.0)))),
@@ -41,7 +41,7 @@ class PathGenerator {
         )
     }
 
-    fun powerPortToTrench(): Trajectory {
+    fun corner(): Trajectory {
         return TrajectoryGenerator.generateTrajectory(listOf(Pose2d(drivetrain.xTranslation, drivetrain.yTranslation, Rotation2d(drivetrain.heading.convert(Degrees to Radians))),
                 Pose2d(-.75, -1.65, Rotation2d((171.0).convert(Degrees to Radians)))),
                 TrajectoryConfig(1.0, 1.0).setKinematics(kinematics).setReversed(true))
