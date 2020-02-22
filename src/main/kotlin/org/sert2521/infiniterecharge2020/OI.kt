@@ -10,6 +10,8 @@ import org.sert2521.infiniterecharge2020.OI.primaryController
 import org.sert2521.infiniterecharge2020.OI.secondaryJoystick
 import org.sert2521.infiniterecharge2020.OI.setClimberCamera
 import org.sert2521.infiniterecharge2020.OI.setNextDriverCamera
+import org.sert2521.infiniterecharge2020.autonomous.PathGenerator
+import org.sert2521.infiniterecharge2020.autonomous.auto
 import org.sert2521.infiniterecharge2020.climber.climberDown
 import org.sert2521.infiniterecharge2020.climber.climberUp
 import org.sert2521.infiniterecharge2020.climber.runWinch
@@ -29,6 +31,10 @@ object OI {
         CONTROLLER, JOYSTICK
     }
 
+    enum class AutoMode {
+        centerToPowerPortToBalls, rightToPowerPortToBalls, centerToBallsToPort, rightToBallsToPort
+    }
+
     enum class DriverCameraSource(val key: String) {
         FRONT("Front"), Ball("Ball")
     }
@@ -40,6 +46,15 @@ object OI {
     }
 
     val controlMode get() = controlModeChooser.selected ?: ControlMode.CONTROLLER
+
+    val autoChooser = SendableChooser<AutoMode>().apply {
+        addOption("centerToPowerPortToBalls", AutoMode.centerToPowerPortToBalls)
+        addOption("rightToPowerPortToBalls", AutoMode.rightToPowerPortToBalls)
+        addOption("centerToBallsToPort", AutoMode.centerToBallsToPort)
+        addOption("rightToBallsToPort", AutoMode.rightToBallsToPort)
+    }
+
+    val autoMode get() = autoChooser.selected ?: AutoMode.centerToPowerPortToBalls
 
     val currentCamera = NetworkTableInstance.getDefault().getEntry("/current_camera")
     var currentCameraIndex = 0

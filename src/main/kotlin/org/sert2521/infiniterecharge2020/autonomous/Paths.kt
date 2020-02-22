@@ -89,3 +89,30 @@ suspend fun auto(startLocation: Pair<Pose2d, Rotation2d>, tasks: List<PathGenera
         }
     }
 }
+
+// TODO: name better
+object autos {
+    suspend fun centerToPowerPortToBalls() {
+        auto(PathGenerator.startlocation.CENTER, listOf(PathGenerator.tasks.LOADINGSTATION,
+                PathGenerator.tasks.UNLOAD,
+                PathGenerator.tasks.TRENCH,
+                PathGenerator.tasks.BALLS3))
+    }
+
+    suspend fun rightToPowerPortToBalls() {
+        auto(PathGenerator.startlocation.RIGHT, listOf(PathGenerator.tasks.LOADINGSTATION,
+                PathGenerator.tasks.UNLOAD,
+                PathGenerator.tasks.TRENCH,
+                PathGenerator.tasks.BALLS3))
+    }
+
+    suspend fun centerToBallsToPort() {
+        auto(PathGenerator.startlocation.CENTER, listOf(PathGenerator.tasks.BALLS2,
+                PathGenerator.tasks.UNLOAD))
+    }
+
+    suspend fun rightToBallsToPort() {
+        auto(PathGenerator.startlocation.RIGHT, listOf(PathGenerator.tasks.BALLS2,
+                PathGenerator.tasks.UNLOAD))
+    }
+}

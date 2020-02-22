@@ -3,6 +3,7 @@ package org.sert2521.infiniterecharge2020
 import kotlinx.coroutines.launch
 import org.sert2521.infiniterecharge2020.autonomous.PathGenerator
 import org.sert2521.infiniterecharge2020.autonomous.auto
+import org.sert2521.infiniterecharge2020.autonomous.autos
 import org.sert2521.infiniterecharge2020.climber.Climber
 import org.sert2521.infiniterecharge2020.drivetrain.Drivetrain
 import org.sert2521.infiniterecharge2020.powerhouse.PowerHouse
@@ -12,6 +13,7 @@ import org.sert2521.sertain.events.whileAuto
 import org.sert2521.sertain.robot
 import org.sert2521.sertain.subsystems.access
 import org.sert2521.sertain.subsystems.add
+import java.nio.file.Paths
 
 suspend fun main() = robot {
     println("Robot program starting")
@@ -32,9 +34,13 @@ suspend fun main() = robot {
         val dt = access<Drivetrain>()
         dt.gyro.reset()
         dt.zeroEncoders()
-        auto(PathGenerator.startlocation.CENTER, listOf(PathGenerator.tasks.LOADINGSTATION,
-                                                        PathGenerator.tasks.UNLOAD,
-                                                        PathGenerator.tasks.TRENCH,
-                                                        PathGenerator.tasks.BALLS3))
+
+        println("Autoing")
+        when(OI.autoMode) {
+            OI.AutoMode.centerToPowerPortToBalls -> autos.centerToPowerPortToBalls()
+            OI.AutoMode.rightToPowerPortToBalls -> autos.rightToPowerPortToBalls()
+            OI.AutoMode.centerToBallsToPort -> autos.centerToBallsToPort()
+            OI.AutoMode.rightToBallsToPort -> autos.rightToBallsToPort()
+        }
     }
 }
