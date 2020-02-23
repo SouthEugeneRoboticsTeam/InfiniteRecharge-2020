@@ -16,6 +16,7 @@ import org.sert2521.infiniterecharge2020.utils.deadband
 import org.sert2521.infiniterecharge2020.utils.timer
 import org.sert2521.sertain.control.MotionCurve
 import org.sert2521.sertain.control.PidfConfig
+import org.sert2521.sertain.coroutines.periodic
 import org.sert2521.sertain.events.onTick
 import org.sert2521.sertain.motors.EncoderTicks
 import org.sert2521.sertain.subsystems.doTask
@@ -74,14 +75,18 @@ suspend fun alignToBall(offset: Double) = doTask {
         pidConfig.ki = 0.0
         pidConfig.kd = 0.0
         val controller = PidfController2(pidConfig, 1.0)
-        onTick {
-            if (lastAlive != visionLastAlive.value) {
-                lastAlive = visionLastAlive.value + drivetrain.rawHeading
-                lastAngle = visionAngle.value + drivetrain.rawHeading - (sign(visionAngle.value) * offset)
-            }
+        try {
+            periodic(20) {
+                if (lastAlive != visionLastAlive.value) {
+                    lastAlive = visionLastAlive.value + drivetrain.rawHeading
+                    lastAngle = visionAngle.value + drivetrain.rawHeading - (sign(visionAngle.value) * offset)
+                }
 
-            val turnValue = controller.next(0.0, (drivetrain.rawHeading - lastAngle).IEEErem(360.0))
-            drivetrain.arcadeDrive(autoAlignSpeed, -turnValue)
+                val turnValue = controller.next(0.0, (drivetrain.rawHeading - lastAngle).IEEErem(360.0))
+                drivetrain.arcadeDrive(autoAlignSpeed, -turnValue)
+            }
+        } finally {
+            drivetrain.stop()
         }
     }
 }
