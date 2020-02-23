@@ -16,7 +16,7 @@ import org.sert2521.sertain.subsystems.use
 
 suspend fun auto(startLocation: Pair<Pose2d, Rotation2d>, tasks: List<PathGenerator.tasks>) = doTask {
     val drivetrain = use<Drivetrain>()
-    val pathGenerator = use<PathGenerator>()
+    val pathGenerator = PathGenerator()
     drivetrain.odometry.resetPosition(startLocation.first, startLocation.second)
 
     action {

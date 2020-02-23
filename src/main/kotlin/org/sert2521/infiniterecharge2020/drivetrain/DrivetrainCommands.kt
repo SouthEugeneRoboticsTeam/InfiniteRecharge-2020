@@ -22,9 +22,20 @@ import org.sert2521.sertain.subsystems.doTask
 import org.sert2521.sertain.subsystems.use
 import org.sert2521.sertain.telemetry.TableEntry
 import org.sert2521.sertain.telemetry.tableEntry
-import org.sert2521.sertain.units.*
+import org.sert2521.sertain.units.Chronic
+import org.sert2521.sertain.units.CompositeUnit
+import org.sert2521.sertain.units.CompositeUnitType
+import org.sert2521.sertain.units.Linear
 import org.sert2521.sertain.units.Meters
+import org.sert2521.sertain.units.MetricUnit
+import org.sert2521.sertain.units.MetricValue
 import org.sert2521.sertain.units.Milliseconds
+import org.sert2521.sertain.units.Per
+import org.sert2521.sertain.units.Seconds
+import org.sert2521.sertain.units.convertTo
+import org.sert2521.sertain.units.div
+import org.sert2521.sertain.units.mps
+import org.sert2521.sertain.units.rps
 import org.sert2521.sertain.utils.timer
 
 private val throttle

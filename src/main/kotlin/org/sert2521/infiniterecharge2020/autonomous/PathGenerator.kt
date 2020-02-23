@@ -7,13 +7,12 @@ import edu.wpi.first.wpilibj.trajectory.TrajectoryConfig
 import edu.wpi.first.wpilibj.trajectory.TrajectoryGenerator
 import org.sert2521.infiniterecharge2020.drivetrain.Drivetrain
 import org.sert2521.infiniterecharge2020.drivetrain.kinematics
-import org.sert2521.sertain.subsystems.Subsystem
 import org.sert2521.sertain.subsystems.access
 import org.sert2521.sertain.units.Degrees
 import org.sert2521.sertain.units.Radians
 import org.sert2521.sertain.units.convert
 
-class PathGenerator() : Subsystem("Path Generator") {
+class PathGenerator {
     val drivetrain = access<Drivetrain>()
 
     object startlocation {
