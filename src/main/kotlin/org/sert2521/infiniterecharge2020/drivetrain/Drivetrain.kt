@@ -40,12 +40,14 @@ class Drivetrain : Subsystem("Drivetrain", ::controlDrivetrain) {
         }
     }
 
+    val drivetrainPIDF = if (isPracticeBot == RobotType.PRACTICE) practiceBotPid else compBotPid
+
     // Get PID gains from Shuffleboard
-    val kp = TableEntry("KP", 2.0, table)
-    val ki = TableEntry("KI", 0.005, table)
-    val kd = TableEntry("KD", 0.00001, table)
-    val kfLeft = TableEntry("KF Left", 0.265, table)
-    val kfRight = TableEntry("KF Right", 0.25, table)
+    val kp = TableEntry("KP", drivetrainPIDF.kp, table)
+    val ki = TableEntry("KI", drivetrainPIDF.ki, table)
+    val kd = TableEntry("KD", drivetrainPIDF.kd, table)
+    val kfLeft = TableEntry("KF Left", drivetrainPIDF.kfLeft, table)
+    val kfRight = TableEntry("KF Right", drivetrainPIDF.kfRight, table)
 
     val rightDrive = MotorController(MotorControllers.rightFront, MotorControllers.rightBack) {
         inverted = true
