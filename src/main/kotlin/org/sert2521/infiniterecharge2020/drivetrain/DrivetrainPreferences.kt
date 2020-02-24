@@ -35,7 +35,7 @@ val kinematics = DifferentialDriveKinematics(0.575)
 
 val practiceBotChooser = SendableChooser<RobotType>().apply {
     setDefaultOption("Comp", RobotType.COMP)
-    addOption("Practiec", RobotType.PRACTICE)
+    addOption("Practice", RobotType.PRACTICE)
 }
 
 val isPracticeBot = practiceBotChooser.selected

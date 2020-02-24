@@ -36,12 +36,13 @@ class Climber : Subsystem("Climber") {
 
     init {
         liftMotor.position = 0
+        // See if these are lagging inputs when climbing
         RobotScope.linkTableEntry("At Bottom", name) { atBottom }
         RobotScope.linkTableEntry("At Top", name) { atTop }
         RobotScope.linkTableEntry("Climber Position", name) { position }
         ({ atBottom }).watch {
             RobotScope.whenTrue {
-                position = POSITION_AT_BOTTOM
+                position = 0
             }
         }
         ({ atTop }).watch {
@@ -54,6 +55,7 @@ class Climber : Subsystem("Climber") {
     // TODO: Call this climberLiftUp
     fun setOutput(output: Double) {
         if (position > POSITION_AT_TOP - 500) {
+            println("Slowing down going up")
             liftMotor.setPercentOutput(output / 2)
         } else {
             liftMotor.setPercentOutput(output)
@@ -62,6 +64,7 @@ class Climber : Subsystem("Climber") {
 
     fun climberLiftDown() {
         if (position < POSITION_AT_BOTTOM + 500) {
+            println("Slowing down going down")
             liftMotor.setPercentOutput(-CLIMBER_LIFT_SPEED / 2)
         } else {
             liftMotor.setPercentOutput(-CLIMBER_LIFT_SPEED)
