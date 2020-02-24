@@ -13,7 +13,6 @@ import org.sert2521.sertain.motors.MotorController
 import org.sert2521.sertain.subsystems.Subsystem
 import org.sert2521.sertain.telemetry.Table
 import org.sert2521.sertain.telemetry.TableEntry
-import org.sert2521.sertain.telemetry.linkTableEntry
 import org.sert2521.sertain.telemetry.withTableEntry
 import org.sert2521.sertain.units.Chronic
 import org.sert2521.sertain.units.CompositeUnit
@@ -40,12 +39,14 @@ class Drivetrain : Subsystem("Drivetrain", ::controlDrivetrain) {
         }
     }
 
+    val drivetrainPIDF = if (isPracticeBot == RobotType.PRACTICE) practiceBotPid else compBotPid
+
     // Get PID gains from Shuffleboard
-    val kp = TableEntry("KP", 2.0, table)
-    val ki = TableEntry("KI", 0.005, table)
-    val kd = TableEntry("KD", 0.00001, table)
-    val kfLeft = TableEntry("KF Left", 0.265, table)
-    val kfRight = TableEntry("KF Right", 0.25, table)
+    val kp = TableEntry("KP", drivetrainPIDF.kp, table)
+    val ki = TableEntry("KI", drivetrainPIDF.ki, table)
+    val kd = TableEntry("KD", drivetrainPIDF.kd, table)
+    val kfLeft = TableEntry("KF Left", drivetrainPIDF.kfLeft, table)
+    val kfRight = TableEntry("KF Right", drivetrainPIDF.kfRight, table)
 
     val rightDrive = MotorController(MotorControllers.rightFront, MotorControllers.rightBack) {
         inverted = true
@@ -86,15 +87,15 @@ class Drivetrain : Subsystem("Drivetrain", ::controlDrivetrain) {
 
     init {
         zeroEncoders()
-        RobotScope.linkTableEntry("Right Position", name) { rightPosition }
-        RobotScope.linkTableEntry("Left Position", name) { leftPosition }
-        RobotScope.linkTableEntry("Right Velocity", name) { rightSpeed }
-        RobotScope.linkTableEntry("Left Velocity", name) { leftSpeed }
-        RobotScope.linkTableEntry("Heading", name) { heading }
-
-        RobotScope.linkTableEntry("X Translation", name) { xTranslation }
-        RobotScope.linkTableEntry("Y Translation", name) { yTranslation }
-        RobotScope.linkTableEntry("Transformation Angle", name) { odometry.poseMeters.rotation.degrees }
+//        RobotScope.linkTableEntry("Right Position", name) { rightPosition }
+//        RobotScope.linkTableEntry("Left Position", name) { leftPosition }
+//        RobotScope.linkTableEntry("Right Velocity", name) { rightSpeed }
+//        RobotScope.linkTableEntry("Left Velocity", name) { leftSpeed }
+//        RobotScope.linkTableEntry("Heading", name) { heading }
+//
+//        RobotScope.linkTableEntry("X Translation", name) { xTranslation }
+//        RobotScope.linkTableEntry("Y Translation", name) { yTranslation }
+//        RobotScope.linkTableEntry("Transformation Angle", name) { odometry.poseMeters.rotation.degrees }
     }
 
     fun arcadeDrive(speed: Double, turn: Double) {

@@ -13,7 +13,6 @@ import org.sert2521.infiniterecharge2020.OI.primaryController
 import org.sert2521.infiniterecharge2020.OI.primaryJoystick
 import org.sert2521.infiniterecharge2020.utils.PidfController2
 import org.sert2521.infiniterecharge2020.utils.deadband
-import org.sert2521.infiniterecharge2020.utils.timer
 import org.sert2521.sertain.control.MotionCurve
 import org.sert2521.sertain.control.PidfConfig
 import org.sert2521.sertain.coroutines.periodic

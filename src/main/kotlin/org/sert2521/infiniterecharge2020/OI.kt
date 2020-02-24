@@ -33,7 +33,6 @@ object OI {
         FRONT("Front"), Ball("Ball")
     }
 
-    // TODO: Figure out why this isn't working
     val controlModeChooser = SendableChooser<ControlMode>().apply {
         addOption("Joystick", ControlMode.JOYSTICK)
         addOption("Controller", ControlMode.CONTROLLER)

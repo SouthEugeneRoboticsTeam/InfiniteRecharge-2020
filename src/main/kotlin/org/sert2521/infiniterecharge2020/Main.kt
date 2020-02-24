@@ -1,12 +1,18 @@
 package org.sert2521.infiniterecharge2020
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import org.sert2521.infiniterecharge2020.autonomous.PathGenerator
 import org.sert2521.infiniterecharge2020.autonomous.auto
 import org.sert2521.infiniterecharge2020.climber.Climber
 import org.sert2521.infiniterecharge2020.drivetrain.Drivetrain
+import org.sert2521.infiniterecharge2020.drivetrain.practiceBotChooser
 import org.sert2521.infiniterecharge2020.powerhouse.PowerHouse
 import org.sert2521.infiniterecharge2020.powerhouse.closeHouse
+import org.sert2521.infiniterecharge2020.powerhouse.openHouse
 import org.sert2521.sertain.events.onEnable
+import org.sert2521.sertain.events.onTick
 import org.sert2521.sertain.events.whileAuto
 import org.sert2521.sertain.events.whileTeleop
 import org.sert2521.sertain.robot
@@ -20,6 +26,7 @@ suspend fun main() = robot {
     add<PowerHouse>()
 
     onEnable {
+        openHouse()
         closeHouse()
     }
 
@@ -44,5 +51,14 @@ suspend fun main() = robot {
 //                PathGenerator.tasks.UNLOAD_FROM_CORNER))
 //
 //    }
+    }
+
+    launch {
+        delay(1000)
+        SmartDashboard.putData("Control Mode", OI.controlModeChooser)
+        SmartDashboard.putData("Robot Type", practiceBotChooser)
+        onTick {
+            SmartDashboard.updateValues()
+        }
     }
 }
