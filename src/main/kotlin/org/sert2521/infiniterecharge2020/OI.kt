@@ -5,6 +5,9 @@ import edu.wpi.first.wpilibj.Joystick
 import edu.wpi.first.wpilibj.XboxController
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.cancel
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import org.sert2521.infiniterecharge2020.OI.primaryController
 import org.sert2521.infiniterecharge2020.OI.secondaryJoystick
 import org.sert2521.infiniterecharge2020.OI.setClimberCamera
@@ -13,15 +16,13 @@ import org.sert2521.infiniterecharge2020.climber.climberDown
 import org.sert2521.infiniterecharge2020.climber.climberUp
 import org.sert2521.infiniterecharge2020.climber.runWinch
 import org.sert2521.infiniterecharge2020.drivetrain.alignToBall
-import org.sert2521.infiniterecharge2020.powerhouse.banish
-import org.sert2521.infiniterecharge2020.powerhouse.closeHouse
-import org.sert2521.infiniterecharge2020.powerhouse.openHouse
-import org.sert2521.infiniterecharge2020.powerhouse.reverseWelcome
-import org.sert2521.infiniterecharge2020.powerhouse.welcome
+import org.sert2521.infiniterecharge2020.powerhouse.*
 import org.sert2521.infiniterecharge2020.utils.deadband
 import org.sert2521.sertain.coroutines.RobotScope
 import org.sert2521.sertain.coroutines.doAll
 import org.sert2521.sertain.coroutines.watch
+import org.sert2521.sertain.subsystems.doTask
+import org.sert2521.sertain.subsystems.use
 import org.sert2521.sertain.telemetry.linkTableEntry
 
 object OI {
@@ -97,8 +98,23 @@ fun CoroutineScope.initControls() {
             println("Should be outtaking")
             banish()
         }
+        // Reverse the brushes briefly after outtaking
         whenFalse {
-            closeHouse()
+            doTask {
+                use<PowerHouse>()
+                action {
+                    doAll {
+                        action {
+                            closeHouse()
+                        }
+                        action {
+                            launch { reverseWelcome() }
+                            delay(250)
+                            cancel()
+                        }
+                    }
+                }
+            }
         }
     }
     ({ secondaryJoystick.getRawButton(2) }).watch {
