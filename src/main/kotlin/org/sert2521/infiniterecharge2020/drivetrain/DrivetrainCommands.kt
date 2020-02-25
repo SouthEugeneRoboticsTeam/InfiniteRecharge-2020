@@ -60,7 +60,7 @@ suspend fun controlDrivetrain() = doTask {
     }
 }
 
-suspend fun alignToBall(offset: Double, oneside: Boolean = false) = doTask {
+suspend fun alignToBall(offset: Double, oneSide: Boolean = false) = doTask {
     val drivetrain = use<Drivetrain>()
     var visionLastAlive = TableEntry("last_alive", 0.0, "Vision")
     var visionAngle = TableEntry("xAngOff", 0.0, "Vision")
@@ -78,10 +78,10 @@ suspend fun alignToBall(offset: Double, oneside: Boolean = false) = doTask {
             periodic(20) {
                 if (lastAlive != visionLastAlive.value) {
                     lastAlive = visionLastAlive.value + drivetrain.rawHeading
-                    if(oneside) {
-                        lastAngle = visionAngle.value + drivetrain.rawHeading - offset
+                    if(oneSide) {
+                        lastAngle = visionAngle.value + drivetrain.rawHeading + offset
                     }else{
-                        lastAngle = visionAngle.value + drivetrain.rawHeading - (sign(visionAngle.value) * offset)
+                        lastAngle = visionAngle.value + drivetrain.rawHeading + (sign(visionAngle.value) * offset)
                     }
                 }
 
