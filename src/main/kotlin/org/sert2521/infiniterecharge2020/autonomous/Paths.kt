@@ -22,89 +22,91 @@ suspend fun auto(startLocation: Pair<Pose2d, Rotation2d>, tasks: List<PathGenera
 
     action {
         tasks.forEach {
-            if (it == PathGenerator.tasks.UNLOAD_FROM_POWERPORT) {
-                val toPowerPortPath = pathGenerator.initToPowerPort()
-                println(toPowerPortPath.states)
-                runPath(drivetrain, toPowerPortPath)
+            when (it) {
+                PathGenerator.tasks.UNLOAD_FROM_POWERPORT -> {
+                    val toPowerPortPath = pathGenerator.initToPowerPort()
+                    println(toPowerPortPath.states)
+                    runPath(drivetrain, toPowerPortPath)
 
-                val banishJob = launch {
-                    banish()
-                }
-                // Run the outtake for 1.2 seconds
-                delay(1200)
-                banishJob.cancelAndJoin()
-                closeHouse()
-            }
-
-            if (it == PathGenerator.tasks.UNLOAD_FROM_CORNER) {
-                val toCornerFromTrenchPath = pathGenerator.cornerToTrench()
-                println(toCornerFromTrenchPath.states)
-                runPath(drivetrain, toCornerFromTrenchPath)
-
-                val banishJob = launch {
-                    banish()
-                }
-                // Run the outtake for 1.2 seconds
-                delay(2000)
-                banishJob.cancelAndJoin()
-                closeHouse()
-            }
-
-            if (it == PathGenerator.tasks.TRENCH_TO_CORNER) {
-                val trenchToCorner = pathGenerator.trenchToCorner()
-                println(trenchToCorner.states)
-                runPath(drivetrain, trenchToCorner)
-            }
-
-            if (it == PathGenerator.tasks.CORNER_TO_TRENCH) {
-                val toTrenchFromPortPath = pathGenerator.powerPortToTrench()
-                println(toTrenchFromPortPath.states)
-                runPath(drivetrain, toTrenchFromPortPath)
-
-                val trenchRunPath = pathGenerator.trenchRun(2.0)
-                println(trenchRunPath.states)
-
-                runPath(drivetrain, trenchRunPath)
-            }
-
-            if (it == PathGenerator.tasks.BALLS2) {
-                val welcomeJob = launch {
-                    welcome()
+                    val banishJob = launch {
+                        banish()
+                    }
+                    // Run the outtake for 1.2 seconds
+                    delay(1200)
+                    banishJob.cancelAndJoin()
+                    closeHouse()
                 }
 
-                val alignJob = launch {
-                    alignToBall(0.0)
+                PathGenerator.tasks.UNLOAD_FROM_CORNER -> {
+                    val toPowerPortFromCornerPath = pathGenerator.cornerToPowerPort()
+                    println(toPowerPortFromCornerPath.states)
+                    runPath(drivetrain, toPowerPortFromCornerPath)
+
+                    val banishJob = launch {
+                        banish()
+                    }
+                    // Run the outtake for 1.2 seconds
+                    delay(2000)
+                    banishJob.cancelAndJoin()
+                    closeHouse()
                 }
 
-                // Stop using vision to pick up balls after the robot has driven into the trench for 2 seconds
-                delay(2000)
-                alignJob.cancel()
-                welcomeJob.cancel()
-            }
-
-            if (it == PathGenerator.tasks.BALLS3) {
-                val welcomeJob = launch {
-                    welcome()
+                PathGenerator.tasks.TRENCH_TO_CORNER -> {
+                    val trenchToCorner = pathGenerator.trenchToCorner()
+                    println(trenchToCorner.states)
+                    runPath(drivetrain, trenchToCorner)
                 }
 
-                val alignJob = launch {
-                    alignToBall(0.0)
+                PathGenerator.tasks.CORNER_TO_TRENCH -> {
+                    val toTrenchFromPortPath = pathGenerator.powerPortToTrench()
+                    println(toTrenchFromPortPath.states)
+                    runPath(drivetrain, toTrenchFromPortPath)
+
+                    val trenchRunPath = pathGenerator.trenchRun(2.0)
+                    println(trenchRunPath.states)
+
+                    runPath(drivetrain, trenchRunPath)
                 }
-                onTick {
-                    println(drivetrain.xTranslation)
-                    // Robot takes around 0.87 meters to stop
-                    // Value can be increased to potentially acquire a 4th ball
-                    if (drivetrain.xTranslation < -6.825) {
-                        println("I SHOULD BE STOPPING")
-                        alignJob.cancel()
-                        welcomeJob.cancel()
+
+                PathGenerator.tasks.BALLS2 -> {
+                    val welcomeJob = launch {
+                        welcome()
+                    }
+
+                    val alignJob = launch {
+                        alignToBall(0.0)
+                    }
+
+                    // Stop using vision to pick up balls after the robot has driven into the trench for a certain time
+                    delay(2600)
+                    alignJob.cancel()
+                    welcomeJob.cancel()
+                }
+
+                PathGenerator.tasks.BALLS3 -> {
+                    val welcomeJob = launch {
+                        welcome()
+                    }
+
+                    val alignJob = launch {
+                        alignToBall(0.0)
+                    }
+                    onTick {
+                        println(drivetrain.xTranslation)
+                        // Robot takes around 0.87 meters to stop
+                        // Value can be increased to potentially acquire a 4th ball
+                        if (drivetrain.xTranslation < -6.825) {
+                            println("I SHOULD BE STOPPING")
+                            alignJob.cancel()
+                            welcomeJob.cancel()
+                        }
                     }
                 }
-            }
 
-            if (it == PathGenerator.tasks.PUSHBACK) {
-                val pushBackPath = pathGenerator.pushBack(0.30)
-                runPath(drivetrain, pushBackPath)
+                PathGenerator.tasks.PUSHBACK -> {
+                    val pushBackPath = pathGenerator.pushBack(0.30)
+                    runPath(drivetrain, pushBackPath)
+                }
             }
         }
     }
