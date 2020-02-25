@@ -6,11 +6,9 @@ import kotlinx.coroutines.cancelAndJoin
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.sert2521.infiniterecharge2020.drivetrain
-import org.sert2521.infiniterecharge2020.drivetrain.Drivetrain
 import org.sert2521.infiniterecharge2020.drivetrain.alignToBall
 import org.sert2521.infiniterecharge2020.drivetrain.runPath
 import org.sert2521.infiniterecharge2020.pathGenerator
-import org.sert2521.infiniterecharge2020.powerHouse
 import org.sert2521.infiniterecharge2020.powerhouse.banish
 import org.sert2521.infiniterecharge2020.powerhouse.closeHouse
 import org.sert2521.infiniterecharge2020.powerhouse.welcome

@@ -4,7 +4,6 @@ import kotlinx.coroutines.cancel
 import org.sert2521.infiniterecharge2020.powerHouse
 import org.sert2521.sertain.coroutines.delayUntil
 import org.sert2521.sertain.events.onTick
-import org.sert2521.sertain.subsystems.use
 
 // Welcomes a ball into the house
 suspend fun welcome() = powerHouse { powerHouse ->

@@ -15,14 +15,10 @@ import org.sert2521.sertain.telemetry.Table
 import org.sert2521.sertain.telemetry.TableEntry
 import org.sert2521.sertain.telemetry.linkTableEntry
 import org.sert2521.sertain.telemetry.withTableEntry
-import org.sert2521.sertain.units.Chronic
 import org.sert2521.sertain.units.ChronicUnit
-import org.sert2521.sertain.units.CompositeUnit
-import org.sert2521.sertain.units.Linear
 import org.sert2521.sertain.units.LinearUnit
 import org.sert2521.sertain.units.Meters
 import org.sert2521.sertain.units.MetricValue
-import org.sert2521.sertain.units.Per
 import org.sert2521.sertain.units.Radians
 import org.sert2521.sertain.units.Seconds
 import org.sert2521.sertain.units.VelocityValue

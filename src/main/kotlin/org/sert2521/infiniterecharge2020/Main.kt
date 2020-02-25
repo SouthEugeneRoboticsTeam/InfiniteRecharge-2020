@@ -17,7 +17,6 @@ import org.sert2521.sertain.events.whileAuto
 import org.sert2521.sertain.events.whileTeleop
 import org.sert2521.sertain.robot
 import org.sert2521.sertain.subsystems.access
-import org.sert2521.sertain.subsystems.add
 import org.sert2521.sertain.subsystems.register
 
 val drivetrain = register<Drivetrain>()
