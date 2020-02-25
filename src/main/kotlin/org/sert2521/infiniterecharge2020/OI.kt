@@ -64,7 +64,6 @@ object OI {
 }
 
 fun CoroutineScope.initControls() {
-
     // CLIMBER
     ({ secondaryJoystick.getRawButton(5) }).watch {
         whileTrue {
