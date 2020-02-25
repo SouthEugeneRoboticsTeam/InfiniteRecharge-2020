@@ -78,9 +78,9 @@ suspend fun alignToBall(offset: Double, oneSide: Boolean = false) = doTask {
             periodic(20) {
                 if (lastAlive != visionLastAlive.value) {
                     lastAlive = visionLastAlive.value + drivetrain.rawHeading
-                    if(oneSide) {
+                    if (oneSide) {
                         lastAngle = visionAngle.value - drivetrain.rawHeading + offset
-                    }else{
+                    } else {
                         lastAngle = visionAngle.value - drivetrain.rawHeading + (sign(visionAngle.value) * offset)
                     }
                 }

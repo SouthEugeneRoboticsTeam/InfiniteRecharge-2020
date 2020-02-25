@@ -3,6 +3,8 @@ package org.sert2521.infiniterecharge2020
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import org.sert2521.infiniterecharge2020.autonomous.PathGenerator
+import org.sert2521.infiniterecharge2020.autonomous.auto
 import org.sert2521.infiniterecharge2020.climber.Climber
 import org.sert2521.infiniterecharge2020.drivetrain.Drivetrain
 import org.sert2521.infiniterecharge2020.drivetrain.practiceBotChooser
@@ -43,10 +45,10 @@ suspend fun main() = robot {
 //                PathGenerator.tasks.CORNER_TO_TRENCH,
 //                PathGenerator.tasks.BALLS3))
 
-        // Needs more testing. Vision can be unreliable sometimes. Might be fixed with actual PID tuning
-//        auto(PathGenerator.startlocation.RIGHT_TRENCH, listOf(PathGenerator.tasks.BALLS2,
-//                PathGenerator.tasks.TRENCH_TO_CORNER,
-//                PathGenerator.tasks.UNLOAD_FROM_CORNER))
+//         Needs more testing. Vision can be unreliable sometimes. Might be fixed with actual PID tuning
+        auto(PathGenerator.startlocation.RIGHT_TRENCH, listOf(PathGenerator.tasks.BALLS2,
+                PathGenerator.tasks.TRENCH_TO_CORNER,
+                PathGenerator.tasks.UNLOAD_FROM_CORNER))
     }
 
     launch {

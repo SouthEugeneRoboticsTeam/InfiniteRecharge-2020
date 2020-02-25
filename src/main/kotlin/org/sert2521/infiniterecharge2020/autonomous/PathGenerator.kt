@@ -73,11 +73,10 @@ class PathGenerator {
 
     // Drives the robot in an arc from the Alliance Station corner to the Power Port
     fun cornerToPowerPort(): Trajectory {
-        return TrajectoryGenerator.generateTrajectory(Pose2d(drivetrain.xTranslation, drivetrain.yTranslation, Rotation2d(drivetrain.heading.convert(Degrees to Radians))),
-                listOf(),
+        return TrajectoryGenerator.generateTrajectory(listOf(Pose2d(drivetrain.xTranslation, drivetrain.yTranslation, Rotation2d(drivetrain.heading.convert(Degrees to Radians))),
                 // Make y more negative to make the robot translate more to the left facing the power port
-                Pose2d(0.0, -0.50, Rotation2d((-180.0).convert(Degrees to Radians))),
-                TrajectoryConfig(2.0, 1.0).setKinematics(kinematics))
+                Pose2d(0.0, -0.50, Rotation2d((-180.0).convert(Degrees to Radians)))),
+                TrajectoryConfig(3.0, 1.0).setKinematics(kinematics))
     }
 
     // TODO: THE TARGET TRANSLATION SHOULD BE SOMETHING MORE LIKE 2.5m INSTEAD OF 1.0m
