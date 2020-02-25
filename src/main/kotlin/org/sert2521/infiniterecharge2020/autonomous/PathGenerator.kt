@@ -13,7 +13,7 @@ import org.sert2521.sertain.units.Degrees
 import org.sert2521.sertain.units.Radians
 import org.sert2521.sertain.units.convert
 
-class PathGenerator() : Subsystem("Path Generator") {
+class PathGenerator : Subsystem("Path Generator") {
     val drivetrain = access<Drivetrain>()
 
     enum class endLocation {
