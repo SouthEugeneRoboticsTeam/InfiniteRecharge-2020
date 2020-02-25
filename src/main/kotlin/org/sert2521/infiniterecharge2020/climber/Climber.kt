@@ -3,6 +3,7 @@ package org.sert2521.infiniterecharge2020.climber
 import edu.wpi.first.wpilibj.DigitalInput
 import org.sert2521.infiniterecharge2020.MotorControllers
 import org.sert2521.infiniterecharge2020.Sensors.BOTTOM_LIMIT_SWITCH
+import org.sert2521.infiniterecharge2020.Sensors.RUNG_LIMIT_SWTICH
 import org.sert2521.infiniterecharge2020.Sensors.TOP_LIMIT_SWITCH
 import org.sert2521.sertain.coroutines.RobotScope
 import org.sert2521.sertain.coroutines.watch
@@ -18,13 +19,15 @@ class Climber : Subsystem("Climber") {
             MotorControllers.winchFront, MotorControllers.winchRear
     )
 
-    // Ah. Now would be time to look away from the code (or at least not closely)
-    // TODO: FIX THESE INCREDIBLE NAMES CORUTSEY OF MOISEUR WILL.I.AM
     val bottomLimitSwitch = DigitalInput(BOTTOM_LIMIT_SWITCH)
     val topLimitSwitch = DigitalInput(TOP_LIMIT_SWITCH)
+    val rungLimitSwitch = DigitalInput(RUNG_LIMIT_SWTICH)
 
     val atBottom get() = !bottomLimitSwitch.get()
     val atTop get() = !topLimitSwitch.get()
+    // TODO: TEST TO GET CORRECT VALUES
+    // Should return true when pushed back, false when not
+    val contactingRung = rungLimitSwitch.get()
 
     var position
         get() = liftMotor.position

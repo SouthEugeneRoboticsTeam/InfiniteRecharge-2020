@@ -29,6 +29,7 @@ object Sensors {
     const val CLOSE_SWITCH = 3
     const val OPEN_SWITCH = 2
 
-    val BOTTOM_LIMIT_SWITCH = 1
     val TOP_LIMIT_SWITCH = 0
+    val BOTTOM_LIMIT_SWITCH = 1
+    val RUNG_LIMIT_SWTICH = 4
 }
