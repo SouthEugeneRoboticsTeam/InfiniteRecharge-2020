@@ -49,9 +49,11 @@ val practiceBotPid = BotPid(
 )
 
 val compBotPid = BotPid(
-        kp = 2.0,
+        kp = 1.8,
+        // Both these have not been played around with
         ki = 0.005,
         kd = 0.00001,
+        // These have not been tuned at all
         kfLeft = .265,
         kfRight = .25
 )
