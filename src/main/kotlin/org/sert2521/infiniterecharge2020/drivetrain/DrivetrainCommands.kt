@@ -13,9 +13,9 @@ import org.sert2521.infiniterecharge2020.OI.primaryController
 import org.sert2521.infiniterecharge2020.OI.primaryJoystick
 import org.sert2521.infiniterecharge2020.utils.PidfController2
 import org.sert2521.infiniterecharge2020.utils.deadband
-import org.sert2521.infiniterecharge2020.utils.timer
 import org.sert2521.sertain.control.MotionCurve
 import org.sert2521.sertain.control.PidfConfig
+import org.sert2521.sertain.coroutines.periodic
 import org.sert2521.sertain.events.onTick
 import org.sert2521.sertain.motors.EncoderTicks
 import org.sert2521.sertain.subsystems.doTask
@@ -54,13 +54,13 @@ suspend fun controlDrivetrain() = doTask {
     action {
         onTick {
             val scaledThrottle = (-throttle.sign * (throttle * throttle)).deadband(.05)
-            val scaledTurn = (turn.sign * (turn * turn)).deadband(.05)
+            val scaledTurn = turn.deadband(.05)
             drivetrain.arcadeDrive(scaledThrottle, scaledTurn)
         }
     }
 }
 
-suspend fun alignToBall(offset: Double, oneside: Boolean = false) = doTask {
+suspend fun alignToBall(offset: Double) = doTask {
     val drivetrain = use<Drivetrain>()
     var visionLastAlive = TableEntry("last_alive", 0.0, "Vision")
     var visionAngle = TableEntry("xAngOff", 0.0, "Vision")
@@ -74,18 +74,18 @@ suspend fun alignToBall(offset: Double, oneside: Boolean = false) = doTask {
         pidConfig.ki = 0.0
         pidConfig.kd = 0.0
         val controller = PidfController2(pidConfig, 1.0)
-        onTick {
-            if (lastAlive != visionLastAlive.value) {
-                lastAlive = visionLastAlive.value + drivetrain.rawHeading
-                if(oneside) {
-                    lastAngle = visionAngle.value + drivetrain.rawHeading - offset
-                }else{
+        try {
+            periodic(20) {
+                if (lastAlive != visionLastAlive.value) {
+                    lastAlive = visionLastAlive.value + drivetrain.rawHeading
                     lastAngle = visionAngle.value + drivetrain.rawHeading - (sign(visionAngle.value) * offset)
                 }
-            }
 
-            val turnValue = controller.next(0.0, (drivetrain.rawHeading - lastAngle).IEEErem(360.0))
-            drivetrain.arcadeDrive(autoAlignSpeed, -turnValue)
+                val turnValue = controller.next(0.0, (drivetrain.rawHeading - lastAngle).IEEErem(360.0))
+                drivetrain.arcadeDrive(autoAlignSpeed, -turnValue)
+            }
+        } finally {
+            drivetrain.stop()
         }
     }
 }

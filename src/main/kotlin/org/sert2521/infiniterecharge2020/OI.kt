@@ -1,7 +1,6 @@
 package org.sert2521.infiniterecharge2020
 
 import edu.wpi.first.networktables.NetworkTableInstance
-import edu.wpi.first.wpilibj.GenericHID
 import edu.wpi.first.wpilibj.Joystick
 import edu.wpi.first.wpilibj.XboxController
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser
@@ -16,6 +15,7 @@ import org.sert2521.infiniterecharge2020.climber.runWinch
 import org.sert2521.infiniterecharge2020.drivetrain.alignToBall
 import org.sert2521.infiniterecharge2020.powerhouse.banish
 import org.sert2521.infiniterecharge2020.powerhouse.closeHouse
+import org.sert2521.infiniterecharge2020.powerhouse.openHouse
 import org.sert2521.infiniterecharge2020.powerhouse.reverseWelcome
 import org.sert2521.infiniterecharge2020.powerhouse.welcome
 import org.sert2521.infiniterecharge2020.utils.deadband
@@ -33,7 +33,6 @@ object OI {
         FRONT("Front"), Ball("Ball")
     }
 
-    // TODO: Figure out why this isn't working
     val controlModeChooser = SendableChooser<ControlMode>().apply {
         addOption("Joystick", ControlMode.JOYSTICK)
         addOption("Controller", ControlMode.CONTROLLER)
@@ -67,13 +66,13 @@ object OI {
 fun CoroutineScope.initControls() {
 
     // CLIMBER
-    ({ primaryController.pov == 0 }).watch {
+    ({ secondaryJoystick.getRawButton(5) }).watch {
         whileTrue {
             println("GOING UP")
             climberUp()
         }
     }
-    ({ primaryController.pov == 180 }).watch {
+    ({ secondaryJoystick.getRawButton(10) }).watch {
         whileTrue {
             println("GOING DOWN")
             climberDown()
@@ -87,13 +86,13 @@ fun CoroutineScope.initControls() {
     }
 
     // INTAKE
-    ({ primaryController.getBumper(GenericHID.Hand.kRight) }).watch {
+    ({ secondaryJoystick.getRawButton(3) }).watch {
         whileTrue {
             println("Should be intaking")
             welcome()
         }
     }
-    ({ primaryController.getBumper(GenericHID.Hand.kLeft) }).watch {
+    ({ secondaryJoystick.getRawButton(4) }).watch {
         whileTrue {
             println("Should be outtaking")
             banish()
@@ -102,10 +101,20 @@ fun CoroutineScope.initControls() {
             closeHouse()
         }
     }
-    ({ primaryController.getTriggerAxis(GenericHID.Hand.kLeft) > .5 }).watch {
+    ({ secondaryJoystick.getRawButton(2) }).watch {
         whileTrue {
             println("Reversing the intake")
             reverseWelcome()
+        }
+    }
+    ({ secondaryJoystick.getRawButton(7) }).watch {
+        whenTrue {
+            openHouse()
+        }
+    }
+    ({ secondaryJoystick.getRawButton(8) }).watch {
+        whenTrue {
+            closeHouse()
         }
     }
 

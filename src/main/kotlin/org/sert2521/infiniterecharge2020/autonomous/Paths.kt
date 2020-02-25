@@ -11,6 +11,7 @@ import org.sert2521.infiniterecharge2020.drivetrain.runPath
 import org.sert2521.infiniterecharge2020.powerhouse.banish
 import org.sert2521.infiniterecharge2020.powerhouse.closeHouse
 import org.sert2521.infiniterecharge2020.powerhouse.welcome
+import org.sert2521.sertain.events.onTick
 import org.sert2521.sertain.subsystems.doTask
 import org.sert2521.sertain.subsystems.use
 
@@ -21,7 +22,7 @@ suspend fun auto(startLocation: Pair<Pose2d, Rotation2d>, tasks: List<PathGenera
 
     action {
         tasks.forEach {
-            if (it == PathGenerator.tasks.UNLOAD) {
+            if (it == PathGenerator.tasks.UNLOAD_FROM_POWERPORT) {
                 val toPowerPortPath = pathGenerator.initToPowerPort()
                 println(toPowerPortPath.states)
                 runPath(drivetrain, toPowerPortPath)
@@ -29,14 +30,33 @@ suspend fun auto(startLocation: Pair<Pose2d, Rotation2d>, tasks: List<PathGenera
                 val banishJob = launch {
                     banish()
                 }
+                // Run the outtake for 1.2 seconds
+                delay(1200)
+                banishJob.cancelAndJoin()
+                closeHouse()
+            }
 
-                // TODO: Could be even shorter
+            if (it == PathGenerator.tasks.UNLOAD_FROM_CORNER) {
+                val toCornerFromTrenchPath = pathGenerator.cornerToTrench()
+                println(toCornerFromTrenchPath.states)
+                runPath(drivetrain, toCornerFromTrenchPath)
+
+                val banishJob = launch {
+                    banish()
+                }
+                // Run the outtake for 1.2 seconds
                 delay(2000)
                 banishJob.cancelAndJoin()
                 closeHouse()
             }
 
-            if (it == PathGenerator.tasks.TRENCH) {
+            if (it == PathGenerator.tasks.TRENCH_TO_CORNER) {
+                val trenchToCorner = pathGenerator.trenchToCorner()
+                println(trenchToCorner.states)
+                runPath(drivetrain, trenchToCorner)
+            }
+
+            if (it == PathGenerator.tasks.CORNER_TO_TRENCH) {
                 val toTrenchFromPortPath = pathGenerator.powerPortToTrench()
                 println(toTrenchFromPortPath.states)
                 runPath(drivetrain, toTrenchFromPortPath)
@@ -56,8 +76,8 @@ suspend fun auto(startLocation: Pair<Pose2d, Rotation2d>, tasks: List<PathGenera
                     alignToBall(0.0)
                 }
 
-                // TODO: This needs to be tuned. At 3000, I needed to disable in order to stop the robot from crashing into a table
-                delay(3000)
+                // Stop using vision to pick up balls after the robot has driven into the trench for 2 seconds
+                delay(2000)
                 alignJob.cancel()
                 welcomeJob.cancel()
             }
@@ -70,21 +90,21 @@ suspend fun auto(startLocation: Pair<Pose2d, Rotation2d>, tasks: List<PathGenera
                 val alignJob = launch {
                     alignToBall(0.0)
                 }
-
-                // TODO: This needs to be tuned. At 3000, I needed to disable in order to stop the robot from crashing into a table
-                delay(3000)
-                alignJob.cancel()
-                welcomeJob.cancel()
+                onTick {
+                    println(drivetrain.xTranslation)
+                    // Robot takes around 0.87 meters to stop
+                    // Value can be increased to potentially acquire a 4th ball
+                    if (drivetrain.xTranslation < -6.825) {
+                        println("I SHOULD BE STOPPING")
+                        alignJob.cancel()
+                        welcomeJob.cancel()
+                    }
+                }
             }
 
             if (it == PathGenerator.tasks.PUSHBACK) {
                 val pushBackPath = pathGenerator.pushBack(0.30)
                 runPath(drivetrain, pushBackPath)
-            }
-
-            if (it == PathGenerator.tasks.PUSHBACK) {
-                val loadingStationPath = pathGenerator.loadingStation()
-                runPath(drivetrain, loadingStationPath)
             }
         }
     }
