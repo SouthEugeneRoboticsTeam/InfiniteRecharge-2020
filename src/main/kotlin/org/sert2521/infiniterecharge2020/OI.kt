@@ -15,8 +15,17 @@ import org.sert2521.infiniterecharge2020.OI.setNextDriverCamera
 import org.sert2521.infiniterecharge2020.climber.climberDown
 import org.sert2521.infiniterecharge2020.climber.climberUp
 import org.sert2521.infiniterecharge2020.climber.runWinch
+import org.sert2521.infiniterecharge2020.colorwheelspinner.extend
+import org.sert2521.infiniterecharge2020.colorwheelspinner.retract
+import org.sert2521.infiniterecharge2020.colorwheelspinner.spinForColors
+import org.sert2521.infiniterecharge2020.colorwheelspinner.spinToColor
 import org.sert2521.infiniterecharge2020.drivetrain.alignToBall
-import org.sert2521.infiniterecharge2020.powerhouse.*
+import org.sert2521.infiniterecharge2020.powerhouse.PowerHouse
+import org.sert2521.infiniterecharge2020.powerhouse.banish
+import org.sert2521.infiniterecharge2020.powerhouse.closeHouse
+import org.sert2521.infiniterecharge2020.powerhouse.openHouse
+import org.sert2521.infiniterecharge2020.powerhouse.reverseWelcome
+import org.sert2521.infiniterecharge2020.powerhouse.welcome
 import org.sert2521.infiniterecharge2020.utils.deadband
 import org.sert2521.sertain.coroutines.RobotScope
 import org.sert2521.sertain.coroutines.doAll
@@ -131,6 +140,28 @@ fun CoroutineScope.initControls() {
     ({ secondaryJoystick.getRawButton(8) }).watch {
         whenTrue {
             closeHouse()
+        }
+    }
+
+    // COLOR SPINNER
+    ({ secondaryJoystick.getRawButton(12) }).watch {
+        whenTrue {
+            spinForColors()
+        }
+    }
+    ({ secondaryJoystick.getRawButton(15) }).watch {
+        whenTrue {
+            spinToColor()
+        }
+    }
+    ({ secondaryJoystick.getRawButton(11) }).watch {
+        whileTrue {
+            extend()
+        }
+    }
+    ({ secondaryJoystick.getRawButton(16) }).watch {
+        whileTrue {
+            retract()
         }
     }
 

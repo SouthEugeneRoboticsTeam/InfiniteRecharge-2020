@@ -4,17 +4,33 @@ import edu.wpi.first.wpilibj.DriverStation
 import edu.wpi.first.wpilibj.util.Color
 import kotlin.math.abs
 import kotlinx.coroutines.cancel
-import kotlinx.coroutines.coroutineScope
+import org.sert2521.sertain.coroutines.periodic
 import org.sert2521.sertain.events.onTick
 import org.sert2521.sertain.subsystems.doTask
 import org.sert2521.sertain.subsystems.use
-import org.sert2521.sertain.utils.timer
 
-suspend fun retract(time: Long) = doTask {
+suspend fun extend() = doTask {
     val colorWheelSpinner = use<ColorWheelSpinner>()
     action {
-        timer(20, 0, time) {
-            colorWheelSpinner.output(-0.5)
+        try {
+            periodic(20) {
+                colorWheelSpinner.output(SPINNER_SPEED)
+            }
+        } finally {
+            colorWheelSpinner.stop()
+        }
+    }
+}
+
+suspend fun retract() = doTask {
+    val colorWheelSpinner = use<ColorWheelSpinner>()
+    action {
+        try {
+            periodic(20) {
+                colorWheelSpinner.output(-SPINNER_SPEED)
+            }
+        } finally {
+            colorWheelSpinner.stop()
         }
     }
 }
@@ -23,7 +39,7 @@ suspend fun spinToColor() = doTask {
     val colorWheelSpinner = use<ColorWheelSpinner>()
     val frcColor = DriverStation.getInstance().gameSpecificMessage.first()
 
-    val targetColor = colorWheelSpinner.frcColorToTargetColor[frcColor] ?: return@doTask
+    val targetColor = frcColorToTargetColor[frcColor] ?: return@doTask
 
     action {
         onTick {
@@ -31,7 +47,7 @@ suspend fun spinToColor() = doTask {
             if (color == targetColor) {
                 this@action.cancel()
             }
-            colorWheelSpinner.output(0.5)
+            colorWheelSpinner.output(SPINNER_SPEED)
         }
     }
 }
@@ -51,19 +67,8 @@ suspend fun spinForColors() = doTask {
                 this@action.cancel()
             }
             pastColor = sensorColor
-            colorWheelSpinner.output(0.5)
+            colorWheelSpinner.output(SPINNER_SPEED)
         }
-    }
-}
-
-suspend fun spinAndExtend(isSpinningToColor: Boolean) {
-    coroutineScope {
-        if (isSpinningToColor) {
-            spinToColor()
-        } else {
-            spinForColors()
-        }
-        retract(3000)
     }
 }
 
