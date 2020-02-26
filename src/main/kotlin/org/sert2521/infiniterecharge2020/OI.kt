@@ -156,11 +156,13 @@ fun CoroutineScope.initControls() {
     }
     ({ secondaryJoystick.getRawButton(11) }).watch {
         whileTrue {
+            println("Extending")
             extend()
         }
     }
     ({ secondaryJoystick.getRawButton(16) }).watch {
         whileTrue {
+            println("Retracting")
             retract()
         }
     }

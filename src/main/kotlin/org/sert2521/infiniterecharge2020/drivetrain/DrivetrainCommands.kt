@@ -52,7 +52,8 @@ suspend fun controlDrivetrain() = doTask {
     val drivetrain = use<Drivetrain>()
     action {
         onTick {
-            val scaledThrottle = (-throttle.sign * (throttle * throttle)).deadband(.05)
+            val controlPanelSpeedScalar = if (Drivetrain.slowAtColorWheel) 0.14 else 1.0
+            val scaledThrottle = (-throttle.sign * (throttle * throttle)).deadband(.05) * controlPanelSpeedScalar
             val scaledTurn = turn.deadband(.05)
             drivetrain.arcadeDrive(scaledThrottle, scaledTurn)
         }

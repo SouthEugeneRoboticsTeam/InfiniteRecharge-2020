@@ -6,6 +6,7 @@ import kotlinx.coroutines.launch
 import org.sert2521.infiniterecharge2020.autonomous.PathGenerator
 import org.sert2521.infiniterecharge2020.autonomous.centerInitPowerPort
 import org.sert2521.infiniterecharge2020.climber.Climber
+import org.sert2521.infiniterecharge2020.colorwheelspinner.ColorWheelSpinner
 import org.sert2521.infiniterecharge2020.drivetrain.Drivetrain
 import org.sert2521.infiniterecharge2020.drivetrain.practiceBotChooser
 import org.sert2521.infiniterecharge2020.powerhouse.PowerHouse
@@ -25,6 +26,7 @@ suspend fun main() = robot {
     add<Climber>()
     add<PowerHouse>()
     add<PathGenerator>()
+    add<ColorWheelSpinner>()
 
     onEnable {
         openHouse()

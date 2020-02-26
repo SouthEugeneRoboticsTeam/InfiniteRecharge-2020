@@ -2,10 +2,8 @@ package org.sert2521.infiniterecharge2020.colorwheelspinner
 
 import edu.wpi.first.wpilibj.DriverStation
 import edu.wpi.first.wpilibj.util.Color
-import kotlin.math.abs
 import kotlinx.coroutines.cancel
 import org.sert2521.sertain.coroutines.periodic
-import org.sert2521.sertain.events.onTick
 import org.sert2521.sertain.subsystems.doTask
 import org.sert2521.sertain.subsystems.use
 
@@ -14,7 +12,7 @@ suspend fun extend() = doTask {
     action {
         try {
             periodic(20) {
-                colorWheelSpinner.output(SPINNER_SPEED)
+                colorWheelSpinner.spin(EXTEND_SPEED)
             }
         } finally {
             colorWheelSpinner.stop()
@@ -27,7 +25,7 @@ suspend fun retract() = doTask {
     action {
         try {
             periodic(20) {
-                colorWheelSpinner.output(-SPINNER_SPEED)
+                colorWheelSpinner.spin(-EXTEND_SPEED)
             }
         } finally {
             colorWheelSpinner.stop()
@@ -37,17 +35,24 @@ suspend fun retract() = doTask {
 
 suspend fun spinToColor() = doTask {
     val colorWheelSpinner = use<ColorWheelSpinner>()
-    val frcColor = DriverStation.getInstance().gameSpecificMessage.first()
+    // Get color to spin to from the FMS
+    val frcColor: Char = DriverStation.getInstance().gameSpecificMessage.first() ?: 'Z'
+    if (frcColor in ((listOf('R', 'G', 'B', 'Y')))) {
+        println("Attempting Position Control to color: $frcColor")
+        val targetColor = frcColorToTargetColor[frcColor] ?: return@doTask
 
-    val targetColor = frcColorToTargetColor[frcColor] ?: return@doTask
-
-    action {
-        onTick {
-            val color = getColor(colorWheelSpinner.sensor.color)
-            if (color == targetColor) {
-                this@action.cancel()
+        action {
+            try {
+                periodic(20) {
+                    val color = colorWheelSpinner.currentColor
+                    if (color == targetColor) {
+                        this@action.cancel()
+                    }
+                    colorWheelSpinner.spin(SPIN_SPEED)
+                }
+            } finally {
+                colorWheelSpinner.stop()
             }
-            colorWheelSpinner.output(SPINNER_SPEED)
         }
     }
 }
@@ -55,37 +60,45 @@ suspend fun spinToColor() = doTask {
 suspend fun spinForColors() = doTask {
     val colorWheelSpinner = use<ColorWheelSpinner>()
     action {
+        println("Starting")
         var triangleSpins = 0
         var pastColor: Color = Color.kWhite
-        onTick {
-            val sensorColor = getColor(colorWheelSpinner.sensor.color)
-            if (sensorColor != pastColor) {
+        try {
+            periodic(20) {
+                val sensorColor = colorWheelSpinner.currentColor
+                if (sensorColor != pastColor) {
+                    pastColor = sensorColor
+                    triangleSpins++
+                }
+                if (triangleSpins >= NUM_TRIANGLES) {
+                    this@action.cancel()
+                }
                 pastColor = sensorColor
-                triangleSpins++
+                println("Color : ${sensorColorToString[sensorColor]}")
+                println("Num colors counted : $triangleSpins")
+                colorWheelSpinner.spin(SPIN_SPEED)
             }
-            if (triangleSpins >= 32) {
-                this@action.cancel()
-            }
-            pastColor = sensorColor
-            colorWheelSpinner.output(SPINNER_SPEED)
+        } finally {
+            colorWheelSpinner.stop()
         }
     }
 }
 
-fun getColor(sensorOutput: Color): Color {
-    val distanceToRed = abs(sensorOutput.blue - 0.13) + abs(sensorOutput.green - 0.34) + abs(sensorOutput.red - 0.52)
-    val distanceToBlue = abs(sensorOutput.blue - 0.45) + abs(sensorOutput.green - 0.42) + abs(sensorOutput.red - 0.11)
-    val distanceToGreen = abs(sensorOutput.blue - 0.25) + abs(sensorOutput.green - 0.58) + abs(sensorOutput.red - 0.16)
-    val distanceToYellow = abs(sensorOutput.blue - 0.11) + abs(sensorOutput.green - 0.56) + abs(sensorOutput.red - 0.31)
-
-    return when {
-        distanceToRed < distanceToBlue && distanceToRed < distanceToGreen && distanceToRed < distanceToYellow ->
-            Color.kRed
-        distanceToBlue < distanceToGreen && distanceToBlue < distanceToYellow ->
-            Color.kBlue
-        distanceToGreen < distanceToYellow ->
-            Color.kGreen
-        else ->
-            Color.kYellow
-    }
-}
+// fun getColor2(sensorOutput: Color): Color {
+//    // Needs more tuning
+//    val distanceToRed = abs(sensorOutput.blue - 0.13) + abs(sensorOutput.green - 0.34) + abs(sensorOutput.red - 0.52)
+//    val distanceToBlue = abs(sensorOutput.blue - 0.45) + abs(sensorOutput.green - 0.42) + abs(sensorOutput.red - 0.11)
+//    val distanceToGreen = abs(sensorOutput.blue - 0.25) + abs(sensorOutput.green - 0.58) + abs(sensorOutput.red - 0.16)
+//    val distanceToYellow = abs(sensorOutput.blue - 0.11) + abs(sensorOutput.green - 0.56) + abs(sensorOutput.red - 0.31)
+//
+//    return when {
+//        distanceToRed < distanceToBlue && distanceToRed < distanceToGreen && distanceToRed < distanceToYellow ->
+//            Color.kRed
+//        distanceToBlue < distanceToGreen && distanceToBlue < distanceToYellow ->
+//            Color.kBlue
+//        distanceToGreen < distanceToYellow ->
+//            Color.kGreen
+//        else ->
+//            Color.kYellow
+//    }
+// }

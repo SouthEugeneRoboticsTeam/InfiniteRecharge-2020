@@ -33,4 +33,6 @@ object Sensors {
 
     val BOTTOM_LIMIT_SWITCH = 1
     val TOP_LIMIT_SWITCH = 0
+
+    val SPINNER_BOTTOM_LIMIT_SWITCH = 5
 }
