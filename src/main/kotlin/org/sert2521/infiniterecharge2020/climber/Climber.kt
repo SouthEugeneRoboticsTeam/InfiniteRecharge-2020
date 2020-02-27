@@ -9,7 +9,6 @@ import org.sert2521.sertain.coroutines.RobotScope
 import org.sert2521.sertain.coroutines.watch
 import org.sert2521.sertain.motors.MotorController
 import org.sert2521.sertain.subsystems.Subsystem
-import org.sert2521.sertain.telemetry.linkTableEntry
 
 class Climber : Subsystem("Climber") {
     private val liftMotor = MotorController(
