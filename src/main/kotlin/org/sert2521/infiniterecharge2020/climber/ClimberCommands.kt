@@ -2,6 +2,7 @@ package org.sert2521.infiniterecharge2020.climber
 
 import kotlin.math.abs
 import org.sert2521.infiniterecharge2020.OI
+import org.sert2521.sertain.coroutines.periodic
 import org.sert2521.sertain.events.onTick
 import org.sert2521.sertain.subsystems.doTask
 import org.sert2521.sertain.subsystems.use
@@ -55,11 +56,15 @@ suspend fun runWinch(output: () -> Double) = doTask {
     }
 }
 
-suspend fun reverseRunWinch(output: () -> Double) = doTask {
+suspend fun reverseRunWinch() = doTask {
     val climber = use<Climber>()
     action {
-        onTick {
-            climber.runWinch(-abs(output()))
+        try {
+            periodic(20) {
+                climber.runWinch(WINCH_UNWIND_SPEED)
+            }
+        } finally {
+            climber.stopWinch()
         }
     }
 }

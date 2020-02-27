@@ -14,6 +14,7 @@ import org.sert2521.infiniterecharge2020.OI.setClimberCamera
 import org.sert2521.infiniterecharge2020.OI.setNextDriverCamera
 import org.sert2521.infiniterecharge2020.climber.climberDown
 import org.sert2521.infiniterecharge2020.climber.climberUp
+import org.sert2521.infiniterecharge2020.climber.reverseRunWinch
 import org.sert2521.infiniterecharge2020.climber.runWinch
 import org.sert2521.infiniterecharge2020.drivetrain.alignToBall
 import org.sert2521.infiniterecharge2020.powerhouse.PowerHouse
@@ -88,6 +89,13 @@ fun CoroutineScope.initControls() {
         whileTrue {
             println("Winching: ${secondaryJoystick.y.deadband(0.02)}")
             runWinch { secondaryJoystick.y.deadband(0.02) }
+        }
+    }
+    // Only for use in the pit
+    ({ secondaryJoystick.throttle == -1.0 && secondaryJoystick.getRawButton(6) }).watch {
+        whileTrue {
+            println("Reversing the winch")
+            reverseRunWinch()
         }
     }
 

@@ -57,19 +57,23 @@ class Climber : Subsystem("Climber") {
     fun climberLiftUp() {
         // The slowing down does not appear to be working. Investigate if time
         if (position > POSITION_AT_TOP - 1000) {
+            println("Encoder: $position, Going Up Half Speed")
             println("Slowing down going up")
             liftMotor.setPercentOutput(CLIMBER_LIFT_SPEED / 2)
         } else {
+            println("Encoder: $position, Going Up Normal Speed")
             liftMotor.setPercentOutput(CLIMBER_LIFT_SPEED)
         }
     }
 
     fun climberLiftDown() {
         // The slowing down does not appear to be working. Investigate if time
-        if (position < POSITION_AT_BOTTOM + 500) {
+        if (position < POSITION_AT_BOTTOM + 1000) {
+            println("Encoder: $position, Going Down Half Speed")
             println("Slowing down going down")
             liftMotor.setPercentOutput(-CLIMBER_LIFT_SPEED / 2)
         } else {
+            println("Encoder: $position, Going Down Normal Speed")
             liftMotor.setPercentOutput(-CLIMBER_LIFT_SPEED)
         }
     }
