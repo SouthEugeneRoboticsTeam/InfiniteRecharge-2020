@@ -11,6 +11,7 @@ import org.sert2521.infiniterecharge2020.drivetrain.runPath
 import org.sert2521.infiniterecharge2020.powerhouse.banish
 import org.sert2521.infiniterecharge2020.powerhouse.closeHouse
 import org.sert2521.infiniterecharge2020.powerhouse.welcome
+import org.sert2521.sertain.events.True
 import org.sert2521.sertain.events.onTick
 import org.sert2521.sertain.subsystems.doTask
 import org.sert2521.sertain.subsystems.use
@@ -45,10 +46,10 @@ suspend fun auto(startLocation: Pair<Pose2d, Rotation2d>, tasks: List<PathGenera
                     val banishJob = launch {
                         banish()
                     }
-                    // Run the outtake for 1.2 seconds
-                    delay(2000)
-                    banishJob.cancelAndJoin()
-                    closeHouse()
+//                    // Run the outtake for 1.2 seconds
+//                    delay(2000)
+//                    banishJob.cancelAndJoin()
+//                    closeHouse()
                 }
 
                 PathGenerator.tasks.TRENCH_TO_CORNER -> {
@@ -62,24 +63,22 @@ suspend fun auto(startLocation: Pair<Pose2d, Rotation2d>, tasks: List<PathGenera
                     println(toTrenchFromPortPath.states)
                     runPath(drivetrain, toTrenchFromPortPath)
 
-                    val trenchRunPath = pathGenerator.trenchRun(2.0)
-                    println(trenchRunPath.states)
-
-                    runPath(drivetrain, trenchRunPath)
-                }
-
-                PathGenerator.tasks.BALLS2 -> {
                     val welcomeJob = launch {
                         welcome()
                     }
 
-                    val alignJob = launch {
-                        alignToBall(0.0)
-                    }
+                    val trenchRunPath = pathGenerator.driveForward(6.7, false)
+                    println(trenchRunPath.states)
+                    runPath(drivetrain, trenchRunPath)
+                    welcomeJob.cancel()
+                }
 
-                    // Stop using vision to pick up balls after the robot has driven into the trench for a certain time
-                    delay(2600)
-                    alignJob.cancel()
+                PathGenerator.tasks.BALLS2 -> {
+                    val driveForwardPath = pathGenerator.driveForward(3.75, true)
+                    val welcomeJob = launch {
+                        welcome()
+                    }
+                    runPath(drivetrain, driveForwardPath)
                     welcomeJob.cancel()
                 }
 

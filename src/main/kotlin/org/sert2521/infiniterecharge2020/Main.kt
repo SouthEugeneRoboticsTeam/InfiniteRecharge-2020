@@ -41,14 +41,14 @@ suspend fun main() = robot {
         dt.zeroEncoders()
         // Takes around 18 seconds currently
 //        auto(PathGenerator.startlocation.CENTER, listOf(
-//                PathGenerator.tasks.UNLOAD_FROM_POWERPORT,
-//                PathGenerator.tasks.CORNER_TO_TRENCH,
-//                PathGenerator.tasks.BALLS3))
+//                PathGenerator.tasks.UNLOAD_FROM_POWERPORT, PathGenerator.tasks.CORNER_TO_TRENCH))
 
 //         Needs more testing. Vision can be unreliable sometimes. Might be fixed with actual PID tuning
-        auto(PathGenerator.startlocation.RIGHT_TRENCH, listOf(PathGenerator.tasks.BALLS2,
-                PathGenerator.tasks.TRENCH_TO_CORNER,
-                PathGenerator.tasks.UNLOAD_FROM_CORNER))
+//        auto(PathGenerator.startlocation.RIGHT_TRENCH, listOf(PathGenerator.tasks.BALLS2,
+//                PathGenerator.tasks.TRENCH_TO_CORNER,
+//                PathGenerator.tasks.UNLOAD_FROM_CORNER))
+
+        auto(PathGenerator.startlocation.RIGHT_ALLIANCE, listOf(PathGenerator.tasks.UNLOAD_FROM_POWERPORT))
     }
 
     launch {
