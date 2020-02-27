@@ -21,11 +21,18 @@ suspend fun driveForward() = drivetrain { drivetrain ->
     }
 }
 
-suspend fun centerToPowerPortToTrench() = drivetrain { drivetrain ->
+// Works from either Right Alliance or Center
+suspend fun initToPowerPortToTrench() = drivetrain { drivetrain ->
     drivetrain.setStartingPose(StartingPose.CENTER)
     unloadFromPowerPort()
     trenchToCorner()
     welcome3()
+}
+
+suspend fun initToLoadingStation() = drivetrain { drivetrain ->
+    drivetrain.setStartingPose(StartingPose.CENTER)
+    unloadFromPowerPort()
+    powerPortToLoadingStation()
 }
 
 // Right Trench -> Trench -> Power Port, Five ball auto

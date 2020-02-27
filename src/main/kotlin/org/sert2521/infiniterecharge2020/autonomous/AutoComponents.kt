@@ -149,6 +149,13 @@ suspend fun cornerToTrench() = drivetrain { drivetrain ->
     runPath(drivetrain, trenchRunPath)
 }
 
+suspend fun powerPortToLoadingStation() = drivetrain { drivetrain ->
+    val toLoadingStation = PathGenerator.loadingStation()
+
+    println(toLoadingStation.states)
+    runPath(drivetrain, toLoadingStation)
+}
+
 suspend fun welcome2() = drivetrain {
     val welcomeJob = launch {
         welcome()
