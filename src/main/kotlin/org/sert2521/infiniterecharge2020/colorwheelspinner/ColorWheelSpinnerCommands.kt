@@ -12,7 +12,11 @@ suspend fun extend() = doTask {
     action {
         try {
             periodic(20) {
-                colorWheelSpinner.spin(EXTEND_SPEED)
+                if (colorWheelSpinner.spinnerPosition <= SPINNER_AT_TOP) {
+                    colorWheelSpinner.spin(EXTEND_SPEED)
+                } else {
+                    colorWheelSpinner.stop()
+                }
             }
         } finally {
             colorWheelSpinner.stop()
@@ -22,10 +26,20 @@ suspend fun extend() = doTask {
 
 suspend fun retract() = doTask {
     val colorWheelSpinner = use<ColorWheelSpinner>()
+    val startTime = System.currentTimeMillis()
     action {
         try {
             periodic(20) {
-                colorWheelSpinner.spin(-EXTEND_SPEED)
+                if (!colorWheelSpinner.spinnerAtBottom) {
+                    var currentTime = System.currentTimeMillis()
+                    if (currentTime - startTime > 500) {
+                        colorWheelSpinner.spin(-EXTEND_SPEED)
+                    } else {
+                        colorWheelSpinner.spin(-EXTEND_SPEED / 2)
+                    }
+                } else {
+                    colorWheelSpinner.stop()
+                }
             }
         } finally {
             colorWheelSpinner.stop()

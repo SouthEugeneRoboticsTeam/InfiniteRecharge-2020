@@ -13,13 +13,13 @@ val sensorColorToString = mapOf(Color.kYellow to "Yellow", Color.kBlue to "Blue"
 const val NUM_TRIANGLES = 32
 
 // The speed we run the motor to raise/lower the spinner
-const val EXTEND_SPEED = 0.25
+const val EXTEND_SPEED = 0.5
 // The speed we run the motor to spin the wheel
 const val SPIN_SPEED = 0.16
 // How high the color wheel can go before slow mode is engaged
-const val POSITION_TO_SLOW = 500
+const val POSITION_TO_SLOW = 100
 // Approximate position of spinner when it's fully extended
-const val AT_TOP = 4500
+const val SPINNER_AT_TOP = 4500
 
 // For tuning until linktablentries are fixed
 // SmartDashboard.putNumber("Red", colorsensor.sensor.color.red)
