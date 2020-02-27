@@ -12,10 +12,10 @@ import org.sert2521.sertain.units.Degrees
 import org.sert2521.sertain.units.Radians
 import org.sert2521.sertain.units.convert
 
-class PathGenerator {
+object PathGenerator {
     val drivetrain = access<Drivetrain>()
 
-    object startlocation {
+    object StartLocation {
         // Facing the Alliance Station. ~2.2 meters from power port | Aligned with line marking trench boundary
         val RIGHT_ALLIANCE = Pair(Pose2d(-2.2, -1.22, Rotation2d(0.0)), Rotation2d(0.0))
         // Facing the Trench. Balls aligned to center of robot | Edge of bumpers contacting initiation line
@@ -25,7 +25,7 @@ class PathGenerator {
         val CENTER = Pair(Pose2d(-2.143, 0.0, Rotation2d(0.0)), Rotation2d(0.0))
     }
 
-    enum class tasks {
+    enum class Task {
         CORNER_TO_TRENCH, BALLS3, BALLS2, PUSHBACK, TRENCH_TO_CORNER, UNLOAD_FROM_CORNER,
         UNLOAD_FROM_POWERPORT
     }

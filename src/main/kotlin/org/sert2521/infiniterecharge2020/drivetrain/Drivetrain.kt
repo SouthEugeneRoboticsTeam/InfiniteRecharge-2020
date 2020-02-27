@@ -15,13 +15,16 @@ import org.sert2521.sertain.telemetry.Table
 import org.sert2521.sertain.telemetry.TableEntry
 import org.sert2521.sertain.telemetry.withTableEntry
 import org.sert2521.sertain.units.Chronic
+import org.sert2521.sertain.units.ChronicUnit
 import org.sert2521.sertain.units.CompositeUnit
 import org.sert2521.sertain.units.Linear
+import org.sert2521.sertain.units.LinearUnit
 import org.sert2521.sertain.units.Meters
 import org.sert2521.sertain.units.MetricValue
 import org.sert2521.sertain.units.Per
 import org.sert2521.sertain.units.Radians
 import org.sert2521.sertain.units.Seconds
+import org.sert2521.sertain.units.VelocityValue
 import org.sert2521.sertain.units.convertTo
 import org.sert2521.sertain.units.div
 import org.sert2521.sertain.units.rdps
@@ -126,7 +129,7 @@ class Drivetrain : Subsystem("Drivetrain", ::controlDrivetrain) {
     val leftSpeedError = TableEntry("LeftSpeedError", 0, "Drivetrain")
     val rightSpeedError = TableEntry("RightSpeedError", 0, "Drivetrain")
 
-    fun <V : CompositeUnit<Per, Linear, Chronic>> setTargetSpeed(leftSpeed: MetricValue<Velocity, V>, rightSpeed: MetricValue<Velocity, V>) {
+    fun <L : LinearUnit, C : ChronicUnit> setTargetSpeed(leftSpeed: VelocityValue<L, C>, rightSpeed: VelocityValue<L, C>) {
         // Convert speed setpoints from meters-per-second into encoder ticks
         val leftSetpoint = ((leftSpeed.convertTo(Meters / Seconds).value / wheelRadius.value).rdps.convertTo(motorEncoder.ticksPerSecond).value / 10).toInt()
         val rightSetpoint = ((rightSpeed.convertTo(Meters / Seconds).value / wheelRadius.value).rdps.convertTo(motorEncoder.ticksPerSecond).value / 10).toInt()
