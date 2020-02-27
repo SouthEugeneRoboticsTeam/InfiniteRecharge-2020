@@ -4,14 +4,14 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.sert2521.infiniterecharge2020.autonomous.PathGenerator
-import org.sert2521.infiniterecharge2020.autonomous.centerInitPowerPort
+import org.sert2521.infiniterecharge2020.autonomous.auto
 import org.sert2521.infiniterecharge2020.climber.Climber
 import org.sert2521.infiniterecharge2020.drivetrain.Drivetrain
 import org.sert2521.infiniterecharge2020.drivetrain.practiceBotChooser
 import org.sert2521.infiniterecharge2020.powerhouse.PowerHouse
 import org.sert2521.infiniterecharge2020.powerhouse.closeHouse
 import org.sert2521.infiniterecharge2020.powerhouse.openHouse
-import org.sert2521.sertain.events.onEnable
+import org.sert2521.sertain.events.onTeleop
 import org.sert2521.sertain.events.onTick
 import org.sert2521.sertain.events.whileAuto
 import org.sert2521.sertain.events.whileTeleop
@@ -24,9 +24,8 @@ suspend fun main() = robot {
     add<Drivetrain>()
     add<Climber>()
     add<PowerHouse>()
-    add<PathGenerator>()
 
-    onEnable {
+    onTeleop {
         openHouse()
         closeHouse()
     }
@@ -40,7 +39,16 @@ suspend fun main() = robot {
         val dt = access<Drivetrain>()
         dt.gyro.reset()
         dt.zeroEncoders()
-        centerInitPowerPort(false, PathGenerator.endLocation.TRENCH)
+        // Takes around 18 seconds currently
+//        auto(PathGenerator.startlocation.CENTER, listOf(
+//                PathGenerator.tasks.UNLOAD_FROM_POWERPORT,
+//                PathGenerator.tasks.CORNER_TO_TRENCH,
+//                PathGenerator.tasks.BALLS3))
+
+//         Needs more testing. Vision can be unreliable sometimes. Might be fixed with actual PID tuning
+        auto(PathGenerator.startlocation.RIGHT_TRENCH, listOf(PathGenerator.tasks.BALLS2,
+                PathGenerator.tasks.TRENCH_TO_CORNER,
+                PathGenerator.tasks.UNLOAD_FROM_CORNER))
     }
 
     launch {
