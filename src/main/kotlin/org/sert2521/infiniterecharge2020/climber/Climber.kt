@@ -18,8 +18,6 @@ class Climber : Subsystem("Climber") {
             MotorControllers.winchFront, MotorControllers.winchRear
     )
 
-    // Ah. Now would be time to look away from the code (or at least not closely)
-    // TODO: FIX THESE INCREDIBLE NAMES CORUTSEY OF MOISEUR WILL.I.AM
     val bottomLimitSwitch = DigitalInput(BOTTOM_LIMIT_SWITCH)
     val topLimitSwitch = DigitalInput(TOP_LIMIT_SWITCH)
 
