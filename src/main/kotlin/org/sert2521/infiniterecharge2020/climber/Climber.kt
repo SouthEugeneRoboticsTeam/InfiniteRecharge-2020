@@ -27,7 +27,7 @@ class Climber : Subsystem("Climber") {
     val atTop get() = !topLimitSwitch.get()
     // TODO: TEST TO GET CORRECT VALUES
     // Should return true when pushed back, false when not
-    val contactingRung = rungLimitSwitch.get()
+    val contactingRung get() = rungLimitSwitch.get()
 
     var position
         get() = liftMotor.position
@@ -40,9 +40,10 @@ class Climber : Subsystem("Climber") {
     init {
         liftMotor.position = 0
         // See if these are lagging inputs when climbing
-        RobotScope.linkTableEntry("At Bottom", name) { atBottom }
-        RobotScope.linkTableEntry("At Top", name) { atTop }
-        RobotScope.linkTableEntry("Climber Position", name) { position }
+//        RobotScope.linkTableEntry("At Bottom", name) { atBottom }
+//        RobotScope.linkTableEntry("At Top", name) { atTop }
+//        RobotScope.linkTableEntry("Climber Position", name) { position }
+//        RobotScope.linkTableEntry("Contacting Rung", name) { contactingRung }
         ({ atBottom }).watch {
             RobotScope.whenTrue {
                 position = 0
