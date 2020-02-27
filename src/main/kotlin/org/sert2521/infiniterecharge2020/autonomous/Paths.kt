@@ -6,13 +6,10 @@ import kotlinx.coroutines.cancelAndJoin
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.sert2521.infiniterecharge2020.drivetrain.Drivetrain
-import org.sert2521.infiniterecharge2020.drivetrain.alignToBall
 import org.sert2521.infiniterecharge2020.drivetrain.runPath
 import org.sert2521.infiniterecharge2020.powerhouse.banish
 import org.sert2521.infiniterecharge2020.powerhouse.closeHouse
 import org.sert2521.infiniterecharge2020.powerhouse.welcome
-import org.sert2521.sertain.events.True
-import org.sert2521.sertain.events.onTick
 import org.sert2521.sertain.subsystems.doTask
 import org.sert2521.sertain.subsystems.use
 
@@ -66,8 +63,8 @@ suspend fun auto(startLocation: Pair<Pose2d, Rotation2d>, tasks: List<PathGenera
                     val welcomeJob = launch {
                         welcome()
                     }
-
-                    val trenchRunPath = pathGenerator.driveForward(6.7, false)
+                    // Distance can probably be bumped up further
+                    val trenchRunPath = pathGenerator.driveForward(7.0, false)
                     println(trenchRunPath.states)
                     runPath(drivetrain, trenchRunPath)
                     welcomeJob.cancel()
@@ -82,26 +79,33 @@ suspend fun auto(startLocation: Pair<Pose2d, Rotation2d>, tasks: List<PathGenera
                     welcomeJob.cancel()
                 }
 
-                PathGenerator.tasks.BALLS3 -> {
-                    val welcomeJob = launch {
-                        welcome()
-                    }
+//                PathGenerator.tasks.BALLS3 -> {
+//                    val welcomeJob = launch {
+//                        welcome()
+//                    }
+//
+//                    val alignJob = launch {
+//                        alignToBall(0.0)
+//                    }
+//                    onTick {
+//                        println(drivetrain.xTranslation)
+//                        // Robot takes around 0.87 meters to stop
+//                        // Value can be increased to potentially acquire a 4th ball
+//                        if (drivetrain.xTranslation < -6.825) {
+//                            println("I SHOULD BE STOPPING")
+//                            alignJob.cancel()
+//                            welcomeJob.cancel()
+//                        }
+//                    }
+//                }
 
-                    val alignJob = launch {
-                        alignToBall(0.0)
-                    }
-                    onTick {
-                        println(drivetrain.xTranslation)
-                        // Robot takes around 0.87 meters to stop
-                        // Value can be increased to potentially acquire a 4th ball
-                        if (drivetrain.xTranslation < -6.825) {
-                            println("I SHOULD BE STOPPING")
-                            alignJob.cancel()
-                            welcomeJob.cancel()
-                        }
-                    }
+                PathGenerator.tasks.AWAY_FROM_POWERPORT -> {
+                    val awayFromPowerPortPath = pathGenerator.awayFromPowerPort()
+                    println(awayFromPowerPortPath)
+                    runPath(drivetrain, awayFromPowerPortPath)
                 }
 
+                // Has not been tested on a real robot
                 PathGenerator.tasks.PUSHBACK -> {
                     val pushBackPath = pathGenerator.pushBack(0.30)
                     runPath(drivetrain, pushBackPath)
