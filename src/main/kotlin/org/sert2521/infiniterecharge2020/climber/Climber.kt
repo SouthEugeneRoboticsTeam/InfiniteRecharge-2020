@@ -25,7 +25,6 @@ class Climber : Subsystem("Climber") {
 
     val atBottom get() = !bottomLimitSwitch.get()
     val atTop get() = !topLimitSwitch.get()
-    // TODO: TEST TO GET CORRECT VALUES
     // Should return true when pushed back, false when not
     val contactingRung get() = rungLimitSwitch.get()
 
