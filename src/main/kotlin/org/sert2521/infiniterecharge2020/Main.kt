@@ -3,6 +3,8 @@ package org.sert2521.infiniterecharge2020
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import org.sert2521.infiniterecharge2020.autonomous.auto
+import org.sert2521.infiniterecharge2020.autonomous.handleAutoChooser
 import org.sert2521.infiniterecharge2020.climber.Climber
 import org.sert2521.infiniterecharge2020.drivetrain.Drivetrain
 import org.sert2521.infiniterecharge2020.drivetrain.practiceBotChooser
@@ -25,6 +27,8 @@ val vision = register<Vision>()
 
 suspend fun main() = robot {
     println("Robot program starting")
+
+    handleAutoChooser()
 
     onTeleop {
         openHouse()
@@ -53,6 +57,8 @@ suspend fun main() = robot {
 //                PathGenerator.Task.TRENCH_TO_CORNER,
 //                PathGenerator.Task.UNLOAD_FROM_CORNER
 //        )
+
+        auto.second()
     }
 
     launch {

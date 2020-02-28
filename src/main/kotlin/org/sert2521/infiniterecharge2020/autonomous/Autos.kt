@@ -2,7 +2,7 @@ package org.sert2521.infiniterecharge2020.autonomous
 
 import org.sert2521.infiniterecharge2020.drivetrain
 import org.sert2521.infiniterecharge2020.drivetrain.Drivetrain
-import org.sert2521.sertain.utils.timer
+import org.sert2521.infiniterecharge2020.drivetrain.runPath
 
 fun Drivetrain.setStartingPose(startingPose: StartingPose) {
     when (startingPose) {
@@ -16,22 +16,33 @@ fun Drivetrain.setStartingPose(startingPose: StartingPose) {
 }
 
 suspend fun driveForward() = drivetrain { drivetrain ->
-    timer(20, 0, 2000) {
-        drivetrain.tankDrive(0.2, 0.2)
-    }
+    val driveForward = PathGenerator.driveForward(0.5, false)
+    runPath(drivetrain, driveForward)
 }
 
 // Works from either Right Alliance or Center
-suspend fun initToPowerPortToTrench() = drivetrain { drivetrain ->
+suspend fun centerToPowerPortToTrench() = drivetrain { drivetrain ->
     drivetrain.setStartingPose(StartingPose.CENTER)
-    unloadFromPowerPort()
-    trenchToCorner()
-    welcome3()
+    unloadFromInit()
+    powerPortToCornerToTrench()
 }
 
-suspend fun initToLoadingStation() = drivetrain { drivetrain ->
+// Works from either Right Alliance or Center
+suspend fun rightToPowerPortToTrench() = drivetrain { drivetrain ->
+    drivetrain.setStartingPose(StartingPose.RIGHT_ALLIANCE)
+    unloadFromInit()
+    powerPortToCornerToTrench()
+}
+
+suspend fun centerToPowerPortToLoadingStation() = drivetrain { drivetrain ->
     drivetrain.setStartingPose(StartingPose.CENTER)
-    unloadFromPowerPort()
+    unloadFromInit()
+    powerPortToLoadingStation()
+}
+
+suspend fun rightToPowerPortToLoadingStation() = drivetrain { drivetrain ->
+    drivetrain.setStartingPose(StartingPose.RIGHT_ALLIANCE)
+    unloadFromInit()
     powerPortToLoadingStation()
 }
 
@@ -39,6 +50,6 @@ suspend fun initToLoadingStation() = drivetrain { drivetrain ->
 suspend fun rightTrenchToTrenchToPowerPort() = drivetrain { drivetrain ->
     drivetrain.setStartingPose(StartingPose.RIGHT_TRENCH)
     welcome2()
-    cornerToTrench()
+    trenchToCorner()
     unloadFromCorner()
 }

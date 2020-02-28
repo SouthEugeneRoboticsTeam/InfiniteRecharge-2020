@@ -104,7 +104,7 @@ import org.sert2521.sertain.events.onTick
 //    }
 //}
 
-suspend fun unloadFromPowerPort() = drivetrain { drivetrain ->
+suspend fun unloadFromInit() = drivetrain { drivetrain ->
     val toPowerPortPath = PathGenerator.initToPowerPort()
     println(toPowerPortPath.states)
     runPath(drivetrain, toPowerPortPath)
@@ -123,13 +123,7 @@ suspend fun unloadFromCorner() = drivetrain { drivetrain ->
     println(toPowerPortFromCornerPath.states)
     runPath(drivetrain, toPowerPortFromCornerPath)
 
-    val banishJob = launch {
-        banish()
-    }
-    // Run the outtake for 1.2 seconds
-    delay(2000)
-    banishJob.cancelAndJoin()
-    closeHouse()
+    banish()
 }
 
 suspend fun trenchToCorner() = drivetrain { drivetrain ->
@@ -138,37 +132,32 @@ suspend fun trenchToCorner() = drivetrain { drivetrain ->
     runPath(drivetrain, trenchToCorner)
 }
 
-suspend fun cornerToTrench() = drivetrain { drivetrain ->
-    val toTrenchFromPortPath = PathGenerator.powerPortToTrench()
-    println(toTrenchFromPortPath.states)
-    runPath(drivetrain, toTrenchFromPortPath)
+suspend fun powerPortToCornerToTrench() = drivetrain { drivetrain ->
+    val toCornerFromPortPath = PathGenerator.powerPortToCorner()
+    println(toCornerFromPortPath.states)
+    runPath(drivetrain, toCornerFromPortPath)
 
-    val trenchRunPath = PathGenerator.trenchRun(2.0)
+    val trenchRunPath = PathGenerator.driveForward(7.0, false)
     println(trenchRunPath.states)
-
+    welcome()
     runPath(drivetrain, trenchRunPath)
 }
 
 suspend fun powerPortToLoadingStation() = drivetrain { drivetrain ->
-    val toLoadingStation = PathGenerator.loadingStation()
+    val toLoadingStation = PathGenerator.awayFromPowerPort()
 
     println(toLoadingStation.states)
     runPath(drivetrain, toLoadingStation)
 }
 
-suspend fun welcome2() = drivetrain {
+suspend fun welcome2() = drivetrain { drivetrain ->
     val welcomeJob = launch {
         welcome()
     }
 
-    val alignJob = launch {
-        alignToBall(0.0)
-    }
-
-    // Stop using vision to pick up balls after the robot has driven into the trench for a certain time
-    delay(2600)
-    alignJob.cancel()
-    welcomeJob.cancel()
+    val ballPickupPath = PathGenerator.driveForward(3.75, true)
+    runPath(drivetrain, ballPickupPath)
+    welcomeJob.cancelAndJoin()
 }
 
 suspend fun welcome3() = drivetrain { drivetrain ->
