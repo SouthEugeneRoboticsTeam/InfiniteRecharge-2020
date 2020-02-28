@@ -2,8 +2,9 @@ package org.sert2521.infiniterecharge2020.climber
 
 import edu.wpi.first.wpilibj.DigitalInput
 import org.sert2521.infiniterecharge2020.MotorControllers
-import org.sert2521.infiniterecharge2020.Sensors.BOTTOM_LIMIT_SWITCH
-import org.sert2521.infiniterecharge2020.Sensors.TOP_LIMIT_SWITCH
+import org.sert2521.infiniterecharge2020.Sensors.CLIMBER_BOTTOM_LIMIT_SWITCH
+import org.sert2521.infiniterecharge2020.Sensors.CLIMBER_TOP_LIMIT_SWITCH
+import org.sert2521.infiniterecharge2020.Sensors.RUNG_LIMIT_SWTICH
 import org.sert2521.infiniterecharge2020.utils.linkTableEntry
 import org.sert2521.sertain.coroutines.RobotScope
 import org.sert2521.sertain.coroutines.watch
@@ -18,13 +19,14 @@ class Climber : Subsystem("Climber") {
             MotorControllers.winchFront, MotorControllers.winchRear
     )
 
-    // Ah. Now would be time to look away from the code (or at least not closely)
-    // TODO: FIX THESE INCREDIBLE NAMES CORUTSEY OF MOISEUR WILL.I.AM
-    val bottomLimitSwitch = DigitalInput(BOTTOM_LIMIT_SWITCH)
-    val topLimitSwitch = DigitalInput(TOP_LIMIT_SWITCH)
+    val bottomLimitSwitch = DigitalInput(CLIMBER_BOTTOM_LIMIT_SWITCH)
+    val topLimitSwitch = DigitalInput(CLIMBER_TOP_LIMIT_SWITCH)
+    val rungLimitSwitch = DigitalInput(RUNG_LIMIT_SWTICH)
 
     val atBottom get() = !bottomLimitSwitch.get()
     val atTop get() = !topLimitSwitch.get()
+    // Should return true when pushed back, false when not
+    val contactingRung get() = rungLimitSwitch.get()
 
     var position
         get() = liftMotor.position
@@ -40,6 +42,7 @@ class Climber : Subsystem("Climber") {
         RobotScope.linkTableEntry("At Bottom", name) { atBottom }
         RobotScope.linkTableEntry("At Top", name) { atTop }
         RobotScope.linkTableEntry("Climber Position", name) { position }
+        RobotScope.linkTableEntry("Contacting Rung", name) { contactingRung }
         ({ atBottom }).watch {
             RobotScope.whenTrue {
                 position = 0
@@ -55,19 +58,23 @@ class Climber : Subsystem("Climber") {
     fun climberLiftUp() {
         // The slowing down does not appear to be working. Investigate if time
         if (position > POSITION_AT_TOP - 1000) {
+            println("Encoder: $position, Going Up Half Speed")
             println("Slowing down going up")
             liftMotor.setPercentOutput(CLIMBER_LIFT_SPEED / 2)
         } else {
+            println("Encoder: $position, Going Up Normal Speed")
             liftMotor.setPercentOutput(CLIMBER_LIFT_SPEED)
         }
     }
 
     fun climberLiftDown() {
         // The slowing down does not appear to be working. Investigate if time
-        if (position < POSITION_AT_BOTTOM + 500) {
+        if (position < POSITION_AT_BOTTOM + 1000) {
+            println("Encoder: $position, Going Down Half Speed")
             println("Slowing down going down")
             liftMotor.setPercentOutput(-CLIMBER_LIFT_SPEED / 2)
         } else {
+            println("Encoder: $position, Going Down Normal Speed")
             liftMotor.setPercentOutput(-CLIMBER_LIFT_SPEED)
         }
     }
