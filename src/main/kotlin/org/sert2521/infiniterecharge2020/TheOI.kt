@@ -34,6 +34,7 @@ import org.sert2521.sertain.coroutines.watch
 import org.sert2521.sertain.subsystems.doTask
 import org.sert2521.sertain.subsystems.use
 import org.sert2521.sertain.telemetry.linkTableEntry
+import sun.tools.jstat.Operator
 
 object OI {
     enum class ControlMode {
@@ -75,7 +76,6 @@ object OI {
 }
 
 fun CoroutineScope.initControls() {
-
     // CLIMBER
     ({ secondaryJoystick.getRawButton(5) }).watch {
         whileTrue {

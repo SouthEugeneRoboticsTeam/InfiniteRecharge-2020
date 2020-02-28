@@ -3,6 +3,11 @@ package org.sert2521.infiniterecharge2020
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import org.sert2521.infiniterecharge2020.autonomous.auto
+import org.sert2521.infiniterecharge2020.autonomous.handleAutoChooser
+import org.sert2521.infiniterecharge2020.autonomous.objective1
+import org.sert2521.infiniterecharge2020.autonomous.objective2
+import org.sert2521.infiniterecharge2020.autonomous.startingPose
 import org.sert2521.infiniterecharge2020.climber.Climber
 import org.sert2521.infiniterecharge2020.colorwheelspinner.ColorWheelSpinner
 import org.sert2521.infiniterecharge2020.drivetrain.Drivetrain
@@ -24,6 +29,12 @@ suspend fun main() = robot {
     add<Climber>()
     add<PowerHouse>()
     add<ColorWheelSpinner>()
+
+    startingPose
+    objective1
+    objective2
+
+    handleAutoChooser()
 
     onTeleop {
         openHouse()
@@ -53,6 +64,7 @@ suspend fun main() = robot {
 //         Additional end options: PathGenerator.tasks.AWAY_FROM_POWERPORT
 //         Additional start option(untested): PathGenerator.tasks.PUSHBACK
 //         DO NOT USE BALLS3
+        auto.second()
     }
 
     launch {
