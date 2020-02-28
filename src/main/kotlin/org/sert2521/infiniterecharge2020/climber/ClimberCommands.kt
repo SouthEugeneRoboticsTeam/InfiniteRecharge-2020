@@ -14,7 +14,7 @@ suspend fun climberUp() = doTask {
         try {
             onTick {
                 if (!climber.atTop && climber.position < POSITION_AT_TOP) {
-                    climber.setOutput(CLIMBER_LIFT_SPEED)
+                    climber.climberLiftUp()
                 } else {
                     climber.climberStop()
                 }

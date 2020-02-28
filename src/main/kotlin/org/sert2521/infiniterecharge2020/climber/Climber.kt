@@ -52,17 +52,18 @@ class Climber : Subsystem("Climber") {
         }
     }
 
-    // TODO: Call this climberLiftUp
-    fun setOutput(output: Double) {
-        if (position > POSITION_AT_TOP - 500) {
+    fun climberLiftUp() {
+        // The slowing down does not appear to be working. Investigate if time
+        if (position > POSITION_AT_TOP - 1000) {
             println("Slowing down going up")
-            liftMotor.setPercentOutput(output / 2)
+            liftMotor.setPercentOutput(CLIMBER_LIFT_SPEED / 2)
         } else {
-            liftMotor.setPercentOutput(output)
+            liftMotor.setPercentOutput(CLIMBER_LIFT_SPEED)
         }
     }
 
     fun climberLiftDown() {
+        // The slowing down does not appear to be working. Investigate if time
         if (position < POSITION_AT_BOTTOM + 500) {
             println("Slowing down going down")
             liftMotor.setPercentOutput(-CLIMBER_LIFT_SPEED / 2)
