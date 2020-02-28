@@ -25,10 +25,6 @@ class PidfController2(config: PidfConfig, val dt: Double) {
     }
 }
 
-// So ktlint can be happy
-fun placeHolder() {
-}
-
 fun <T> CoroutineScope.linkTableEntry(name: String, parent: Table, get: () -> T) = run {
     val entry = TableEntry(name, get(), parent)
     onTick {
