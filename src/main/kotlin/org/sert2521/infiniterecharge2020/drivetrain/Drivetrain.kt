@@ -92,15 +92,15 @@ class Drivetrain : Subsystem("Drivetrain", ::controlDrivetrain) {
 
     init {
         zeroEncoders()
-        RobotScope.linkTableEntry("Right Position", name) { rightPosition }
-        RobotScope.linkTableEntry("Left Position", name) { leftPosition }
-        RobotScope.linkTableEntry("Right Velocity", name) { rightSpeed }
-        RobotScope.linkTableEntry("Left Velocity", name) { leftSpeed }
+//        RobotScope.linkTableEntry("Right Position", name) { rightPosition }
+//        RobotScope.linkTableEntry("Left Position", name) { leftPosition }
+//        RobotScope.linkTableEntry("Right Velocity", name) { rightSpeed }
+//        RobotScope.linkTableEntry("Left Velocity", name) { leftSpeed }
         RobotScope.linkTableEntry("Heading", name) { heading }
-
-        RobotScope.linkTableEntry("X Translation", name) { xTranslation }
-        RobotScope.linkTableEntry("Y Translation", name) { yTranslation }
-        RobotScope.linkTableEntry("Transformation Angle", name) { odometry.poseMeters.rotation.degrees }
+//
+//        RobotScope.linkTableEntry("X Translation", name) { xTranslation }
+//        RobotScope.linkTableEntry("Y Translation", name) { yTranslation }
+//        RobotScope.linkTableEntry("Transformation Angle", name) { odometry.poseMeters.rotation.degrees }
     }
 
     fun arcadeDrive(speed: Double, turn: Double) {

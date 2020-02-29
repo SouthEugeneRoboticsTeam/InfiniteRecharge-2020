@@ -3,13 +3,10 @@ package org.sert2521.infiniterecharge2020.colorwheelspinner
 import com.revrobotics.ColorMatch
 import com.revrobotics.ColorSensorV3
 import edu.wpi.first.wpilibj.DigitalInput
-import edu.wpi.first.wpilibj.DriverStation
 import edu.wpi.first.wpilibj.I2C
 import edu.wpi.first.wpilibj.util.Color
 import org.sert2521.infiniterecharge2020.MotorControllers
 import org.sert2521.infiniterecharge2020.Sensors.SPINNER_BOTTOM_LIMIT_SWITCH
-import org.sert2521.infiniterecharge2020.drivetrain.Drivetrain
-import org.sert2521.infiniterecharge2020.utils.linkTableEntry
 import org.sert2521.sertain.coroutines.RobotScope
 import org.sert2521.sertain.coroutines.watch
 import org.sert2521.sertain.motors.MotorController
@@ -63,11 +60,11 @@ class ColorWheelSpinner : Subsystem("ColorWheelSpinner") {
     init {
         configColorSensor()
         spinnerPosition = 0
-        RobotScope.linkTableEntry("Target Color", name) { frcColorToString[DriverStation.getInstance().gameSpecificMessage.first()] }
-        RobotScope.linkTableEntry("Sensed Color", name) { currentColor }
-        RobotScope.linkTableEntry("Spinner Position", name) { spinnerPosition }
-        RobotScope.linkTableEntry("Spinner at bottom", name) { spinnerAtBottom }
-        RobotScope.linkTableEntry("Color wheel slow mode engaged", name) { Drivetrain.slowAtColorWheel }
+//        RobotScope.linkTableEntry("Target Color", name) { frcColorToString[frcColor] }
+//        RobotScope.linkTableEntry("Sensed Color", name) { sensorColorToString[currentColor] }
+//        RobotScope.linkTableEntry("Spinner Position", name) { spinnerPosition }
+//        RobotScope.linkTableEntry("Spinner at bottom", name) { spinnerAtBottom }
+//        RobotScope.linkTableEntry("Color wheel slow mode engaged", name) { Drivetrain.slowAtColorWheel }
 
         // Reset spinner encoder to 0 when it hits the bottom limit switch
         ({ spinnerAtBottom }).watch {
@@ -76,12 +73,6 @@ class ColorWheelSpinner : Subsystem("ColorWheelSpinner") {
             }
         }
         // Slow driving after the spinner has raised above a certain point
-        // TEST TEST TEST TEST TEST TEST
-        ({ !spinnerAtBottom }).watch {
-            RobotScope.onChange {
-                Drivetrain.slowAtColorWheel = value
-            }
-        }
     }
 
     fun spin(value: Double) {

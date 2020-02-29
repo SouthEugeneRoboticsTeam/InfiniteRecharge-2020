@@ -21,6 +21,12 @@ suspend fun auto(startLocation: Pair<Pose2d, Rotation2d>, tasks: List<PathGenera
     action {
         tasks.forEach {
             when (it) {
+                PathGenerator.tasks.DRIVE_FORWARD -> {
+                    val driveForwardPath = pathGenerator.driveForward(1.0, false)
+                    println(driveForwardPath.states)
+                    runPath(drivetrain, driveForwardPath)
+                }
+
                 PathGenerator.tasks.UNLOAD_FROM_POWERPORT -> {
                     val toPowerPortPath = pathGenerator.initToPowerPort()
                     println(toPowerPortPath.states)

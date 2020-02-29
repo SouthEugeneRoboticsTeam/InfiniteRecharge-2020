@@ -48,10 +48,9 @@ fun getAuto(startingPose: StartingPose, objective1: Objective, objective2: Objec
         when (startingPose) {
             StartingPose.NO_AUTO -> "I find your lack of faith in our auto disturbing." to suspend {}
             StartingPose.DRIVE_FORWARD -> "" to suspend {
-
             }
             StartingPose.RIGHT_TRENCH ->
-                if (objective1 == Objective.TRENCH && objective2 == Objective.POWER_PORT){
+                if (objective1 == Objective.TRENCH && objective2 == Objective.POWER_PORT) {
                     "May the auto be with you." to suspend {
                         auto(PathGenerator.startlocation.RIGHT_TRENCH, listOf(
                                 PathGenerator.tasks.BALLS2,

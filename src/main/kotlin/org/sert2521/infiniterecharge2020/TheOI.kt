@@ -34,7 +34,6 @@ import org.sert2521.sertain.coroutines.watch
 import org.sert2521.sertain.subsystems.doTask
 import org.sert2521.sertain.subsystems.use
 import org.sert2521.sertain.telemetry.linkTableEntry
-import sun.tools.jstat.Operator
 
 object OI {
     enum class ControlMode {
@@ -96,7 +95,7 @@ fun CoroutineScope.initControls() {
         }
     }
     // Only for use in the pit
-    ({ secondaryJoystick.throttle == -1.0 && secondaryJoystick.getRawButton(6) }).watch {
+    ({ secondaryJoystick.throttle == -1.0 && secondaryJoystick.getRawButton(13) }).watch {
         whileTrue {
             println("Reversing the winch")
             reverseRunWinch()

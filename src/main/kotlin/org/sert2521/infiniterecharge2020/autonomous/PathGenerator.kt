@@ -27,7 +27,7 @@ class PathGenerator {
 
     enum class tasks {
         CORNER_TO_TRENCH, BALLS2, PUSHBACK, TRENCH_TO_CORNER, UNLOAD_FROM_CORNER,
-        UNLOAD_FROM_POWERPORT, AWAY_FROM_POWERPORT
+        UNLOAD_FROM_POWERPORT, AWAY_FROM_POWERPORT, DRIVE_FORWARD
     }
 
     // Drives the robot straight backwards for given distance.

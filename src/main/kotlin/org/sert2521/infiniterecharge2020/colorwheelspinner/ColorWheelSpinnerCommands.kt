@@ -12,11 +12,8 @@ suspend fun extend() = doTask {
     action {
         try {
             periodic(20) {
-                if (colorWheelSpinner.spinnerPosition <= SPINNER_AT_TOP) {
+                    println("Attempting to go up")
                     colorWheelSpinner.spin(EXTEND_SPEED)
-                } else {
-                    colorWheelSpinner.stop()
-                }
             }
         } finally {
             colorWheelSpinner.stop()
