@@ -75,8 +75,8 @@ suspend fun main() = robot {
         delay(1000)
         SmartDashboard.putData("Control Mode", OI.controlModeChooser)
         SmartDashboard.putData("Robot Type", practiceBotChooser)
-        val camera = CameraServer.getInstance().startAutomaticCapture()
-        camera.setResolution(640, 360)
+//        val camera = CameraServer.getInstance().startAutomaticCapture()
+//        camera.setResolution(640, 360)
         onTick {
             SmartDashboard.updateValues()
         }
