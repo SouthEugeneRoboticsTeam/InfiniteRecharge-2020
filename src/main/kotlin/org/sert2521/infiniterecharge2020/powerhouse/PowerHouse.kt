@@ -5,7 +5,6 @@ import org.sert2521.infiniterecharge2020.MotorControllers
 import org.sert2521.infiniterecharge2020.MotorControllers.rollerRight
 import org.sert2521.infiniterecharge2020.Sensors.CLOSE_SWITCH
 import org.sert2521.infiniterecharge2020.Sensors.OPEN_SWITCH
-import org.sert2521.infiniterecharge2020.utils.linkTableEntry
 import org.sert2521.sertain.coroutines.RobotScope
 import org.sert2521.sertain.motors.MotorController
 import org.sert2521.sertain.subsystems.Subsystem
@@ -36,8 +35,8 @@ class PowerHouse : Subsystem("PowerHouse") {
     private var rollerRunning = false
 
     init {
-        RobotScope.linkTableEntry("Flap Closed", name) { flapClosed }
-        RobotScope.linkTableEntry("Flap Open", name) { flapOpen }
+//        RobotScope.linkTableEntry("Flap Closed", name) { flapClosed }
+//        RobotScope.linkTableEntry("Flap Open", name) { flapOpen }
     }
 
     fun spin() {

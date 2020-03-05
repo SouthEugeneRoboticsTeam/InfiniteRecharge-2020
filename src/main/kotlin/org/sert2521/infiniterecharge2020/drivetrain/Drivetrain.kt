@@ -7,7 +7,6 @@ import edu.wpi.first.wpilibj.geometry.Rotation2d
 import edu.wpi.first.wpilibj.kinematics.DifferentialDriveOdometry
 import kotlin.math.IEEErem
 import org.sert2521.infiniterecharge2020.MotorControllers
-import org.sert2521.infiniterecharge2020.utils.linkTableEntry
 import org.sert2521.sertain.coroutines.RobotScope
 import org.sert2521.sertain.events.onTick
 import org.sert2521.sertain.motors.MotorController
@@ -96,7 +95,7 @@ class Drivetrain : Subsystem("Drivetrain", ::controlDrivetrain) {
 //        RobotScope.linkTableEntry("Left Position", name) { leftPosition }
 //        RobotScope.linkTableEntry("Right Velocity", name) { rightSpeed }
 //        RobotScope.linkTableEntry("Left Velocity", name) { leftSpeed }
-        RobotScope.linkTableEntry("Heading", name) { heading }
+//        RobotScope.linkTableEntry("Heading", name) { heading }
 //
 //        RobotScope.linkTableEntry("X Translation", name) { xTranslation }
 //        RobotScope.linkTableEntry("Y Translation", name) { yTranslation }
