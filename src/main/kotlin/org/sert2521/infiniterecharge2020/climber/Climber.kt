@@ -5,11 +5,11 @@ import org.sert2521.infiniterecharge2020.MotorControllers
 import org.sert2521.infiniterecharge2020.Sensors.CLIMBER_BOTTOM_LIMIT_SWITCH
 import org.sert2521.infiniterecharge2020.Sensors.CLIMBER_TOP_LIMIT_SWITCH
 import org.sert2521.infiniterecharge2020.Sensors.RUNG_LIMIT_SWTICH
+import org.sert2521.infiniterecharge2020.utils.linkTableEntry
 import org.sert2521.sertain.coroutines.RobotScope
 import org.sert2521.sertain.coroutines.watch
 import org.sert2521.sertain.motors.MotorController
 import org.sert2521.sertain.subsystems.Subsystem
-import org.sert2521.sertain.telemetry.linkTableEntry
 
 class Climber : Subsystem("Climber") {
     private val liftMotor = MotorController(
