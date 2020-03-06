@@ -5,6 +5,7 @@ import org.sert2521.infiniterecharge2020.MotorControllers
 import org.sert2521.infiniterecharge2020.Sensors.CLIMBER_BOTTOM_LIMIT_SWITCH
 import org.sert2521.infiniterecharge2020.Sensors.CLIMBER_TOP_LIMIT_SWITCH
 import org.sert2521.infiniterecharge2020.Sensors.RUNG_LIMIT_SWTICH
+import org.sert2521.infiniterecharge2020.utils.linkTableEntry
 import org.sert2521.sertain.coroutines.RobotScope
 import org.sert2521.sertain.coroutines.watch
 import org.sert2521.sertain.motors.MotorController
@@ -38,10 +39,10 @@ class Climber : Subsystem("Climber") {
     init {
         liftMotor.position = 0
         // See if these are lagging inputs when climbing
-//        RobotScope.linkTableEntry("At Bottom", name) { atBottom }
-//        RobotScope.linkTableEntry("At Top", name) { atTop }
-//        RobotScope.linkTableEntry("Climber Position", name) { position }
-//        RobotScope.linkTableEntry("Contacting Rung", name) { contactingRung }
+        RobotScope.linkTableEntry("At Bottom", name) { atBottom }
+        RobotScope.linkTableEntry("At Top", name) { atTop }
+        RobotScope.linkTableEntry("Climber Position", name) { position }
+        RobotScope.linkTableEntry("Contacting Rung", name) { contactingRung }
         ({ atBottom }).watch {
             RobotScope.whenTrue {
                 position = 0
@@ -55,8 +56,7 @@ class Climber : Subsystem("Climber") {
     }
 
     fun climberLiftUp() {
-        // The slowing down does not appear to be working. Investigate if time
-        if (position > POSITION_AT_TOP - 1000) {
+        if (position > POSITION_AT_TOP - 5000) {
             println("Encoder: $position, Going Up Half Speed")
             println("Slowing down going up")
             liftMotor.setPercentOutput(CLIMBER_LIFT_SPEED / 2)
@@ -67,13 +67,12 @@ class Climber : Subsystem("Climber") {
     }
 
     fun climberLiftDown() {
-        // The slowing down does not appear to be working. Investigate if time
-        if (position < POSITION_AT_BOTTOM + 1000) {
-            println("Encoder: $position, Going Down Half Speed")
-            println("Slowing down going down")
-            liftMotor.setPercentOutput(-CLIMBER_LIFT_SPEED / 2)
+        if (position < POSITION_AT_BOTTOM + 5000) {
+            println("Encoder: $position, Going Up Half Speed")
+            println("Slowing down going up")
+            liftMotor.setPercentOutput(-CLIMBER_LIFT_SPEED / 4)
         } else {
-            println("Encoder: $position, Going Down Normal Speed")
+            println("Encoder: $position, Going Up Normal Speed")
             liftMotor.setPercentOutput(-CLIMBER_LIFT_SPEED)
         }
     }

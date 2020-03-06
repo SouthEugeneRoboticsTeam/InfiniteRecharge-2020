@@ -24,3 +24,17 @@ class PidfController2(config: PidfConfig, val dt: Double) {
         return (kp * error) + (ki * integral) + (kd * derivative) + (kf * sign(error))
     }
 }
+
+fun <T> CoroutineScope.linkTableEntry(name: String, parent: Table, get: () -> T) = run {
+    val entry = TableEntry(name, get(), parent)
+    onTick {
+        entry.value = get()
+    }
+}
+
+fun <T> CoroutineScope.linkTableEntry(name: String, vararg location: String, get: () -> T) = run {
+    val entry = TableEntry(name, get(), *location)
+    onTick {
+        entry.value = get()
+    }
+}
