@@ -113,16 +113,16 @@ class Drivetrain : Subsystem("Drivetrain", ::controlDrivetrain) {
 
     fun tankDrive(leftSpeed: Double, rightSpeed: Double) {
         if (slowMode.value) {
-            leftDrive.setPercentOutput(leftSpeed / 2)
-            rightDrive.setPercentOutput(rightSpeed / 2)
+            //leftDrive.setPercentOutput(leftSpeed / 2)
+            //rightDrive.setPercentOutput(rightSpeed / 2)
         }
-        leftDrive.setPercentOutput(leftSpeed)
-        rightDrive.setPercentOutput(rightSpeed)
+        //leftDrive.setPercentOutput(leftSpeed)
+        //rightDrive.setPercentOutput(rightSpeed)
     }
 
     fun setTargetSpeed(leftSpeed: Int, rightSpeed: Int = leftSpeed) {
-        leftDrive.ctreMotorController.set(ControlMode.Velocity, leftSpeed.toDouble())
-        rightDrive.ctreMotorController.set(ControlMode.Velocity, rightSpeed.toDouble())
+        //leftDrive.ctreMotorController.set(ControlMode.Velocity, leftSpeed.toDouble())
+        //rightDrive.ctreMotorController.set(ControlMode.Velocity, rightSpeed.toDouble())
     }
 
     val leftSpeedSetpoint = TableEntry("LeftSpeedSetpoint", 0, "Drivetrain")
