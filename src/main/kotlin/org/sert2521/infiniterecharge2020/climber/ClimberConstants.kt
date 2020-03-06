@@ -5,4 +5,4 @@ const val WINCH_UNWIND_SPEED = -0.2
 // ~2000 ticks higher than the actual bottom position so that we don't accidentally break anything
 const val POSITION_AT_BOTTOM = 2000
 // Approx. value read when the climber hits the top limit switch
-const val POSITION_AT_TOP = 30000 // 24000 for BB-11
+const val POSITION_AT_TOP = 30000 // 25000 for BB-11

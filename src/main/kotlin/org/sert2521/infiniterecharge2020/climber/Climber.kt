@@ -59,7 +59,7 @@ class Climber : Subsystem("Climber") {
         if (position > POSITION_AT_TOP - 5000) {
             println("Encoder: $position, Going Up Half Speed")
             println("Slowing down going up")
-            liftMotor.setPercentOutput(CLIMBER_LIFT_SPEED / 4)
+            liftMotor.setPercentOutput(CLIMBER_LIFT_SPEED / 2)
         } else {
             println("Encoder: $position, Going Up Normal Speed")
             liftMotor.setPercentOutput(CLIMBER_LIFT_SPEED)

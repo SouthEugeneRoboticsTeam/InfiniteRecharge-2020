@@ -1,11 +1,11 @@
 package org.sert2521.infiniterecharge2020.utils
 
+import kotlin.math.sign
 import kotlinx.coroutines.CoroutineScope
 import org.sert2521.sertain.control.PidfConfig
 import org.sert2521.sertain.events.onTick
 import org.sert2521.sertain.telemetry.Table
 import org.sert2521.sertain.telemetry.TableEntry
-import kotlin.math.sign
 
 class PidfController2(config: PidfConfig, val dt: Double) {
     private val kp = config.kp ?: 0.0
