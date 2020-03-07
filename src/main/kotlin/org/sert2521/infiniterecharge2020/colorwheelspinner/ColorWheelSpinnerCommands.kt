@@ -3,95 +3,82 @@ package org.sert2521.infiniterecharge2020.colorwheelspinner
 import edu.wpi.first.wpilibj.DriverStation
 import edu.wpi.first.wpilibj.util.Color
 import kotlinx.coroutines.cancel
+import org.sert2521.infiniterecharge2020.colorWheelSpinner
 import org.sert2521.sertain.coroutines.periodic
-import org.sert2521.sertain.subsystems.doTask
-import org.sert2521.sertain.subsystems.use
 
-suspend fun extend() = doTask {
-    val colorWheelSpinner = use<ColorWheelSpinner>()
-    action {
-        try {
-            periodic(20) {
-                    println("Attempting to go up")
-                    colorWheelSpinner.spin(EXTEND_SPEED)
-            }
-        } finally {
-            colorWheelSpinner.stop()
+suspend fun extend() = colorWheelSpinner { colorWheelSpinner ->
+    try {
+        periodic(20) {
+                println("Attempting to go up")
+                colorWheelSpinner.spin(EXTEND_SPEED)
         }
+    } finally {
+        colorWheelSpinner.stop()
     }
 }
 
-suspend fun retract() = doTask {
-    val colorWheelSpinner = use<ColorWheelSpinner>()
+suspend fun retract() = colorWheelSpinner { colorWheelSpinner ->
     val startTime = System.currentTimeMillis()
-    action {
-        try {
-            periodic(20) {
-                if (!colorWheelSpinner.spinnerAtBottom) {
-                    var currentTime = System.currentTimeMillis()
-                    if (currentTime - startTime > 500) {
-                        colorWheelSpinner.spin(-EXTEND_SPEED)
-                    } else {
-                        colorWheelSpinner.spin(-EXTEND_SPEED / 2)
-                    }
+    try {
+        periodic(20) {
+            if (!colorWheelSpinner.spinnerAtBottom) {
+                var currentTime = System.currentTimeMillis()
+                if (currentTime - startTime > 500) {
+                    colorWheelSpinner.spin(-EXTEND_SPEED)
                 } else {
-                    colorWheelSpinner.stop()
+                    colorWheelSpinner.spin(-EXTEND_SPEED / 2)
                 }
+            } else {
+                colorWheelSpinner.stop()
             }
-        } finally {
-            colorWheelSpinner.stop()
         }
+    } finally {
+        colorWheelSpinner.stop()
     }
 }
 
-suspend fun spinToColor() = doTask {
-    val colorWheelSpinner = use<ColorWheelSpinner>()
+suspend fun spinToColor() = colorWheelSpinner { colorWheelSpinner ->
     // Get color to spin to from the FMS
     val frcColor: Char = DriverStation.getInstance().gameSpecificMessage.first() ?: 'Z'
     if (frcColor in ((listOf('R', 'G', 'B', 'Y')))) {
         println("Attempting Position Control to color: $frcColor")
-        val targetColor = frcColorToTargetColor[frcColor] ?: return@doTask
+        val targetColor = frcColorToTargetColor[frcColor] ?: return@colorWheelSpinner
 
-        action {
-            try {
-                periodic(20) {
-                    val color = colorWheelSpinner.currentColor
-                    if (color == targetColor) {
-                        this@action.cancel()
-                    }
-                    colorWheelSpinner.spin(SPIN_SPEED)
-                }
-            } finally {
-                colorWheelSpinner.stop()
-            }
-        }
-    }
-}
-
-suspend fun spinForColors() = doTask {
-    val colorWheelSpinner = use<ColorWheelSpinner>()
-    action {
-        println("Starting")
-        var triangleSpins = 0
-        var pastColor: Color = Color.kWhite
         try {
             periodic(20) {
-                val sensorColor = colorWheelSpinner.currentColor
-                if (sensorColor != pastColor) {
-                    pastColor = sensorColor
-                    triangleSpins++
+                val color = colorWheelSpinner.currentColor
+                if (color == targetColor) {
+                    cancel()
                 }
-                if (triangleSpins >= NUM_TRIANGLES) {
-                    this@action.cancel()
-                }
-                pastColor = sensorColor
-                println("Color : ${sensorColorToString[sensorColor]}")
-                println("Num colors counted : $triangleSpins")
                 colorWheelSpinner.spin(SPIN_SPEED)
             }
         } finally {
             colorWheelSpinner.stop()
         }
+    }
+}
+
+suspend fun spinForColors() = colorWheelSpinner { colorWheelSpinner ->
+    println("Starting")
+    var triangleSpins = 0
+    var pastColor: Color = Color.kWhite
+    try {
+        periodic(20) {
+            val sensorColor = colorWheelSpinner.currentColor
+            if (sensorColor != pastColor) {
+                pastColor = sensorColor
+                triangleSpins++
+            }
+            if (triangleSpins >= NUM_TRIANGLES) {
+                cancel()
+            }
+            pastColor = sensorColor
+            println("Color : ${sensorColorToString[sensorColor]}")
+            println("Num colors counted : $triangleSpins")
+            colorWheelSpinner.spin(SPIN_SPEED)
+        }
+    } finally {
+        colorWheelSpinner.stop()
     }
 }
 
