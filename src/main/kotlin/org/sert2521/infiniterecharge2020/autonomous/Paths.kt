@@ -62,7 +62,7 @@ suspend fun auto(startLocation: Pair<Pose2d, Rotation2d>, tasks: List<PathGenera
                 }
 
                 PathGenerator.tasks.CORNER_TO_TRENCH -> {
-                    val toTrenchFromPortPath = pathGenerator.powerPortToTrench()
+                    val toTrenchFromPortPath = pathGenerator.powerPortToCorner()
                     println(toTrenchFromPortPath.states)
                     runPath(drivetrain, toTrenchFromPortPath)
 
