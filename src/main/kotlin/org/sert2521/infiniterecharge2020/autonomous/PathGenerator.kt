@@ -18,6 +18,8 @@ class PathGenerator {
     object startlocation {
         // Facing the Alliance Station. ~2.2 meters from power port | Aligned with line marking trench boundary
         val RIGHT_ALLIANCE = Pair(Pose2d(-2.2, -1.32, Rotation2d(0.0)), Rotation2d(0.0))
+        // Facing the Alliance Station. ~2.2 meters from power port | Aligned with line marking trench boundary
+        val LEFT_ALLIANCE = Pair(Pose2d(-2.143, 3.3, Rotation2d(0.0)), Rotation2d(0.0))
         // Facing the Trench. Balls aligned to center of robot | Edge of bumpers contacting initiation line
         // Increase x to make robot go further
         val RIGHT_TRENCH = Pair(Pose2d(3.2, 1.2264, Rotation2d(0.0)), Rotation2d(0.0))
@@ -26,7 +28,7 @@ class PathGenerator {
     }
 
     enum class tasks {
-        CORNER_TO_TRENCH, BALLS2, PUSHBACK, TRENCH_TO_CORNER, UNLOAD_FROM_CORNER,
+        CORNER_TO_TRENCH, BALLS2, TRENCH_TO_CORNER, UNLOAD_FROM_CORNER,
         UNLOAD_FROM_POWERPORT, AWAY_FROM_POWERPORT, DRIVE_FORWARD
     }
 

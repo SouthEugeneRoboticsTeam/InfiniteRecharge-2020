@@ -13,16 +13,21 @@ import org.sert2521.infiniterecharge2020.powerhouse.welcome
 import org.sert2521.sertain.subsystems.doTask
 import org.sert2521.sertain.subsystems.use
 
-suspend fun auto(startLocation: Pair<Pose2d, Rotation2d>, tasks: List<PathGenerator.tasks>) = doTask {
+suspend fun auto(startLocation: Pair<Pose2d, Rotation2d>, tasks: List<PathGenerator.tasks>, pushback: Boolean) = doTask {
     val drivetrain = use<Drivetrain>()
     val pathGenerator = PathGenerator()
     drivetrain.odometry.resetPosition(startLocation.first, startLocation.second)
 
     action {
+        if (pushback){
+            // Has not been tested on a real robot
+            val pushBackPath = pathGenerator.pushBack(0.30)
+            runPath(drivetrain, pushBackPath)
+        }
         tasks.forEach {
             when (it) {
                 PathGenerator.tasks.DRIVE_FORWARD -> {
-                    val driveForwardPath = pathGenerator.driveForward(1.0, false)
+                    val driveForwardPath = pathGenerator.driveForward(1.0, true)
                     println(driveForwardPath.states)
                     runPath(drivetrain, driveForwardPath)
                 }
@@ -109,12 +114,6 @@ suspend fun auto(startLocation: Pair<Pose2d, Rotation2d>, tasks: List<PathGenera
                     val awayFromPowerPortPath = pathGenerator.awayFromPowerPort()
                     println(awayFromPowerPortPath)
                     runPath(drivetrain, awayFromPowerPortPath)
-                }
-
-                // Has not been tested on a real robot
-                PathGenerator.tasks.PUSHBACK -> {
-                    val pushBackPath = pathGenerator.pushBack(0.30)
-                    runPath(drivetrain, pushBackPath)
                 }
             }
         }
