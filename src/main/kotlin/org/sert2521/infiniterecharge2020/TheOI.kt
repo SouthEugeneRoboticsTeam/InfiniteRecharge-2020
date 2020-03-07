@@ -48,7 +48,6 @@ object OI {
 
     val controlMode get() = controlModeChooser.selected ?: ControlMode.CONTROLLER
 
-
     init {
         RobotScope.linkTableEntry("Control Mode", "OI") { controlMode.name }
     }
