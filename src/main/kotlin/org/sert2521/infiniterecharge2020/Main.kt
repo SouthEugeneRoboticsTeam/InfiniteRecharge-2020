@@ -3,7 +3,11 @@ package org.sert2521.infiniterecharge2020
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import org.sert2521.infiniterecharge2020.autonomous.*
+import org.sert2521.infiniterecharge2020.autonomous.auto
+import org.sert2521.infiniterecharge2020.autonomous.handleAutoChooser
+import org.sert2521.infiniterecharge2020.autonomous.objective1
+import org.sert2521.infiniterecharge2020.autonomous.objective2
+import org.sert2521.infiniterecharge2020.autonomous.startingPose
 import org.sert2521.infiniterecharge2020.climber.Climber
 import org.sert2521.infiniterecharge2020.colorwheelspinner.ColorWheelSpinner
 import org.sert2521.infiniterecharge2020.drivetrain.Drivetrain
@@ -46,24 +50,7 @@ suspend fun main() = robot {
         val dt = access<Drivetrain>()
         dt.gyro.reset()
         dt.zeroEncoders()
-
-        // BORKED
-//        auto(PathGenerator.startlocation.CENTER, listOf(PathGenerator.tasks.DRIVE_FORWARD))
-//         3 ball auto with 3 ball trench pickup
-//        auto(PathGenerator.startlocation.CENTER, listOf(
-//                PathGenerator.tasks.UNLOAD_FROM_POWERPORT))
-        // 5 ball auto
-//        auto(PathGenerator.startlocation.RIGHT_TRENCH, listOf(PathGenerator.tasks.BALLS2,
-//                PathGenerator.tasks.TRENCH_TO_CORNER,
-//                PathGenerator.tasks.UNLOAD_FROM_CORNER))        auto(PathGenerator.startlocation.RIGHT_TRENCH, listOf(PathGenerator.tasks.BALLS2,
-//                PathGenerator.tasks.TRENCH_TO_CORNER,
-//                PathGenerator.tasks.UNLOAD_FROM_CORNER))
-        // 3 ball auto from right side.
-//        auto(PathGenerator.startlocation.RIGHT_ALLIANCE, listOf(PathGenerator.tasks.UNLOAD_FROM_POWERPORT))
-
-//         Additional end options: PathGenerator.tasks.AWAY_FROM_POWERPORT
-//         Additional start option(untested): PathGenerator.tasks.PUSHBACK
-//         DO NOT USE BALLS3
+        // Build and run the selected auto paths
         auto.second()
     }
 
@@ -71,27 +58,8 @@ suspend fun main() = robot {
         delay(1000)
         SmartDashboard.putData("Control Mode", OI.controlModeChooser)
         SmartDashboard.putData("Robot Type", practiceBotChooser)
-//        val camera = CameraServer.getInstance().startAutomaticCapture()
-//        camera.setResolution(640, 360)
         onTick {
             SmartDashboard.updateValues()
         }
     }
-
-//    GlobalScope.launch(RobotDispatcher) {
-//        periodic(20, 0) {
-//            var rootGroup = Thread.currentThread().threadGroup
-//            var parentGroup: ThreadGroup
-//            while (rootGroup.parent.also { parentGroup = it } != null) {
-//                rootGroup = parentGroup
-//            }
-//
-//            var threads = arrayOfNulls<Thread>(rootGroup.activeCount())
-//            while (rootGroup.enumerate(threads, true) == threads.size) {
-//                threads = arrayOfNulls(threads.size * 2)
-//            }
-//
-//            println("NumThreads: ${threads.size}")
-//        }
-//    }
 }

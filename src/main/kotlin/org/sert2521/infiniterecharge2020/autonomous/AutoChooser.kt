@@ -10,6 +10,7 @@ var auto = getAuto(StartingPose.NO_AUTO, Objective.NONE, Objective.NONE)
 
 val autoMessage = TableEntry("Auto", auto.first, "Auto")
 val pushBack = TableEntry("Pushback", false)
+val delay = TableEntry("Auto Delay (milliseconds)", 0.0)
 
 enum class StartingPose {
     NO_AUTO,
@@ -49,70 +50,87 @@ val objective2 = dropdown("Objective 2", "None" gives Objective.NONE) {
 fun getAuto(startingPose: StartingPose, objective1: Objective, objective2: Objective): Pair<String, suspend () -> Unit> =
         when (startingPose) {
             StartingPose.NO_AUTO -> "I find your lack of faith in our auto disturbing." to suspend {}
-            StartingPose.DRIVE_FORWARD -> "Strait? #watergameconfirmed" to suspend { auto(PathGenerator.startlocation.CENTER, listOf(PathGenerator.tasks.DRIVE_FORWARD), pushBack.value) }
+            StartingPose.DRIVE_FORWARD -> "Strait? #watergameconfirmed" to suspend { auto(PathGenerator.startlocation.CENTER, listOf(PathGenerator.tasks.DRIVE_FORWARD), pushBack.value, delay.value) }
             StartingPose.RIGHT_TRENCH ->
                 if (objective1 == Objective.TRENCH && objective2 == Objective.POWER_PORT) {
                     "May the auto be with you." to suspend {
                         auto(PathGenerator.startlocation.RIGHT_TRENCH, listOf(
-                                PathGenerator.tasks.BALLS2,
+                                PathGenerator.tasks.TWO_BALL_TRENCH_PICKUP,
                                 PathGenerator.tasks.TRENCH_TO_CORNER,
                                 PathGenerator.tasks.UNLOAD_FROM_CORNER
-                        ), pushBack.value)
+                        ), pushBack.value, delay.value)
                     }
                 } else {
                     "ERR: Millennium Carwash, you know better than to trust a strange auto." to suspend {}
                 }
             StartingPose.RIGHT_ALLIANCE ->
                 if (objective1 == Objective.POWER_PORT && objective2 == Objective.TRENCH) {
-                    "May the auto be with you." to suspend {
+                    "May the auto be with you. (Right->PP->Trench)" to suspend {
                         auto(PathGenerator.startlocation.RIGHT_ALLIANCE, listOf(
-                                PathGenerator.tasks.UNLOAD_FROM_POWERPORT,
-                                PathGenerator.tasks.CORNER_TO_TRENCH
-                        ), pushBack.value)
+                                PathGenerator.tasks.UNLOAD_FROM_INIT,
+                                PathGenerator.tasks.POWERPORT_TO_CORNER_TO_TRENCH
+                        ), pushBack.value, delay.value)
                     }
                 } else if (objective1 == Objective.POWER_PORT && objective2 == Objective.LOADING_STATION) {
-                    "There's no mystical code that controls my auto." to suspend {
+                    "There's no mystical code that controls my auto. (Right->PP->Loading Station)" to suspend {
                         auto(PathGenerator.startlocation.RIGHT_ALLIANCE, listOf(
-                                PathGenerator.tasks.UNLOAD_FROM_POWERPORT,
+                                PathGenerator.tasks.UNLOAD_FROM_INIT,
                                 PathGenerator.tasks.AWAY_FROM_POWERPORT
-                        ), pushBack.value)
+                        ), pushBack.value, delay.value)
+                    }
+                } else if (objective1 == Objective.POWER_PORT && objective2 == Objective.LOADING_STATION) {
+                    "I am the GDC (Right->PP)" to suspend {
+                        auto(PathGenerator.startlocation.RIGHT_ALLIANCE, listOf(
+                                PathGenerator.tasks.UNLOAD_FROM_INIT
+                        ), pushBack.value, delay.value)
                     }
                 } else {
                     "ERR: The auto you seek is not behind you... it is ahead." to suspend {}
                 }
             StartingPose.CENTER -> if (objective1 == Objective.POWER_PORT && objective2 == Objective.TRENCH) {
-                "Try spinning, that's a good trick!" to suspend {
+                "Try spinning, that's a good trick! (Center->PP->Trench)" to suspend {
                     auto(PathGenerator.startlocation.CENTER, listOf(
-                            PathGenerator.tasks.UNLOAD_FROM_POWERPORT,
-                            PathGenerator.tasks.CORNER_TO_TRENCH
-                    ), pushBack.value)
+                            PathGenerator.tasks.UNLOAD_FROM_INIT,
+                            PathGenerator.tasks.POWERPORT_TO_CORNER_TO_TRENCH
+                    ), pushBack.value, delay.value)
                 }
             } else if (objective1 == Objective.POWER_PORT && objective2 == Objective.LOADING_STATION) {
-                "There's no mystical code that controls my auto." to suspend {
+                "There's no mystical code that controls my auto. (Center->PP->Loading Station)" to suspend {
                     auto(PathGenerator.startlocation.CENTER, listOf(
-                            PathGenerator.tasks.UNLOAD_FROM_POWERPORT,
+                            PathGenerator.tasks.UNLOAD_FROM_INIT,
                             PathGenerator.tasks.AWAY_FROM_POWERPORT
-                    ), pushBack.value)
+                    ), pushBack.value, delay.value)
+                }
+            } else if (objective1 == Objective.POWER_PORT && objective2 == Objective.NONE) {
+                "Hello There! (Center->PP)" to suspend {
+                    auto(PathGenerator.startlocation.CENTER, listOf(
+                            PathGenerator.tasks.UNLOAD_FROM_INIT), pushBack.value, delay.value)
                 }
             } else {
                 "ERR: The auto you seek is not behind you... it is ahead." to suspend {}
             }
             StartingPose.LEFT_ALLIANCE -> if (objective1 == Objective.POWER_PORT && objective2 == Objective.TRENCH) {
-                "Punch it Chewy" to suspend {
+                "Punch it Chewy. (Left->PP->Trench)" to suspend {
                     auto(PathGenerator.startlocation.LEFT_ALLIANCE, listOf(
-                            PathGenerator.tasks.UNLOAD_FROM_POWERPORT,
-                            PathGenerator.tasks.CORNER_TO_TRENCH
-                    ), pushBack.value)
+                            PathGenerator.tasks.UNLOAD_FROM_INIT,
+                            PathGenerator.tasks.POWERPORT_TO_CORNER_TO_TRENCH
+                    ), pushBack.value, delay.value)
                 }
             } else if (objective1 == Objective.POWER_PORT && objective2 == Objective.LOADING_STATION) {
-                "Never tell me the odds!" to suspend {
+                "Never tell me the odds! (Left->PP->Loading Station)" to suspend {
                     auto(PathGenerator.startlocation.LEFT_ALLIANCE, listOf(
-                            PathGenerator.tasks.UNLOAD_FROM_POWERPORT,
+                            PathGenerator.tasks.UNLOAD_FROM_INIT,
                             PathGenerator.tasks.AWAY_FROM_POWERPORT
-                    ), pushBack.value)
+                    ), pushBack.value, delay.value)
+                }
+            } else if (objective1 == Objective.POWER_PORT && objective2 == Objective.NONE) {
+                "I don't like sand... (LEFT->PP)" to suspend {
+                    auto(PathGenerator.startlocation.LEFT_ALLIANCE, listOf(
+                            PathGenerator.tasks.UNLOAD_FROM_INIT
+                    ), pushBack.value, delay.value)
                 }
             } else {
-                "ERR: Auto or auto not there is no try." to suspend {}
+                "ERR: Auto or auto not there is no try. (Path doesn't exist)" to suspend {}
             }
         }
 
