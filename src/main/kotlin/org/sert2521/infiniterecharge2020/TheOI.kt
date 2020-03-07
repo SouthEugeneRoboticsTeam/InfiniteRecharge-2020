@@ -1,6 +1,5 @@
 package org.sert2521.infiniterecharge2020
 
-import edu.wpi.first.networktables.NetworkTableInstance
 import edu.wpi.first.wpilibj.Joystick
 import edu.wpi.first.wpilibj.XboxController
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser
@@ -10,12 +9,14 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.sert2521.infiniterecharge2020.OI.primaryController
 import org.sert2521.infiniterecharge2020.OI.secondaryJoystick
-import org.sert2521.infiniterecharge2020.OI.setClimberCamera
-import org.sert2521.infiniterecharge2020.OI.setNextDriverCamera
 import org.sert2521.infiniterecharge2020.climber.climberDown
 import org.sert2521.infiniterecharge2020.climber.climberUp
 import org.sert2521.infiniterecharge2020.climber.reverseRunWinch
 import org.sert2521.infiniterecharge2020.climber.runWinch
+import org.sert2521.infiniterecharge2020.colorwheelspinner.extend
+import org.sert2521.infiniterecharge2020.colorwheelspinner.retract
+import org.sert2521.infiniterecharge2020.colorwheelspinner.spinForColors
+import org.sert2521.infiniterecharge2020.colorwheelspinner.spinToColor
 import org.sert2521.infiniterecharge2020.drivetrain.alignToBall
 import org.sert2521.infiniterecharge2020.powerhouse.PowerHouse
 import org.sert2521.infiniterecharge2020.powerhouse.banish
@@ -47,31 +48,16 @@ object OI {
 
     val controlMode get() = controlModeChooser.selected ?: ControlMode.CONTROLLER
 
-    val currentCamera = NetworkTableInstance.getDefault().getEntry("/current_camera")
-    var currentCameraIndex = 0
-
     init {
         RobotScope.linkTableEntry("Control Mode", "OI") { controlMode.name }
-        currentCamera.setString(DriverCameraSource.FRONT.key)
     }
 
     val primaryController by lazy { XboxController(Operator.PRIMARY_CONTROLLER) }
     val primaryJoystick by lazy { Joystick(Operator.PRIMARY_STICK) }
     val secondaryJoystick by lazy { Joystick(Operator.SECONDARY_STICK) }
-
-    fun setNextDriverCamera() {
-        val camera = DriverCameraSource.values()[currentCameraIndex]
-        currentCamera.setString(camera.key)
-        if (currentCameraIndex == 1) currentCameraIndex = 0 else currentCameraIndex++
-    }
-
-    fun setClimberCamera() {
-        NetworkTableInstance.getDefault().getEntry("/current_camera").setString("Climber")
-    }
 }
 
 fun CoroutineScope.initControls() {
-
     // CLIMBER
     ({ secondaryJoystick.getRawButton(5) }).watch {
         whileTrue {
@@ -92,7 +78,7 @@ fun CoroutineScope.initControls() {
         }
     }
     // Only for use in the pit
-    ({ secondaryJoystick.throttle == -1.0 && secondaryJoystick.getRawButton(6) }).watch {
+    ({ secondaryJoystick.throttle == -1.0 && secondaryJoystick.getRawButton(13) }).watch {
         whileTrue {
             println("Reversing the winch")
             reverseRunWinch()
@@ -147,6 +133,30 @@ fun CoroutineScope.initControls() {
         }
     }
 
+    // COLOR SPINNER
+    ({ secondaryJoystick.getRawButton(12) }).watch {
+        whenTrue {
+            spinForColors()
+        }
+    }
+    ({ secondaryJoystick.getRawButton(15) }).watch {
+        whenTrue {
+            spinToColor()
+        }
+    }
+    ({ secondaryJoystick.getRawButton(11) }).watch {
+        whileTrue {
+            println("Extending")
+            extend()
+        }
+    }
+    ({ secondaryJoystick.getRawButton(16) }).watch {
+        whileTrue {
+            println("Retracting")
+            retract()
+        }
+    }
+
     // AUTO-ALIGN
     ({ primaryController.yButton }).watch {
         whileTrue {
@@ -159,19 +169,6 @@ fun CoroutineScope.initControls() {
                     alignToBall(3.5)
                 }
             }
-        }
-    }
-
-    // DRIVER CAMERAS
-    ({ primaryController.aButton }).watch {
-        whenTrue {
-            setNextDriverCamera()
-        }
-    }
-
-    ({ primaryController.bButton }).watch {
-        whenTrue {
-            setClimberCamera()
         }
     }
 }

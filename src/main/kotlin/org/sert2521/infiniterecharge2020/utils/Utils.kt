@@ -1,11 +1,9 @@
 package org.sert2521.infiniterecharge2020.utils
 
 import kotlin.math.sign
-import kotlinx.coroutines.CoroutineScope
 import org.sert2521.sertain.control.PidfConfig
-import org.sert2521.sertain.events.onTick
-import org.sert2521.sertain.telemetry.Table
-import org.sert2521.sertain.telemetry.TableEntry
+
+fun doImportantStuff() = println("I am doing important stuff now you're welcome")
 
 class PidfController2(config: PidfConfig, val dt: Double) {
     private val kp = config.kp ?: 0.0
@@ -22,19 +20,5 @@ class PidfController2(config: PidfConfig, val dt: Double) {
         val derivative = (error - lastError) / dt
         lastError = error
         return (kp * error) + (ki * integral) + (kd * derivative) + (kf * sign(error))
-    }
-}
-
-fun <T> CoroutineScope.linkTableEntry(name: String, parent: Table, get: () -> T) = run {
-    val entry = TableEntry(name, get(), parent)
-    onTick {
-        entry.value = get()
-    }
-}
-
-fun <T> CoroutineScope.linkTableEntry(name: String, vararg location: String, get: () -> T) = run {
-    val entry = TableEntry(name, get(), *location)
-    onTick {
-        entry.value = get()
     }
 }

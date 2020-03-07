@@ -27,6 +27,10 @@ import org.sert2521.sertain.units.div
 import org.sert2521.sertain.units.rdps
 
 class Drivetrain : Subsystem("Drivetrain", ::controlDrivetrain) {
+    companion object {
+        var slowAtColorWheel = false
+    }
+
     val table = Table(name)
 
     init {

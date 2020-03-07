@@ -3,15 +3,18 @@ package org.sert2521.infiniterecharge2020
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import org.sert2521.infiniterecharge2020.autonomous.PathGenerator
-import org.sert2521.infiniterecharge2020.autonomous.centerInitPowerPort
+import org.sert2521.infiniterecharge2020.autonomous.handleAutoChooser
+import org.sert2521.infiniterecharge2020.autonomous.objective1
+import org.sert2521.infiniterecharge2020.autonomous.objective2
+import org.sert2521.infiniterecharge2020.autonomous.startingPose
 import org.sert2521.infiniterecharge2020.climber.Climber
+import org.sert2521.infiniterecharge2020.colorwheelspinner.ColorWheelSpinner
 import org.sert2521.infiniterecharge2020.drivetrain.Drivetrain
 import org.sert2521.infiniterecharge2020.drivetrain.practiceBotChooser
 import org.sert2521.infiniterecharge2020.powerhouse.PowerHouse
 import org.sert2521.infiniterecharge2020.powerhouse.closeHouse
 import org.sert2521.infiniterecharge2020.powerhouse.openHouse
-import org.sert2521.sertain.events.onEnable
+import org.sert2521.sertain.events.onTeleop
 import org.sert2521.sertain.events.onTick
 import org.sert2521.sertain.events.whileAuto
 import org.sert2521.sertain.events.whileTeleop
@@ -24,9 +27,15 @@ suspend fun main() = robot {
     add<Drivetrain>()
     add<Climber>()
     add<PowerHouse>()
-    add<PathGenerator>()
+    add<ColorWheelSpinner>()
 
-    onEnable {
+    startingPose
+    objective1
+    objective2
+
+    handleAutoChooser()
+
+    onTeleop {
         openHouse()
         closeHouse()
     }
@@ -40,15 +49,52 @@ suspend fun main() = robot {
         val dt = access<Drivetrain>()
         dt.gyro.reset()
         dt.zeroEncoders()
-        centerInitPowerPort(false, PathGenerator.endLocation.TRENCH)
+
+        // BORKED
+//        auto(PathGenerator.startlocation.CENTER, listOf(PathGenerator.tasks.DRIVE_FORWARD))
+//         3 ball auto with 3 ball trench pickup
+//        auto(PathGenerator.startlocation.CENTER, listOf(
+//                PathGenerator.tasks.UNLOAD_FROM_POWERPORT))
+        // 5 ball auto
+//        auto(PathGenerator.startlocation.RIGHT_TRENCH, listOf(PathGenerator.tasks.BALLS2,
+//                PathGenerator.tasks.TRENCH_TO_CORNER,
+//                PathGenerator.tasks.UNLOAD_FROM_CORNER))        auto(PathGenerator.startlocation.RIGHT_TRENCH, listOf(PathGenerator.tasks.BALLS2,
+//                PathGenerator.tasks.TRENCH_TO_CORNER,
+//                PathGenerator.tasks.UNLOAD_FROM_CORNER))
+        // 3 ball auto from right side.
+//        auto(PathGenerator.startlocation.RIGHT_ALLIANCE, listOf(PathGenerator.tasks.UNLOAD_FROM_POWERPORT))
+
+//         Additional end options: PathGenerator.tasks.AWAY_FROM_POWERPORT
+//         Additional start option(untested): PathGenerator.tasks.PUSHBACK
+//         DO NOT USE BALLS3
+//        auto.second()
     }
 
     launch {
         delay(1000)
         SmartDashboard.putData("Control Mode", OI.controlModeChooser)
         SmartDashboard.putData("Robot Type", practiceBotChooser)
+//        val camera = CameraServer.getInstance().startAutomaticCapture()
+//        camera.setResolution(640, 360)
         onTick {
             SmartDashboard.updateValues()
         }
     }
+
+//    GlobalScope.launch(RobotDispatcher) {
+//        periodic(20, 0) {
+//            var rootGroup = Thread.currentThread().threadGroup
+//            var parentGroup: ThreadGroup
+//            while (rootGroup.parent.also { parentGroup = it } != null) {
+//                rootGroup = parentGroup
+//            }
+//
+//            var threads = arrayOfNulls<Thread>(rootGroup.activeCount())
+//            while (rootGroup.enumerate(threads, true) == threads.size) {
+//                threads = arrayOfNulls(threads.size * 2)
+//            }
+//
+//            println("NumThreads: ${threads.size}")
+//        }
+//    }
 }

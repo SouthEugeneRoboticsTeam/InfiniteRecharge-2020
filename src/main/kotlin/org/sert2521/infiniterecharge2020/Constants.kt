@@ -17,6 +17,8 @@ object MotorControllers {
     val rollerRight = TalonId(12)
 
     val flap = VictorId(8)
+
+    val spinner = TalonId(7)
 }
 
 object Operator {
@@ -29,7 +31,8 @@ object Sensors {
     const val CLOSE_SWITCH = 3
     const val OPEN_SWITCH = 2
 
-    val TOP_LIMIT_SWITCH = 0
-    val BOTTOM_LIMIT_SWITCH = 1
+    val CLIMBER_TOP_LIMIT_SWITCH = 0
+    val CLIMBER_BOTTOM_LIMIT_SWITCH = 1
     val RUNG_LIMIT_SWTICH = 4
+    val SPINNER_BOTTOM_LIMIT_SWITCH = 5
 }

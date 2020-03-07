@@ -1,10 +1,13 @@
 package org.sert2521.infiniterecharge2020.climber
 
 import kotlin.math.abs
+import org.sert2521.infiniterecharge2020.OI
 import org.sert2521.sertain.coroutines.periodic
 import org.sert2521.sertain.events.onTick
 import org.sert2521.sertain.subsystems.doTask
 import org.sert2521.sertain.subsystems.use
+
+val winchSpeed get() = OI.secondaryJoystick
 
 suspend fun climberUp() = doTask {
     val climber = use<Climber>()
