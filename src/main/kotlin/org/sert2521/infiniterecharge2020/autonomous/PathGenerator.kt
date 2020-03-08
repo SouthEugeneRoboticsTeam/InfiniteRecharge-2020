@@ -18,6 +18,8 @@ class PathGenerator {
     object startlocation {
         // Facing the Alliance Station. ~2.2 meters from power port | Aligned with line marking trench boundary
         val RIGHT_ALLIANCE = Pair(Pose2d(-2.2, -1.32, Rotation2d(0.0)), Rotation2d(0.0))
+        // Facing the Alliance Station. ~2.2 meters from power port | Aligned with loading zoneS
+        val LEFT_ALLIANCE = Pair(Pose2d(-2.143, 3.3, Rotation2d(0.0)), Rotation2d(0.0))
         // Facing the Trench. Balls aligned to center of robot | Edge of bumpers contacting initiation line
         // Increase x to make robot go further
         val RIGHT_TRENCH = Pair(Pose2d(3.2, 1.2264, Rotation2d(0.0)), Rotation2d(0.0))
@@ -26,12 +28,11 @@ class PathGenerator {
     }
 
     enum class tasks {
-        CORNER_TO_TRENCH, BALLS2, PUSHBACK, TRENCH_TO_CORNER, UNLOAD_FROM_CORNER,
-        UNLOAD_FROM_POWERPORT, AWAY_FROM_POWERPORT, DRIVE_FORWARD
+        POWERPORT_TO_CORNER_TO_TRENCH, TWO_BALL_TRENCH_PICKUP, TRENCH_TO_CORNER, UNLOAD_FROM_CORNER,
+        UNLOAD_FROM_INIT, AWAY_FROM_POWERPORT, DRIVE_FORWARD
     }
 
     // Drives the robot straight backwards for given distance.
-    // HAS NOT BEEN TESTED PUSHING A REAL ROBOT
     fun pushBack(pushDistance: Double): Trajectory {
         return TrajectoryGenerator.generateTrajectory(
                 listOf(Pose2d(drivetrain.xTranslation, drivetrain.yTranslation, Rotation2d(0.0)),
@@ -50,9 +51,9 @@ class PathGenerator {
     }
 
     // Drives the robot backwards in an arc to a corner in front of Alliance Station 1
-    fun powerPortToTrench(): Trajectory {
+    fun powerPortToCorner(): Trajectory {
         return TrajectoryGenerator.generateTrajectory(listOf(Pose2d(drivetrain.xTranslation, drivetrain.yTranslation, Rotation2d(drivetrain.heading.convert(Degrees to Radians))),
-                Pose2d(-.75, -1.65, Rotation2d((171.0).convert(Degrees to Radians)))),
+                Pose2d(-.75, -1.65, Rotation2d((174.0).convert(Degrees to Radians)))),
                 TrajectoryConfig(3.0, 1.0).setKinematics(kinematics).setReversed(true))
     }
 
@@ -82,8 +83,9 @@ class PathGenerator {
 
     // Drives the robot left backwards in an arc to a position that clears the Power Port
     fun awayFromPowerPort(): Trajectory {
+        // TODO: Increase 0.5 later \/
         return TrajectoryGenerator.generateTrajectory(listOf(Pose2d(drivetrain.xTranslation, drivetrain.yTranslation, Rotation2d(drivetrain.heading.convert(Degrees to Radians))),
-                Pose2d(drivetrain.xTranslation - 1.0, drivetrain.yTranslation + 2.5, Rotation2d((-90.0).convert(Degrees to Radians)))),
+                Pose2d(drivetrain.xTranslation - 0.5, drivetrain.yTranslation + 2.5, Rotation2d((-90.0).convert(Degrees to Radians)))),
                 TrajectoryConfig(2.0, 1.0).setKinematics(kinematics).setReversed(true))
     }
 }

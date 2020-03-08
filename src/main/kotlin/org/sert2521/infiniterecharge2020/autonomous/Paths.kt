@@ -13,21 +13,27 @@ import org.sert2521.infiniterecharge2020.powerhouse.welcome
 import org.sert2521.sertain.subsystems.doTask
 import org.sert2521.sertain.subsystems.use
 
-suspend fun auto(startLocation: Pair<Pose2d, Rotation2d>, tasks: List<PathGenerator.tasks>) = doTask {
+suspend fun auto(startLocation: Pair<Pose2d, Rotation2d>, tasks: List<PathGenerator.tasks>, pushback: Boolean, delayMilliSeconds: Double) = doTask {
     val drivetrain = use<Drivetrain>()
     val pathGenerator = PathGenerator()
     drivetrain.odometry.resetPosition(startLocation.first, startLocation.second)
 
     action {
+        // Delay the auto for a specified number of milliseconds
+        delay(delayMilliSeconds.toLong())
+        if (pushback) {
+            val pushBackPath = pathGenerator.pushBack(0.30)
+            runPath(drivetrain, pushBackPath)
+        }
         tasks.forEach {
             when (it) {
                 PathGenerator.tasks.DRIVE_FORWARD -> {
-                    val driveForwardPath = pathGenerator.driveForward(1.0, false)
+                    val driveForwardPath = pathGenerator.driveForward(1.0, true)
                     println(driveForwardPath.states)
                     runPath(drivetrain, driveForwardPath)
                 }
 
-                PathGenerator.tasks.UNLOAD_FROM_POWERPORT -> {
+                PathGenerator.tasks.UNLOAD_FROM_INIT -> {
                     val toPowerPortPath = pathGenerator.initToPowerPort()
                     println(toPowerPortPath.states)
                     runPath(drivetrain, toPowerPortPath)
@@ -46,13 +52,7 @@ suspend fun auto(startLocation: Pair<Pose2d, Rotation2d>, tasks: List<PathGenera
                     println(toPowerPortFromCornerPath.states)
                     runPath(drivetrain, toPowerPortFromCornerPath)
 
-                    val banishJob = launch {
-                        banish()
-                    }
-//                    // Run the outtake for 1.2 seconds
-//                    delay(2000)
-//                    banishJob.cancelAndJoin()
-//                    closeHouse()
+                    banish()
                 }
 
                 PathGenerator.tasks.TRENCH_TO_CORNER -> {
@@ -61,8 +61,8 @@ suspend fun auto(startLocation: Pair<Pose2d, Rotation2d>, tasks: List<PathGenera
                     runPath(drivetrain, trenchToCorner)
                 }
 
-                PathGenerator.tasks.CORNER_TO_TRENCH -> {
-                    val toTrenchFromPortPath = pathGenerator.powerPortToTrench()
+                PathGenerator.tasks.POWERPORT_TO_CORNER_TO_TRENCH -> {
+                    val toTrenchFromPortPath = pathGenerator.powerPortToCorner()
                     println(toTrenchFromPortPath.states)
                     runPath(drivetrain, toTrenchFromPortPath)
 
@@ -76,7 +76,7 @@ suspend fun auto(startLocation: Pair<Pose2d, Rotation2d>, tasks: List<PathGenera
                     welcomeJob.cancel()
                 }
 
-                PathGenerator.tasks.BALLS2 -> {
+                PathGenerator.tasks.TWO_BALL_TRENCH_PICKUP -> {
                     val driveForwardPath = pathGenerator.driveForward(3.75, true)
                     val welcomeJob = launch {
                         welcome()
@@ -85,36 +85,10 @@ suspend fun auto(startLocation: Pair<Pose2d, Rotation2d>, tasks: List<PathGenera
                     welcomeJob.cancel()
                 }
 
-//                PathGenerator.tasks.BALLS3 -> {
-//                    val welcomeJob = launch {
-//                        welcome()
-//                    }
-//
-//                    val alignJob = launch {
-//                        alignToBall(0.0)
-//                    }
-//                    onTick {
-//                        println(drivetrain.xTranslation)
-//                        // Robot takes around 0.87 meters to stop
-//                        // Value can be increased to potentially acquire a 4th ball
-//                        if (drivetrain.xTranslation < -6.825) {
-//                            println("I SHOULD BE STOPPING")
-//                            alignJob.cancel()
-//                            welcomeJob.cancel()
-//                        }
-//                    }
-//                }
-
                 PathGenerator.tasks.AWAY_FROM_POWERPORT -> {
                     val awayFromPowerPortPath = pathGenerator.awayFromPowerPort()
                     println(awayFromPowerPortPath)
                     runPath(drivetrain, awayFromPowerPortPath)
-                }
-
-                // Has not been tested on a real robot
-                PathGenerator.tasks.PUSHBACK -> {
-                    val pushBackPath = pathGenerator.pushBack(0.30)
-                    runPath(drivetrain, pushBackPath)
                 }
             }
         }
