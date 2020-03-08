@@ -1,7 +1,7 @@
 plugins {
     id "org.jetbrains.kotlin.jvm" version "1.3.61"
     id "edu.wpi.first.GradleRIO" version "2020.1.2"
-    id "org.jlleitschuh.gradle.ktlint" version "9.1.1"
+//    id "org.jlleitschuh.gradle.ktlint" version "9.1.1"
 }
 
 ext.kotlinVersion = "1.3.61"
@@ -29,7 +29,10 @@ dependencies {
     compile "com.kauailabs.navx.frc:navx-java:3.1.400"
     compile "com.ctre.phoenix:api-java:5.14.1"
     compile "org.jetbrains.kotlin:kotlin-reflect:1.3.61"
-    compile 'com.github.SouthEugeneRoboticsTeam:sertain:0.0.10'
+    compile 'com.github.SouthEugeneRoboticsTeam:sertain:0.0.12'
+//    compile fileTree("C:\\Users\\Aidan\\IdeaProjects\\sertain\\core\\build\\libs") {
+//        include '*.jar'
+//    }
 
     compile wpi.deps.wpilib()
     compile wpi.deps.vendor.java()
@@ -41,6 +44,11 @@ dependencies {
 
 compileKotlin {
     kotlinOptions.jvmTarget = "11"
+    kotlinOptions.freeCompilerArgs = [
+            "-XXLanguage:+InlineClasses",
+            "-Xuse-experimental=kotlin.Experimental",
+            "-Xallow-result-return-type"
+    ]
 }
 
 deploy {

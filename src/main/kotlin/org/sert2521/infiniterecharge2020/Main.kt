@@ -12,22 +12,20 @@ import org.sert2521.infiniterecharge2020.colorwheelspinner.ColorWheelSpinner
 import org.sert2521.infiniterecharge2020.drivetrain.Drivetrain
 import org.sert2521.infiniterecharge2020.drivetrain.practiceBotChooser
 import org.sert2521.infiniterecharge2020.powerhouse.PowerHouse
-import org.sert2521.infiniterecharge2020.powerhouse.closeHouse
-import org.sert2521.infiniterecharge2020.powerhouse.openHouse
-import org.sert2521.sertain.events.onTeleop
-import org.sert2521.sertain.events.onTick
+import org.sert2521.sertain.coroutines.periodic
 import org.sert2521.sertain.events.whileAuto
 import org.sert2521.sertain.events.whileTeleop
 import org.sert2521.sertain.robot
 import org.sert2521.sertain.subsystems.access
-import org.sert2521.sertain.subsystems.add
+import org.sert2521.sertain.subsystems.register
+
+val drivetrain = register<Drivetrain>()
+val climber = register<Climber>()
+val powerHouse = register<PowerHouse>()
+val colorWheelSpinner = register<ColorWheelSpinner>()
 
 suspend fun main() = robot {
     println("Robot program starting")
-    add<Drivetrain>()
-    add<Climber>()
-    add<PowerHouse>()
-    add<ColorWheelSpinner>()
 
     startingPose
     objective1
@@ -35,10 +33,10 @@ suspend fun main() = robot {
 
     handleAutoChooser()
 
-    onTeleop {
-        openHouse()
-        closeHouse()
-    }
+//    onTeleop {
+//        openHouse()
+//        closeHouse()
+//    }
 
     whileTeleop {
         initControls()
@@ -76,7 +74,7 @@ suspend fun main() = robot {
         SmartDashboard.putData("Robot Type", practiceBotChooser)
 //        val camera = CameraServer.getInstance().startAutomaticCapture()
 //        camera.setResolution(640, 360)
-        onTick {
+        periodic(20) {
             SmartDashboard.updateValues()
         }
     }

@@ -44,7 +44,7 @@ val objective2 = dropdown("Objective 2", "None" gives Objective.NONE) {
     "Loading Station" gives Objective.LOADING_STATION
 }
 
-fun getAuto(startingPose: StartingPose, objective1: Objective, objective2: Objective): Pair<String, suspend () -> Unit> =
+fun getAuto(startingPose: StartingPose, objective1: Objective, objective2: Objective): Pair<String, suspend () -> Any?> =
         when (startingPose) {
             StartingPose.NO_AUTO -> "I find your lack of faith in our auto disturbing." to suspend {}
             StartingPose.DRIVE_FORWARD -> "" to suspend {

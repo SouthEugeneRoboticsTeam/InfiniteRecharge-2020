@@ -29,7 +29,7 @@ import org.sert2521.infiniterecharge2020.utils.deadband
 import org.sert2521.sertain.coroutines.RobotScope
 import org.sert2521.sertain.coroutines.doAll
 import org.sert2521.sertain.coroutines.watch
-import org.sert2521.sertain.subsystems.doTask
+import org.sert2521.sertain.subsystems.reserve
 import org.sert2521.sertain.subsystems.use
 import org.sert2521.sertain.telemetry.linkTableEntry
 
@@ -110,18 +110,15 @@ fun CoroutineScope.initControls() {
         }
         // Reverse the brushes briefly after outtaking
         whenFalse {
-            doTask {
-                use<PowerHouse>()
-                action {
-                    doAll {
-                        action {
-                            closeHouse()
-                        }
-                        action {
-                            launch { reverseWelcome() }
-                            delay(250)
-                            cancel()
-                        }
+            reserve(powerHouse) {
+                doAll {
+                    action {
+                        closeHouse()
+                    }
+                    action {
+                        launch { reverseWelcome() }
+                        delay(250)
+                        cancel()
                     }
                 }
             }
