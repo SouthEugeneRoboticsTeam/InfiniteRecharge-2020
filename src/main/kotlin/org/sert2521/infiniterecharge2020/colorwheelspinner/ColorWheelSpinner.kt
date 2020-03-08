@@ -15,6 +15,7 @@ import org.sert2521.sertain.subsystems.Subsystem
 class ColorWheelSpinner : Subsystem("ColorWheelSpinner") {
     private val spinnerMotor = MotorController(MotorControllers.spinner) {
         inverted = true
+        brakeMode = true
     }
 
     private val colorSensor = ColorSensorV3(I2C.Port.kOnboard)

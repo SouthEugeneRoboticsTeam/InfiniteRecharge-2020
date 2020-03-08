@@ -1,5 +1,6 @@
 package org.sert2521.infiniterecharge2020
 
+import edu.wpi.first.networktables.NetworkTableInstance
 import edu.wpi.first.wpilibj.Joystick
 import edu.wpi.first.wpilibj.XboxController
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser
@@ -9,6 +10,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.sert2521.infiniterecharge2020.OI.primaryController
 import org.sert2521.infiniterecharge2020.OI.secondaryJoystick
+import org.sert2521.infiniterecharge2020.OI.setNextDriverCamera
 import org.sert2521.infiniterecharge2020.climber.climberDown
 import org.sert2521.infiniterecharge2020.climber.climberUp
 import org.sert2521.infiniterecharge2020.climber.reverseRunWinch
@@ -17,7 +19,6 @@ import org.sert2521.infiniterecharge2020.colorwheelspinner.extend
 import org.sert2521.infiniterecharge2020.colorwheelspinner.retract
 import org.sert2521.infiniterecharge2020.colorwheelspinner.spinForColors
 import org.sert2521.infiniterecharge2020.colorwheelspinner.spinToColor
-import org.sert2521.infiniterecharge2020.drivetrain.alignToBall
 import org.sert2521.infiniterecharge2020.powerhouse.PowerHouse
 import org.sert2521.infiniterecharge2020.powerhouse.banish
 import org.sert2521.infiniterecharge2020.powerhouse.closeHouse
@@ -48,13 +49,23 @@ object OI {
 
     val controlMode get() = controlModeChooser.selected ?: ControlMode.CONTROLLER
 
+    val currentCamera = NetworkTableInstance.getDefault().getEntry("/current_camera")
+    var currentCameraIndex = 0
+
     init {
         RobotScope.linkTableEntry("Control Mode", "OI") { controlMode.name }
+        currentCamera.setString(DriverCameraSource.FRONT.key)
     }
 
     val primaryController by lazy { XboxController(Operator.PRIMARY_CONTROLLER) }
     val primaryJoystick by lazy { Joystick(Operator.PRIMARY_STICK) }
     val secondaryJoystick by lazy { Joystick(Operator.SECONDARY_STICK) }
+
+    fun setNextDriverCamera() {
+        val camera = DriverCameraSource.values()[currentCameraIndex]
+        currentCamera.setString(camera.key)
+        if (currentCameraIndex == 1) currentCameraIndex = 0 else currentCameraIndex++
+    }
 }
 
 fun CoroutineScope.initControls() {
@@ -156,19 +167,10 @@ fun CoroutineScope.initControls() {
             retract()
         }
     }
-
-    // AUTO-ALIGN
-    ({ primaryController.yButton }).watch {
-        whileTrue {
-            println("Should be aligning")
-            doAll {
-                action {
-                    welcome()
-                }
-                action {
-                    alignToBall(3.5)
-                }
-            }
+    // DRIVER CAMERAS
+    ({ primaryController.aButton }).watch {
+        whenTrue {
+            setNextDriverCamera()
         }
     }
 }
